@@ -1,0 +1,12 @@
+[submodule "interface"]
+	path = sphene-interface
+	url = https://github.com/sphene/interface.git
+[submodule "API"]
+	path = sphene-api
+	url = https://github.com/sphene/sphene-api.git
+[submodule "sphene-interface"]
+	path = sphene-interface
+	url = https://github.com/sphene/sphene-interface.git
+[submodule "sphene-api"]
+	path = sphene-api
+	url = https://github.com/sphene/sphene-api.git

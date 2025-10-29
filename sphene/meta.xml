@@ -1,0 +1,158 @@
+<meta>
+    <info author="Sphene Team" description="GTA:SA Co-Op and SCM Runtime" version="1.0.0" type="misc" />
+    <min_mta_version client="1.5.9-9.21329" server="1.5.9-9.21329" />
+
+    <include resource="sphene-interface" />
+
+    <!-- 
+    #######   Utilities   #######
+    -->
+    <script src="src/shared/utils/modelrefs.lua" type="server" />
+    <script src="src/shared/utils/util.lua" type="server" />
+    <script src="src/shared/utils/vehicles.lua" type="server" />
+    <script src="src/shared/tasks/taskcode.lua" type="server" />
+    <script src="src/server/utils/env.lua" type="server" />
+
+    <!-- 
+    #######   Tasks   #######
+    -->
+    <script src="src/server/tasks/taskhandler.lua" type="server" />
+    
+    <!--
+    ########    Config      #########
+    -->
+    <script src="src/client/config/config.lua" type="client" cache="false" />
+    <script src="src/server/config/config.lua" type="server" />
+
+    <!--
+    ########    Logger      #########
+    -->
+    <script src="src/shared/logger/logger.lua" type="shared" cache="false" />
+
+    <!--
+    ########    IO      #########
+    -->
+    <script src="src/shared/io/ini.lua" type="server" />
+    <script src="src/shared/io/bitstream.lua" type="shared" cache="false"  />
+    <script src="src/shared/io/imgarchive.lua" type="shared" cache="false"  />
+
+    <!--
+    ########   Overlay  #########
+    -->
+    <file src="src/client/interface/js/debug.js" />
+    <file src="src/client/interface/js/sphene.js" />
+    <script src="src/client/interface/overlay.lua" type="client" cache="false" />
+
+    <!--
+    ########   Benchmark  #########
+    -->
+    <script src="src/client/benchmark/benchmark.lua" type="client" cache="false" />
+    <script src="src/server/benchmark/benchmark.lua" type="server" />
+
+    <!--
+    ########   Sandbox  #########
+    -->
+    <script src="src/client/sandbox/sandbox.lua" type="client" cache="false" />
+
+    <!-- 
+    #########   Elements   #########
+    -->
+    <script src="src/server/game/elements/player.lua" type="server" />
+
+    <!-- 
+    #########   Game   #########
+    -->
+    <script src="src/server/game/lobby.lua" type="server" />
+
+    <!-- 
+    #########   Logic   #########
+    -->
+    <script src="src/client/runtime/scripts/scm.lua" type="client" cache="false" />
+    
+    <script src="src/client/runtime/discord.lua" type="client" cache="false" />
+    <script src="src/client/runtime/core.lua" type="client" cache="false" />
+
+    <script src="src/server/runtime/core.lua" type="server" />
+
+    <!--
+    #########    Assets  ########
+    -->
+    <file src="assets/logo.png" />
+    <file src="assets/fonts/futheavy.ttf" />
+    <file src="assets/opcodes/SASCM.ini" />
+    <file src="assets/opcodes/VCSCM.ini" />
+
+    <file src="assets/demo/demo.scm" />
+    <file src="assets/demo/demo.gxt" />
+
+    <file src="assets/sandbox/sandbox.scm" />
+
+    <file src="assets/benchmark/benchmark1.scm" />
+    <file src="assets/benchmark/benchmark2.scm" />
+    <file src="assets/benchmark/benchmark3.scm" />
+    <file src="assets/benchmark/threads10benchmark.scm" />
+    <file src="assets/benchmark/threads50benchmark.scm" />
+    <file src="assets/benchmark/threads100benchmark.scm" />
+    <file src="assets/benchmark/blank.scm" />
+
+    <!-- 
+    #########   Loader   ########
+    -->
+    <file src="loader/fonts/Roboto-Bold.ttf" />
+    <file src="loader/loader.json" />
+    
+    <script src="src/client/loader/loader.lua" type="client" cache="false" />
+    
+    <script src="src/server/loader/loader.lua" type="server" />
+
+    <!-- 
+    #########   Debug   #########
+    -->
+    <script src="src/client/debug/console/functions/abstractFunction.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/functions/printFunction.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/functions/sleepFunction.lua" type="client" cache="false" />
+
+    <script src="src/client/debug/console/functions/asserts/assertLoadedFunction.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/functions/asserts/assertNotLoadedFunction.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/functions/asserts/assertInsideFunction.lua" type="client" cache="false" />
+
+    <script src="src/client/debug/console/classes/abstractClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/vector3Class.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/matrixClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/vehicleClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/actorClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/trainClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/blipClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/locationClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/externalScriptClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/statClass.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/classes/iplClass.lua" type="client" cache="false" />
+
+    <script src="src/client/debug/console/nodes/node.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/programNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/assignmentNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/numberNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/booleanNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/stringNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/identifierNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/callNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/variableNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/binaryNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/unaryNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/nanNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/classNode.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/nodes/objectNode.lua" type="client" cache="false" />
+
+    <script src="src/client/debug/console/token.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/compiler.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/lexer.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/parser.lua" type="client" cache="false" />
+    <script src="src/client/debug/console/runtime.lua" type="client" cache="false" />
+
+    <script src="src/client/debug/freecam.lua" type="client" cache="false" />
+    <script src="src/client/debug/console.lua" type="client" cache="false" />
+    <script src="src/client/debug/debug.lua" type="client" cache="false" />
+    <script src="src/client/debug/saveState.lua" type="client" cache="false" />
+    
+    <oop>true</oop>
+</meta>

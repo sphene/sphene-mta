@@ -1,0 +1,4 @@
+# Ignore all decompiled source files.
+*.txt
+data/
+.env

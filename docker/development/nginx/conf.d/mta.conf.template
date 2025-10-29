@@ -1,0 +1,25 @@
+server {
+    listen 0.0.0.0:${MTA_HTTP_PORT};
+    listen [::]:${MTA_HTTP_PORT};
+
+    server_name _;
+
+    autoindex off;
+
+    sendfile off;
+    client_max_body_size 10m;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    location /http-client-files/ {
+        alias /var/www/http-client-files/;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}

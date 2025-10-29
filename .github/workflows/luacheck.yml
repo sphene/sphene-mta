@@ -1,0 +1,17 @@
+name: luacheck
+
+on: [ push, pull_request ]
+
+jobs:
+  build-linux:
+    if: contains(toJSON(github.event.commits), '[skip ci]') == false
+    runs-on: ubuntu-22.04
+
+    steps:
+    - run: sudo apt update && sudo apt -y install lua5.1 luarocks && sudo luarocks install luacheck
+    - uses: actions/checkout@v2
+      with:
+        submodules: false
+      
+    - name: Run luacheck
+      run: luacheck --config luacheck.lua ./sphene
