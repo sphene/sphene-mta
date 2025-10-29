@@ -14,7 +14,7 @@ Discord.missionName = false
 -----------------------------------
 
 function Discord.load()
-    if (isDiscordRichPresenceConnected() and config('discord.app_id') ~= nil) then
+    if (isDiscordRichPresenceConnected() and config('discord.app_id') ~= nil and config('discord.app_id') ~= '') then
         setDiscordApplicationID(config('discord.app_id'))
 
         local discordAsset = config('discord.asset')
