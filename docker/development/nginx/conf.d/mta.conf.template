@@ -10,8 +10,7 @@ server {
     client_max_body_size 10m;
 
     location / {
-        root   /usr/share/nginx/html;
-        index  index.html index.htm;
+        alias /var/www/http-client-files/;
     }
 
     location /http-client-files/ {
