@@ -3,7 +3,7 @@ name: luacheck
 on: [ push, pull_request ]
 
 jobs:
-  build-linux:
+  luacheck:
     if: contains(toJSON(github.event.commits), '[skip ci]') == false
     runs-on: ubuntu-22.04
 
