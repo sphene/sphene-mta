@@ -62,7 +62,7 @@ function TaskSimpleGoToPoint:process()
     if node == nil then
         ped:setAnalogControlState("forwards", 0)
         ped:setControlState("walk", false)
-        
+
         self:setFinished()
         return
     end
@@ -83,7 +83,6 @@ end
 
 function TaskSimpleGoToPoint:getDebugParameters()
     local ped = self:getPed()
-    local x, y, z = ped:getPosition()
 
     return {
         Position = string.format("x: %.2f, y: %.2f, z: %.2f", self.x, self.y, self.z),
