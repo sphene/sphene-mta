@@ -49,7 +49,7 @@ function TaskSimpleGoToPoint:process()
     local ped = self:getPed()
     local distance = ped:distanceTo(self.x, self.y, self.z)
 
-    if distance <= 1 then
+    if distance <= 1.05 then
         ped:setAnalogControlState("forwards", 0)
         ped:setControlState("walk", false)
 
