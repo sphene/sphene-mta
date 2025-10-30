@@ -84,6 +84,7 @@ function Game.createEvents()
     addEventHandler("onClientHUDRender", getRootElement(resourceRoot), Game.onHudRender)
     addEventHandler("onClientPlayerWasted", getLocalPlayer(), Game.onPlayerWasted)
     addEventHandler("onClientKey", getRootElement(), Game.onClientKey)
+    addEventHandler("onClientPlayerRadioSwitch", getRootElement(), Game.onPlayerRadioSwitch)
 end
 
 function Game.removeEvents()
@@ -92,6 +93,7 @@ function Game.removeEvents()
     removeEventHandler("onClientHUDRender", getRootElement(resourceRoot), Game.onHudRender)
     removeEventHandler("onClientPlayerWasted", getLocalPlayer(), Game.onPlayerWasted)
     removeEventHandler("onClientKey", getRootElement(), Game.onClientKey)
+    removeEventHandler("onClientPlayerRadioSwitch", getRootElement(), Game.onPlayerRadioSwitch)
 end
 
 function Game.addHospital(x, y, z, angle, town)
@@ -176,6 +178,13 @@ function Game.onClientKey(button, pressed)
         if Cutscene.skippable() or Cutscene.isPlaying() then
             Game.isSkipping = true
         end
+    end
+end
+
+function Game.onPlayerRadioSwitch(stationId)
+    -- Game disables radio switching if cutscene is playing
+    if (Cutscene.isPlaying() and stationId ~= 0) then
+        cancelEvent()
     end
 end
 

@@ -243,6 +243,15 @@ function Cutscene.startScene()
         Cutscene.startTick = getTickCount()
         showPlayerHudComponent("all", false)
 
+        -- Disable gunfire and general ambient sounds
+        setAmbientSoundEnabled("general", false)
+        setAmbientSoundEnabled("gunfire", false)
+
+        -- Disable wind ambient sounds
+        setWorldSoundEnabled(0, 0, false, true)
+        setWorldSoundEnabled(0, 29, false, true)
+        setWorldSoundEnabled(0, 30, false, true)
+
         localPlayer:setDimension(60000 + getElementData(getElementParent(localPlayer), 'dimension'))
 
         local soundId = Cutscene.cutsceneMapping[Cutscene.cutsceneData["cutscene"]:upper()]
@@ -252,6 +261,11 @@ function Cutscene.startScene()
         if (soundId ~= nil) then
             Cutscene.cutsceneData["sound"]
                 = playSFX('radio', 'Cutscene', soundId, false)
+            if (Cutscene.cutsceneData["sound"]) then
+                setSoundVolume(Cutscene.cutsceneData["sound"], 1.0)
+            else
+                Logger.error('CUTSCENE', 'Could not play sound ID {} for cutscene {}', soundId, Cutscene.cutsceneData["cutscene"])
+            end
         end
 
         --[[if (Cutscene.cutsceneData["objectMapping"] ~= nil) then
@@ -323,6 +337,8 @@ function Cutscene.endScene()
     Cutscene.cutscenePlaying = false
     Cutscene.isCutsceneSkipped = false
     showPlayerHudComponent("all", true)
+    resetAmbientSounds()
+    resetWorldSounds()
 
     if (isElement(Cutscene.cutsceneData["sound"])) then
         destroyElement(Cutscene.cutsceneData["sound"])

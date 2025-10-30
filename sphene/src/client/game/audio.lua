@@ -98,8 +98,12 @@ function Audio.playSoundTrack()
         end
 
         if (Audio.soundtrackData.id ~= false) then
+            setRadioChannel(0)
             Audio.soundtrackData.sound =
                 playSFX('radio', 'Beats', Audio.soundtrackData.id, false)
+            if (Audio.soundtrackData.sound) then
+                setSoundVolume(Audio.soundtrackData.sound, 1.0)
+            end
         end
     end
 end
