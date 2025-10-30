@@ -324,10 +324,22 @@ function Text.showPermanentBox(text, label)
 end
 
 function Text.removeTextBox()
-    Text.messageQueue["textbox"] = {}
+    -- Only remove textboxes that have already been displayed (state == 1)
+    -- Preserve queued textboxes (state == 0) so they can be shown on next render
+    local hasDisplayedTextbox = false
+    for i = #Text.messageQueue["textbox"], 1, -1 do
+        if Text.messageQueue["textbox"][i].state == 1 then
+            table.remove(Text.messageQueue["textbox"], i)
+            hasDisplayedTextbox = true
+        end
+    end
 
-    Logger.info('TEXT', 'Clearing text box')
-    Overlay.triggerEvent("onRemoveTextBox")
+    if hasDisplayedTextbox then
+        Logger.info('TEXT', 'Clearing displayed text box')
+        Overlay.triggerEvent("onRemoveTextBox")
+    else
+        Logger.info('TEXT', 'No displayed text box to clear, queued textboxes preserved')
+    end
 end
 
 function Text.setTimerText(label, type, timer)
