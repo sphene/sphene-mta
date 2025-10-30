@@ -428,11 +428,10 @@ end
 function Text.clearAllPrint()
     Logger.debug('TEXT', 'Clearing all print text messages')
 
-    Text.messageQueue = {
-        ["1"] = {},
-        ["2"] = {},
-        ["1022"] = {}
-    }
+
+    Text.messageQueue['1'] = {}
+    Text.messageQueue['2'] = {}
+    Text.messageQueue['1022'] = {}
 
     Text.renderTimerText = false
     Text.renderStatusText = false
