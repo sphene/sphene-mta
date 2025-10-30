@@ -47,9 +47,11 @@ function TaskSimpleGoToPoint:process()
     end
 
     local ped = self:getPed()
+    local distance = ped:distanceTo(self.x, self.y, self.z)
 
-    if (ped:distanceTo(self.x, self.y, self.z) < 0.1) then
+    if distance <= 1 then
         ped:setAnalogControlState("forwards", 0)
+        ped:setControlState("walk", false)
 
         self:setFinished()
         return
@@ -58,11 +60,11 @@ function TaskSimpleGoToPoint:process()
     local node = self.path:findNextWaypoint(1)
 
     if node == nil then
-        node = {
-            x = self.x,
-            y = self.y,
-            z = self.z,
-        }
+        ped:setAnalogControlState("forwards", 0)
+        ped:setControlState("walk", false)
+        
+        self:setFinished()
+        return
     end
 
     local x, y, _ = ped:getPosition()
@@ -72,10 +74,21 @@ function TaskSimpleGoToPoint:process()
 
     ped:setRotation(rotX, rotY, -angle)
     ped:setAnalogControlState("forwards", 1)
+    ped:setControlState("walk", true)
 end
 
 function TaskSimpleGoToPoint:getName()
     return "TASK_SIMPLE_GO_TO_POINT"
+end
+
+function TaskSimpleGoToPoint:getDebugParameters()
+    local ped = self:getPed()
+    local x, y, z = ped:getPosition()
+
+    return {
+        Position = string.format("x: %.2f, y: %.2f, z: %.2f", self.x, self.y, self.z),
+        Distance = string.format("%.2f", ped:distanceTo(self.x, self.y, self.z))
+    }
 end
 
 Task.register(0x05C5, TaskSimpleGoToPoint)

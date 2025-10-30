@@ -90,12 +90,7 @@ function Task:getName()
 end
 
 function Task:getDebugParameters()
-    return {
-        {
-            name = "ped",
-            type = "element:ped",
-        }
-    }
+    return {}
 end
 
 function Task.register(id, class)
