@@ -29,7 +29,7 @@ end
 -- Instruction: clear_prints
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/00BE
 function SharedOpcodeText.clearPrints()
-    Text.clearAll()
+    Text.clearAllPrint()
 end
 
 -- Opcode: 0x01E3

@@ -318,6 +318,7 @@ function Text.addMessageToQueue(message, label, time, style, priority)
 end
 
 function Text.showPermanentBox(text, label)
+    Text.removeTextBox()
     Logger.info('TEXT', 'Displaying permanent box: \'{}\'', text)
 
     Text.addMessageToQueue(text, label, -1, 'textbox')
@@ -424,21 +425,20 @@ function Text.getGXTTable()
     return Text.gxtTable
 end
 
-function Text.clearAll()
-    Logger.debug('TEXT', 'Clearing all text messages')
+function Text.clearAllPrint()
+    Logger.debug('TEXT', 'Clearing all print text messages')
 
     Text.messageQueue = {
         ["1"] = {},
         ["2"] = {},
-        ["textbox"] = {},
         ["1022"] = {}
     }
 
     Text.renderTimerText = false
     Text.renderStatusText = false
 
-    Overlay.triggerEvent("onRemoveTextBox")
     Overlay.triggerEvent("onRemoveSubTitle")
+    -- TODO: Remove other types of messages as needed. Needs more CEF integration.
 end
 
 function Text.cleanup()
@@ -447,5 +447,6 @@ function Text.cleanup()
     Text.textData = {}
     Text.gxtTable = 'MAIN'
 
-    Text.clearAll()
+    Text.clearAllPrint()
+    Text.messageQueue['textbox'] = {}
 end
