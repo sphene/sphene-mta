@@ -383,7 +383,7 @@ function Debug.pause()
             rotation = { getElementRotation(element) },
         }
 
-        --setElementFrozen(element, true)
+        setElementFrozen(element, true)
     end
 
     for _, element in ipairs(getElementsByType('actor')) do
@@ -397,7 +397,7 @@ function Debug.pause()
             rotation = { getElementRotation(element) },
         }
 
-        --setElementFrozen(element, true)
+        setElementFrozen(element, true)
     end
 
     Debug.paused = true
@@ -779,6 +779,25 @@ function Debug.actorDebugRender()
 
                                 infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
                             end
+
+                            local debugParams = task:getDebugParameters()
+
+                            if debugParams then
+                                for property, param in pairs(debugParams) do
+                                    if type(param) == 'table' then
+                                        param = Debug.prettifyTable(param)
+                                    end
+
+                                    dxDrawText("    "..property..": "..param, sx + 20 * (1920 / screenWidth), infoYPosition + 2 * (1920 / screenWidth), screenWidth,
+                                        infoYPosition + 2 * (1920 / screenWidth),
+                                        tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+                                    dxDrawText("    "..property..": "..param, sx + 20 * (1920 / screenWidth), infoYPosition, screenWidth, infoYPosition,
+                                        tocolor(255, 255, 255, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+                                    infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
+                                end
+                            end
                         end
                     end
 
@@ -901,9 +920,9 @@ function Debug.actorDebugRender()
 
                         dxDrawText("Moveable: "..tostring(Pad.isMoveable() or false), sx + 10 * (1920 / screenWidth), infoYPosition, screenWidth, infoYPosition,
                             tocolor(255, 255, 255, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
-                    end
 
-                    infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
+                        infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
+                    end
 
                     if (actor.element) then
                         infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
