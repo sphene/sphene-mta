@@ -679,7 +679,6 @@ end
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0574
 function SharedOpcodeCar.freezePositionAndDontLoadCollision(car, frozen)
     car:setFrozen((frozen == 1) and true or false)
-    car:setCollisionsEnabled((frozen == 1) and true or false)
 end
 
 -- Opcode: 0x0587
