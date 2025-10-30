@@ -326,10 +326,13 @@ end
 function Text.removeTextBox()
     -- Only remove textboxes that have already been displayed (state == 1)
     -- Preserve queued textboxes (state == 0) so they can be shown on next render
+    local textboxQueue = Text.messageQueue["textbox"]
     local hasDisplayedTextbox = false
-    for i = #Text.messageQueue["textbox"], 1, -1 do
-        if Text.messageQueue["textbox"][i].state == 1 then
-            table.remove(Text.messageQueue["textbox"], i)
+
+    for i = #textboxQueue, 1, -1 do
+        local textbox = textboxQueue[i]
+        if textbox and textbox.state == 1 then
+            table.remove(textboxQueue, i)
             hasDisplayedTextbox = true
         end
     end
