@@ -782,7 +782,7 @@ function Debug.actorDebugRender()
 
                             local debugParams = task:getDebugParameters()
 
-                            if debugParams then
+                            if next(debugParams) ~= nil then
                                 for property, param in pairs(debugParams) do
                                     if type(param) == 'table' then
                                         param = Debug.prettifyTable(param)
