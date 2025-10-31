@@ -174,8 +174,20 @@ function PlayerElement:removeWeapon(weapon)
     end
 end
 
+function PlayerElement:setControlState(control, state)
+    setControlState(control, state)
+
+    if self.element == self.__localElement then
+        setPedControlState(self.element, control, state)
+    end
+end
+
 function PlayerElement:setAnalogControlState(control, state)
     setAnalogControlState(control, state)
+
+    if self.element == self.__localElement then
+        setPedAnalogControlState(self.element, control, state)
+    end
 end
 
 function PlayerElement:setClothes(texture, model, bodyPart)

@@ -29,6 +29,11 @@ function Freecam.enable()
     setElementPosition(getCamera(), x, y, z)
     setCameraTarget(lookX, lookY, lookZ)
 
+    setAnalogControlState("forwards", 0)
+    setAnalogControlState("left", 0)
+    setAnalogControlState("accelerate", 0)
+    setAnalogControlState("brake_reverse", 0)
+
     toggleAllControls(true, true, true)
 
     Freecam.enabled = true

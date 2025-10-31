@@ -763,23 +763,6 @@ function Debug.actorDebugRender()
 
                             infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
 
-                            local subTask = task.getSubTask and task:getSubTask()
-
-                            while (subTask) do
-                                local subTaskName = subTask:getName()
-
-                                dxDrawText("- "..subTaskName, sx + 20 * (1920 / screenWidth), infoYPosition + 2 * (1920 / screenWidth), screenWidth,
-                                    infoYPosition + 2 * (1920 / screenWidth),
-                                    tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
-
-                                dxDrawText("- "..subTaskName, sx + 20 * (1920 / screenWidth), infoYPosition, screenWidth, infoYPosition,
-                                    tocolor(255, 255, 255, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
-
-                                subTask = subTask.getSubTask and subTask:getSubTask()
-
-                                infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
-                            end
-
                             local debugParams = task:getDebugParameters()
 
                             if debugParams then
@@ -797,6 +780,42 @@ function Debug.actorDebugRender()
 
                                     infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
                                 end
+                            end
+
+                            local subTask = task.getSubTask and task:getSubTask()
+
+                            while (subTask) do
+                                local subTaskName = subTask:getName()
+
+                                dxDrawText("- "..subTaskName, sx + 20 * (1920 / screenWidth), infoYPosition + 2 * (1920 / screenWidth), screenWidth,
+                                    infoYPosition + 2 * (1920 / screenWidth),
+                                    tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+                                dxDrawText("- "..subTaskName, sx + 20 * (1920 / screenWidth), infoYPosition, screenWidth, infoYPosition,
+                                    tocolor(255, 255, 255, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+                                infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
+
+                                local debugParams = subTask:getDebugParameters()
+
+                                if debugParams then
+                                    for property, param in pairs(debugParams) do
+                                        if type(param) == 'table' then
+                                            param = Debug.prettifyTable(param)
+                                        end
+
+                                        dxDrawText("        "..property..": "..param, sx + 20 * (1920 / screenWidth), infoYPosition + 2 * (1920 / screenWidth), screenWidth,
+                                            infoYPosition + 2 * (1920 / screenWidth),
+                                            tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+                                        dxDrawText("        "..property..": "..param, sx + 20 * (1920 / screenWidth), infoYPosition, screenWidth, infoYPosition,
+                                            tocolor(255, 255, 255, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+                                        infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
+                                    end
+                                end
+
+                                subTask = subTask.getSubTask and subTask:getSubTask()
                             end
                         end
                     end
@@ -925,8 +944,6 @@ function Debug.actorDebugRender()
                     end
 
                     if (actor.element) then
-                        infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
-
                         dxDrawText("Alpha: "..tostring(actor:getAlpha()), sx + 10 * (1920 / screenWidth), infoYPosition + 2 * (1920 / screenWidth), screenWidth,
                             infoYPosition + 2 * (1920 / screenWidth),
                             tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)

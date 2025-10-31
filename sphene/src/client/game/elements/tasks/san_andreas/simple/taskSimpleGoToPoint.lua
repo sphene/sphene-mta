@@ -12,24 +12,12 @@ TaskSimpleGoToPoint.__index = TaskSimpleGoToPoint
 function TaskSimpleGoToPoint:create(ped, x, y, z)
     local mt = setmetatable({}, TaskSimpleGoToPoint)
 
-    mt.parent.create(self, ped)
+    mt.parent.create(mt, ped)
 
     mt.x = x
     mt.y = y
     mt.z = z
     mt.path = false
-
-    return mt
-end
-
-function TaskSimpleGoToPoint:create(ped, x, y, z)
-    local mt = setmetatable({}, TaskSimpleGoToPoint)
-
-    mt.parent.create(self, ped)
-
-    mt.x = x
-    mt.y = y
-    mt.z = z
 
     return mt
 end
@@ -85,6 +73,7 @@ function TaskSimpleGoToPoint:getDebugParameters()
     local ped = self:getPed()
 
     return {
+        Ped = tostring(ped:getId() or 'UNKNOWN'),
         Position = string.format("x: %.2f, y: %.2f, z: %.2f", self.x, self.y, self.z),
         Distance = string.format("%.2f", ped:distanceTo(self.x, self.y, self.z))
     }
