@@ -796,7 +796,7 @@ function Debug.actorDebugRender()
 
                                 infoYPosition = infoYPosition + 28 * (1920 / screenWidth)
 
-                                local debugParams = subTask:getDebugParameters()
+                                debugParams = subTask:getDebugParameters()
 
                                 if debugParams then
                                     for property, param in pairs(debugParams) do
