@@ -1,6 +1,6 @@
 <meta>
     <info author="Sphene Team" description="GTA:SA Co-Op and SCM Runtime" version="1.0.0" type="misc" />
-    <min_mta_version client="1.7.0-7.25581" server="1.7.0-7.25581" />
+    <min_mta_version client="1.7.0-7.25832" server="1.7.0-7.25832" />
 
     <include resource="sphene-interface" />
 
