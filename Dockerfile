@@ -3,7 +3,7 @@ FROM alpine:latest AS base
 WORKDIR /app
 
 RUN apk add --no-cache --update wget tar
-RUN wget https://nightly.multitheftauto.com/multitheftauto_linux_x64-1.7.0-untested-25718.tar.gz -O /tmp/multitheftauto_binaries.tar.gz \
+RUN wget https://nightly.multitheftauto.com/multitheftauto_linux_x64-1.7.0-untested-25832.tar.gz -O /tmp/multitheftauto_binaries.tar.gz \
     && wget https://linux.mtasa.com/dl/baseconfig.tar.gz -O /tmp/multitheftauto_config.tar.gz \
     && wget https://nightly.mtasa.com/files/modules/64/libmysqlclient.so.16 -P /usr/lib \
     && tar -xzvf /tmp/multitheftauto_binaries.tar.gz \
