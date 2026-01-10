@@ -11,12 +11,14 @@ Cutscene.MODEL_PATH = "data/game/san_andreas/models/cutscene.img"
 Cutscene.cutsceneData = {}
 
 Cutscene.cutscenePlaying = false
+Cutscene.cutsceneFinishing = false
 Cutscene.canBeSkipped = false
 Cutscene.isCutsceneSkipped = false
 
 Cutscene.cutsceneSkipPointer = 0
 Cutscene.cutsceneSkipThread = false
 Cutscene.startTick = 0
+Cutscene.finishTime = 0
 
 Cutscene.dataImgArchive = nil
 Cutscene.modelImgArchive = nil
@@ -238,9 +240,18 @@ end
 
 function Cutscene.startScene()
     if (Cutscene.cutsceneData["cutscene"] ~= nil) then
-        Cutscene.cutscenePlaying = true
+        -- In order to get cutscene finish time, we need to get the last keyframe
+        -- timestamp of cutscene camera data (from .dat block 3: camera position).
+        -- This logic was extracted from GTA function CCam::Process_FlyBy on memory address 0x5B25F0.
+        local cameraPositionBlock = Cutscene.cutsceneData["cameraData"][3].data
+        local cameraPositionBlockCount = #Cutscene.cutsceneData["cameraData"][3].data
+        Cutscene.finishTime = cameraPositionBlock[cameraPositionBlockCount][1] * 1000.0
+
         Cutscene.isCutsceneSkipped = false
         Cutscene.startTick = getTickCount()
+
+        engineSetAsynchronousLoading(false, true)
+
         showPlayerHudComponent("all", false)
 
         -- Disable gunfire and general ambient sounds
@@ -326,6 +337,7 @@ function Cutscene.startScene()
         }]]
 
         Cutscene.cutsceneData["starttick"] = getTickCount()
+        Cutscene.cutscenePlaying = true
 
         return true
     end
@@ -334,11 +346,17 @@ function Cutscene.startScene()
 end
 
 function Cutscene.endScene()
+    Logger.info('CUTSCENE', 'Ending cutscene: {}', Cutscene.cutsceneData["cutscene"])
+
     Cutscene.cutscenePlaying = false
+    Cutscene.cutsceneFinishing = false
     Cutscene.isCutsceneSkipped = false
+    Cutscene.finishTime = 0
+
     showPlayerHudComponent("all", true)
     resetAmbientSounds()
     resetWorldSounds()
+    engineSetAsynchronousLoading(true, false)
 
     if (isElement(Cutscene.cutsceneData["sound"])) then
         destroyElement(Cutscene.cutsceneData["sound"])
@@ -440,6 +458,10 @@ end
 
 function Cutscene.isLoaded()
     return (Cutscene.cutsceneData["cutscene"] ~= nil)
+end
+
+function Cutscene.getFinishTime()
+    return Cutscene.finishTime
 end
 
 function Cutscene.run()
@@ -632,6 +654,17 @@ function Cutscene.run()
                 Cutscene.cutsceneData["texts"].currentNode = i
             end
         end
+    end
+
+    -- Cutscene should fade out 1000ms before the cutscene finish time,
+    -- as defined by the original GTA SA logic.
+    if (elapsedTime + 1000 > Cutscene.getFinishTime() and not Cutscene.cutsceneFinishing) then
+        Cutscene.cutsceneFinishing = true
+
+        Logger.info('CUTSCENE', 'Cutscene {} finishing, fading out...', Cutscene.cutsceneData["cutscene"])
+
+        -- Fade out over one second
+        Camera.fade(false, 1000)
     end
 
     --local playerInterior = getCameraInterior()
