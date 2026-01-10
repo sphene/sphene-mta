@@ -1,6 +1,6 @@
 # Contributing
 
-Sphene is a complex project written in Lua for Multi Theft Auto. This document outlines our expectations oon your contributions and best practices. Information on how to setup and run Sphene is also available.
+Sphene is a complex project written in Lua for Multi Theft Auto. This document outlines our expectations on your contributions and best practices. Information on how to setup and run Sphene is also available.
 
 ## How to setup Sphene
 
