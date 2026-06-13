@@ -552,10 +552,10 @@ function Cutscene.run()
 
     for segmentIndex=Cutscene.cutsceneData["cameraData"][1].currentNode,
         #Cutscene.cutsceneData["cameraData"][1].data do
-        local data = Cutscene.cutsceneData["cameraData"][1].data[segmentIndex]
-        local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][1].data[segmentIndex + 1]
-        local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
+        local keyframe = Cutscene.cutsceneData["cameraData"][1].data[segmentIndex]
+        local time = (keyframe[1] * 1000)
+        local nextKeyframe = Cutscene.cutsceneData["cameraData"][1].data[segmentIndex + 1]
+        local nextTime = (nextKeyframe ~= nil) and (nextKeyframe[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
             local data, nextData, segmentProgress = Cutscene.resolveSegment(
@@ -589,10 +589,10 @@ function Cutscene.run()
 
     for segmentIndex=Cutscene.cutsceneData["cameraData"][2].currentNode,
         #Cutscene.cutsceneData["cameraData"][2].data do
-        local data = Cutscene.cutsceneData["cameraData"][2].data[segmentIndex]
-        local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][2].data[segmentIndex + 1]
-        local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
+        local keyframe = Cutscene.cutsceneData["cameraData"][2].data[segmentIndex]
+        local time = (keyframe[1] * 1000)
+        local nextKeyframe = Cutscene.cutsceneData["cameraData"][2].data[segmentIndex + 1]
+        local nextTime = (nextKeyframe ~= nil) and (nextKeyframe[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
             local data, nextData, segmentProgress = Cutscene.resolveSegment(
@@ -626,10 +626,10 @@ function Cutscene.run()
 
     for segmentIndex=Cutscene.cutsceneData["cameraData"][3].currentNode,
         #Cutscene.cutsceneData["cameraData"][3].data do
-        local data = Cutscene.cutsceneData["cameraData"][3].data[segmentIndex]
-        local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][3].data[segmentIndex + 1]
-        local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
+        local keyframe = Cutscene.cutsceneData["cameraData"][3].data[segmentIndex]
+        local time = (keyframe[1] * 1000)
+        local nextKeyframe = Cutscene.cutsceneData["cameraData"][3].data[segmentIndex + 1]
+        local nextTime = (nextKeyframe ~= nil) and (nextKeyframe[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
             local data, nextData, segmentProgress = Cutscene.resolveSegment(
@@ -674,10 +674,10 @@ function Cutscene.run()
 
     for segmentIndex=Cutscene.cutsceneData["cameraData"][4].currentNode,
         #Cutscene.cutsceneData["cameraData"][4].data do
-        local data = Cutscene.cutsceneData["cameraData"][4].data[segmentIndex]
-        local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][4].data[segmentIndex + 1]
-        local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
+        local keyframe = Cutscene.cutsceneData["cameraData"][4].data[segmentIndex]
+        local time = (keyframe[1] * 1000)
+        local nextKeyframe = Cutscene.cutsceneData["cameraData"][4].data[segmentIndex + 1]
+        local nextTime = (nextKeyframe ~= nil) and (nextKeyframe[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
             local data, nextData, segmentProgress = Cutscene.resolveSegment(
