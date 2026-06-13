@@ -8,6 +8,14 @@ Cutscene.__index = Cutscene
 Cutscene.DATA_PATH = "data/game/san_andreas/anim/cuts.img"
 Cutscene.MODEL_PATH = "data/game/san_andreas/models/cutscene.img"
 
+-- Segments shorter than this (in ms) are treated as an instant camera cut.
+-- In CCam::Process_FlyBy (sub_5B2090/sub_5B2330), if the currently active
+-- segment's duration is <= flt_8D0F80 (= 32.0, at 0x8D0F80), the engine
+-- advances to the next segment and evaluates that one instead (see
+-- Cutscene.resolveSegment), so this segment's own (often garbage) lane/
+-- control point values are never evaluated at a t other than 0 or 1.
+Cutscene.INSTANT_CUT_THRESHOLD = 32
+
 Cutscene.cutsceneData = {}
 
 Cutscene.cutscenePlaying = false
@@ -464,6 +472,43 @@ function Cutscene.getFinishTime()
     return Cutscene.finishTime
 end
 
+-- Whether the segment [time, nextTime] is short enough that the original
+-- engine never evaluates its curve directly (see Cutscene.INSTANT_CUT_THRESHOLD).
+function Cutscene.isInstantCut(time, nextTime)
+    return (nextTime - time) <= Cutscene.INSTANT_CUT_THRESHOLD
+end
+
+-- Resolves the (data, nextData, segmentProgress) to use for interpolating
+-- camera data block "data" at segmentIndex for the given elapsedTime. Mirrors
+-- CCam::Process_FlyBy's index-advance for instant-cut segments: if that
+-- segment is an instant cut and a following segment exists, that segment is
+-- evaluated instead.
+function Cutscene.resolveSegment(data, segmentIndex, elapsedTime)
+    local keyframe = data[segmentIndex]
+    local time = keyframe[1] * 1000
+    local nextKeyframe = data[segmentIndex + 1]
+    local nextTime = (nextKeyframe ~= nil) and (nextKeyframe[1] * 1000) or -1
+
+    if (nextKeyframe ~= nil and Cutscene.isInstantCut(time, nextTime)) then
+        local afterNextKeyframe = data[segmentIndex + 2]
+
+        if (afterNextKeyframe ~= nil) then
+            keyframe, time = nextKeyframe, nextTime
+            nextKeyframe, nextTime = afterNextKeyframe, afterNextKeyframe[1] * 1000
+        else
+            -- Final segment of the block is itself an instant cut: there is
+            -- no next segment to jump to, so snap straight to its end value.
+            return keyframe, nextKeyframe, 1
+        end
+    end
+
+    if (nextKeyframe == nil) then
+        return keyframe, nil, 1
+    end
+
+    return keyframe, nextKeyframe, clamp((elapsedTime - time) / (nextTime - time), 0, 1)
+end
+
 function Cutscene.run()
     if (not Cutscene.isPlaying()) then
         return
@@ -505,83 +550,115 @@ function Cutscene.run()
     local elapsedTime = (getTickCount() - Cutscene.cutsceneData["starttick"])
     local progressed = false
 
-    for i=Cutscene.cutsceneData["cameraData"][1].currentNode,
+    for segmentIndex=Cutscene.cutsceneData["cameraData"][1].currentNode,
         #Cutscene.cutsceneData["cameraData"][1].data do
-        local data = Cutscene.cutsceneData["cameraData"][1].data[i]
+        local data = Cutscene.cutsceneData["cameraData"][1].data[segmentIndex]
         local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][1].data[i + 1]
+        local nextData = Cutscene.cutsceneData["cameraData"][1].data[segmentIndex + 1]
         local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
+            local data, nextData, segmentProgress = Cutscene.resolveSegment(
+                Cutscene.cutsceneData["cameraData"][1].data, segmentIndex, elapsedTime
+            )
             local zoom = data[2]
+            local outgoingControlPoint = data[4]
 
             if (nextData ~= nil) then
                 local nextZoom = nextData[2]
-                local progress = 1 / ((nextTime - time) / (elapsedTime - time))
 
-                Cutscene.cutsceneData["lastValues"].zoom =
-                    zoom + ((nextZoom - zoom) * progress)
+                if (outgoingControlPoint == zoom) then
+                    Cutscene.cutsceneData["lastValues"].zoom =
+                        zoom + ((nextZoom - zoom) * segmentProgress)
+                else
+                    local nextIncomingControlPoint = nextData[3]
+
+                    Cutscene.cutsceneData["lastValues"].zoom =
+                        getCubicBezier(segmentProgress, zoom, outgoingControlPoint, nextIncomingControlPoint, nextZoom)
+                end
 
                 progressed = true
             else
                 Cutscene.cutsceneData["lastValues"].zoom = zoom
             end
 
-            Cutscene.cutsceneData["cameraData"][1].currentNode = i
+            Cutscene.cutsceneData["cameraData"][1].currentNode = segmentIndex
             break
         end
     end
 
-    for i=Cutscene.cutsceneData["cameraData"][2].currentNode,
+    for segmentIndex=Cutscene.cutsceneData["cameraData"][2].currentNode,
         #Cutscene.cutsceneData["cameraData"][2].data do
-        local data = Cutscene.cutsceneData["cameraData"][2].data[i]
+        local data = Cutscene.cutsceneData["cameraData"][2].data[segmentIndex]
         local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][2].data[i + 1]
+        local nextData = Cutscene.cutsceneData["cameraData"][2].data[segmentIndex + 1]
         local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
+            local data, nextData, segmentProgress = Cutscene.resolveSegment(
+                Cutscene.cutsceneData["cameraData"][2].data, segmentIndex, elapsedTime
+            )
             local angle = data[2]
+            local outgoingControlPoint = data[4]
 
             if (nextData ~= nil) then
                 local nextAngle = nextData[2]
-                local progress = 1 / ((nextTime - time) / (elapsedTime - time))
 
-                Cutscene.cutsceneData["lastValues"].angle =
-                    angle + ((nextAngle - angle) * progress)
+                if (outgoingControlPoint == angle) then
+                    Cutscene.cutsceneData["lastValues"].angle =
+                        angle + ((nextAngle - angle) * segmentProgress)
+                else
+                    local nextIncomingControlPoint = nextData[3]
+
+                    Cutscene.cutsceneData["lastValues"].angle =
+                        getCubicBezier(segmentProgress, angle, outgoingControlPoint, nextIncomingControlPoint, nextAngle)
+                end
 
                 progressed = true
             else
                 Cutscene.cutsceneData["lastValues"].angle = angle
             end
 
-            Cutscene.cutsceneData["cameraData"][2].currentNode = i
+            Cutscene.cutsceneData["cameraData"][2].currentNode = segmentIndex
             break
         end
     end
 
-    for i=Cutscene.cutsceneData["cameraData"][3].currentNode,
+    for segmentIndex=Cutscene.cutsceneData["cameraData"][3].currentNode,
         #Cutscene.cutsceneData["cameraData"][3].data do
-        local data = Cutscene.cutsceneData["cameraData"][3].data[i]
+        local data = Cutscene.cutsceneData["cameraData"][3].data[segmentIndex]
         local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][3].data[i + 1]
+        local nextData = Cutscene.cutsceneData["cameraData"][3].data[segmentIndex + 1]
         local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
-            local posX, posY, posZ = offsetX + data[2], offsetY + data[3], offsetZ + data[4]
+            local data, nextData, segmentProgress = Cutscene.resolveSegment(
+                Cutscene.cutsceneData["cameraData"][3].data, segmentIndex, elapsedTime
+            )
+            local relativePosX, relativePosY, relativePosZ = data[2], data[3], data[4]
+            local outgoingControlPointX, outgoingControlPointY, outgoingControlPointZ = data[8], data[9], data[10]
+            local posX, posY, posZ = offsetX + relativePosX, offsetY + relativePosY, offsetZ + relativePosZ
 
             if (nextData ~= nil) then
                 local nextX, nextY, nextZ =
                     offsetX + nextData[2], offsetY + nextData[3], offsetZ + nextData[4]
-                local progress = 1 / ((nextTime - time) / (elapsedTime - time))
 
-                Cutscene.cutsceneData["lastValues"].x =
-                    posX + ((nextX - posX) * progress)
+                if (outgoingControlPointX == relativePosX and outgoingControlPointY == relativePosY
+                    and outgoingControlPointZ == relativePosZ) then
+                    Cutscene.cutsceneData["lastValues"].x = posX + ((nextX - posX) * segmentProgress)
+                    Cutscene.cutsceneData["lastValues"].y = posY + ((nextY - posY) * segmentProgress)
+                    Cutscene.cutsceneData["lastValues"].z = posZ + ((nextZ - posZ) * segmentProgress)
+                else
+                    local c1X, c1Y, c1Z = offsetX + outgoingControlPointX, offsetY + outgoingControlPointY, offsetZ + outgoingControlPointZ
+                    local nextIncomingControlPointX, nextIncomingControlPointY, nextIncomingControlPointZ =
+                        nextData[5], nextData[6], nextData[7]
+                    local c2X, c2Y, c2Z =
+                        offsetX + nextIncomingControlPointX, offsetY + nextIncomingControlPointY, offsetZ + nextIncomingControlPointZ
 
-                Cutscene.cutsceneData["lastValues"].y =
-                    posY + ((nextY - posY) * progress)
-
-                Cutscene.cutsceneData["lastValues"].z =
-                    posZ + ((nextZ - posZ) * progress)
+                    Cutscene.cutsceneData["lastValues"].x = getCubicBezier(segmentProgress, posX, c1X, c2X, nextX)
+                    Cutscene.cutsceneData["lastValues"].y = getCubicBezier(segmentProgress, posY, c1Y, c2Y, nextY)
+                    Cutscene.cutsceneData["lastValues"].z = getCubicBezier(segmentProgress, posZ, c1Z, c2Z, nextZ)
+                end
 
                 progressed = true
             else
@@ -590,43 +667,55 @@ function Cutscene.run()
                 Cutscene.cutsceneData["lastValues"].z = posZ
             end
 
-            Cutscene.cutsceneData["cameraData"][3].currentNode = i
+            Cutscene.cutsceneData["cameraData"][3].currentNode = segmentIndex
             break
         end
     end
 
-    for i=Cutscene.cutsceneData["cameraData"][4].currentNode,
+    for segmentIndex=Cutscene.cutsceneData["cameraData"][4].currentNode,
         #Cutscene.cutsceneData["cameraData"][4].data do
-        local data = Cutscene.cutsceneData["cameraData"][4].data[i]
+        local data = Cutscene.cutsceneData["cameraData"][4].data[segmentIndex]
         local time = (data[1] * 1000)
-        local nextData = Cutscene.cutsceneData["cameraData"][4].data[i + 1]
+        local nextData = Cutscene.cutsceneData["cameraData"][4].data[segmentIndex + 1]
         local nextTime = (nextData ~= nil) and (nextData[1] * 1000) or -1
 
         if (time <= elapsedTime and (nextTime > elapsedTime or nextTime == -1)) then
-            local lookX, lookY, lookZ = offsetX + data[2], offsetY + data[3], offsetZ + data[4]
+            local data, nextData, segmentProgress = Cutscene.resolveSegment(
+                Cutscene.cutsceneData["cameraData"][4].data, segmentIndex, elapsedTime
+            )
+            local relativeLookX, relativeLookY, relativeLookZ = data[2], data[3], data[4]
+            local outgoingControlPointX, outgoingControlPointY, outgoingControlPointZ = data[8], data[9], data[10]
+            local lookX, lookY, lookZ = offsetX + relativeLookX, offsetY + relativeLookY, offsetZ + relativeLookZ
 
             if (nextData ~= nil) then
                 local nextLookX, nextLookY, nextLookZ =
                     offsetX + nextData[2], offsetY + nextData[3], offsetZ + nextData[4]
-                local progress = 1 / ((nextTime - time) / (elapsedTime - time))
 
-                Cutscene.cutsceneData["lastValues"].lookX =
-                    lookX + ((nextLookX - lookX) * progress)
+                if (outgoingControlPointX == relativeLookX and outgoingControlPointY == relativeLookY
+                    and outgoingControlPointZ == relativeLookZ) then
+                    Cutscene.cutsceneData["lastValues"].lookX = lookX + ((nextLookX - lookX) * segmentProgress)
+                    Cutscene.cutsceneData["lastValues"].lookY = lookY + ((nextLookY - lookY) * segmentProgress)
+                    Cutscene.cutsceneData["lastValues"].lookZ = lookZ + ((nextLookZ - lookZ) * segmentProgress)
+                else
+                    local c1X, c1Y, c1Z = offsetX + outgoingControlPointX, offsetY + outgoingControlPointY, offsetZ + outgoingControlPointZ
+                    local nextIncomingControlPointX, nextIncomingControlPointY, nextIncomingControlPointZ =
+                        nextData[5], nextData[6], nextData[7]
+                    local c2X, c2Y, c2Z =
+                        offsetX + nextIncomingControlPointX, offsetY + nextIncomingControlPointY, offsetZ + nextIncomingControlPointZ
 
-                Cutscene.cutsceneData["lastValues"].lookY =
-                    lookY + ((nextLookY - lookY) * progress)
-
-                Cutscene.cutsceneData["lastValues"].lookZ =
-                    lookZ + ((nextLookZ - lookZ) * progress)
+                    Cutscene.cutsceneData["lastValues"].lookX = getCubicBezier(segmentProgress, lookX, c1X, c2X, nextLookX)
+                    Cutscene.cutsceneData["lastValues"].lookY = getCubicBezier(segmentProgress, lookY, c1Y, c2Y, nextLookY)
+                    Cutscene.cutsceneData["lastValues"].lookZ = getCubicBezier(segmentProgress, lookZ, c1Z, c2Z, nextLookZ)
+                end
 
                 progressed = true
             else
-                Cutscene.cutsceneData["lastValues"].x = lookX
-                Cutscene.cutsceneData["lastValues"].y = lookY
-                Cutscene.cutsceneData["lastValues"].z = lookZ
+                Cutscene.cutsceneData["lastValues"].lookX = lookX
+                Cutscene.cutsceneData["lastValues"].lookY = lookY
+                Cutscene.cutsceneData["lastValues"].lookZ = lookZ
             end
 
-            Cutscene.cutsceneData["cameraData"][4].currentNode = i
+            Cutscene.cutsceneData["cameraData"][4].currentNode = segmentIndex
             break
         end
     end

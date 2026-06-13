@@ -8,6 +8,7 @@
             "src/shared/utils/modelrefs.lua",
             "src/shared/utils/util.lua",
             "src/shared/utils/vehicles.lua",
+            "src/shared/utils/math.lua",
             "src/shared/tasks/taskcode.lua",
 
             "src/shared/io/ini.lua",
