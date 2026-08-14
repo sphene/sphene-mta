@@ -11,6 +11,7 @@
     <script src="src/shared/utils/util.lua" type="server" />
     <script src="src/shared/utils/vehicles.lua" type="server" />
     <script src="src/shared/utils/math.lua" type="shared" cache="false" />
+    <script src="src/shared/utils/profiler.lua" type="shared" cache="false" />
     <script src="src/shared/tasks/taskcode.lua" type="server" />
     <script src="src/server/utils/env.lua" type="server" />
 

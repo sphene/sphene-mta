@@ -697,10 +697,14 @@ function Loader.loadScripts(scriptsData)
 
                     local scriptData = scriptsData:sub(scriptsOffset + scriptOffset + 1, scriptsOffset + scriptOffset + scriptLen)
 
-                    local call, _ = assert(loadstring("--[["..scriptName.."]]"..scriptData))
+                    -- The chunk is named after the script, so errors and debug info
+                    -- point at the file instead of at the code itself. The @ makes
+                    -- Lua keep the end of the path when it is too long to fit.
+                    local call, _ = assert(loadstring(scriptData, '@' .. scriptName))
 
                     local status = xpcall(call, function(error)
                         error = error:gsub("%[string.+%]", "")
+                        error = error:gsub("^.-%.lua(:%d+:)", "%1", 1)
                         error = error:gsub("^( )+","")
 
                         if (error:match("^:[0-9]+") ~= nil) then
