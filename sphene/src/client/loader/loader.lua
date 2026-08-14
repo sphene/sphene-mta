@@ -50,21 +50,59 @@ function Loader.init(game)
 
     Loader.game = game
 
-    requestBrowserDomains({config('cdn_url'), config('api_url')}, false, Loader.onUrlsRequestComplete)
+    -- MTA doesn't call the callback of requestBrowserDomains anymore, so the whitelist is checked here
+    -- and once more whenever it changes (which is when the request window is accepted)
+    addEventHandler("onClientBrowserWhitelistChange", root, Loader.onBrowserWhitelistChange)
+
+    if (Loader.areBrowserDomainsAccepted() == true) then
+        Logger.info('LOADER', 'CDN and API domains are already accepted, skipping the request')
+        Loader.onUrlsRequestComplete(true)
+        return
+    end
+
+    requestBrowserDomains({config('cdn_url'), config('api_url')}, true, Loader.onUrlsRequestComplete)
+end
+
+function Loader.onBrowserWhitelistChange(changedDomains)
+    if (Loader.active) then
+        return
+    end
+
+    Logger.info('LOADER', 'Browser whitelist changed ({})', table.concat(changedDomains or {}, ", "))
+
+    if (Loader.areBrowserDomainsAccepted() == false) then
+        Logger.info('LOADER', 'CDN and API domains are still blocked, waiting...')
+        return
+    end
+
+    Loader.onUrlsRequestComplete(true)
+end
+
+-- Returns true if both domains are accepted, false if at least one of them is blocked and nil if the state is unknown
+function Loader.areBrowserDomainsAccepted()
+    local accepted = true
+
+    for _, url in pairs({config('cdn_url'), config('api_url')}) do
+        local isBlocked = isBrowserDomainBlocked(url, true)
+
+        if (isBlocked == nil) then
+            accepted = nil
+        elseif (isBlocked) then
+            return false
+        end
+    end
+
+    return accepted
 end
 
 function Loader.onUrlsRequestComplete(wasAccepted)
-    if (not wasAccepted) then
+    if (not wasAccepted or Loader.areBrowserDomainsAccepted() == false) then
         outputChatBox("Sphene does not work if you do not accept the CDN and API subdomains.", 255, 0, 0)
-        requestBrowserDomains({config('cdn_url'), config('api_url')}, false, Loader.onUrlsRequestComplete)
+        requestBrowserDomains({config('cdn_url'), config('api_url')}, true, Loader.onUrlsRequestComplete)
         return
-    else
-        if (isBrowserDomainBlocked(config('cdn_url')) or isBrowserDomainBlocked(config('api_url'))) then
-            outputChatBox("Sphene does not work if you do not accept the CDN and API subdomains.", 255, 0, 0)
-            requestBrowserDomains({config('cdn_url'), config('api_url')}, false, Loader.onUrlsRequestComplete)
-            return
-        end
     end
+
+    removeEventHandler("onClientBrowserWhitelistChange", root, Loader.onBrowserWhitelistChange)
 
     showChat(false)
 
