@@ -63,6 +63,7 @@
             "src/client/game/elements/tasks/simpleTask.lua",
             "src/client/game/elements/tasks/groupTask.lua",
             "src/client/game/elements/tasks/complexTask.lua",
+            "src/client/game/elements/tasks/taskManager.lua",
             "src/client/game/elements/tasks/sequence.lua",
 
             "src/client/opcodes/opcode.lua",
@@ -190,10 +191,19 @@
             "src/client/game/elements/tasks/san_andreas/complex/taskComplexEnterCarAsPassenger.lua",
             "src/client/game/elements/tasks/san_andreas/complex/taskComplexEnterCarAsDriver.lua",
             "src/client/game/elements/tasks/san_andreas/complex/taskComplexGoToCarDoorAndStandStill.lua",
+            "src/client/game/elements/tasks/san_andreas/complex/taskComplexGoToPointAndStandStill.lua",
+            "src/client/game/elements/tasks/san_andreas/complex/taskComplexFollowNodeRoute.lua",
+            "src/client/game/elements/tasks/san_andreas/complex/taskComplexLeaveCar.lua",
+            "src/client/game/elements/tasks/san_andreas/complex/taskComplexEvasiveDiveAndGetUp.lua",
 
             "src/client/game/elements/tasks/san_andreas/simple/taskSimpleCarDrive.lua",
             "src/client/game/elements/tasks/san_andreas/simple/taskSimpleDuck.lua",
+            "src/client/game/elements/tasks/san_andreas/simple/taskSimpleEnterCar.lua",
             "src/client/game/elements/tasks/san_andreas/simple/taskSimpleGoToPoint.lua",
+            "src/client/game/elements/tasks/san_andreas/simple/taskSimpleStandStill.lua",
+            "src/client/game/elements/tasks/san_andreas/simple/taskSimpleEvasiveDive.lua",
+            "src/client/game/elements/tasks/san_andreas/simple/taskSimplePause.lua",
+            "src/client/game/elements/tasks/san_andreas/simple/taskSimpleGetUp.lua",
 
             "src/client/opcodes/san_andreas/attractor.lua",
             "src/client/opcodes/san_andreas/checkpoint.lua",

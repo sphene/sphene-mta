@@ -9,7 +9,7 @@ TaskComplexCarDriveToPoint.__index = TaskComplexCarDriveToPoint
 -- * Functions
 -----------------------------------
 
-function TaskComplexCarDriveToPoint:create(ped, car, posX, posY, posZ, speed, speed2, model, drivingStyle)
+function TaskComplexCarDriveToPoint:create(ped, car, posX, posY, posZ, speed, driveMode, model, drivingStyle)
     local mt = setmetatable({}, TaskComplexCarDriveToPoint)
 
     mt.parent.create(mt, ped)
@@ -18,28 +18,31 @@ function TaskComplexCarDriveToPoint:create(ped, car, posX, posY, posZ, speed, sp
     mt.posY = posY
     mt.posZ = posZ
     mt.speed = speed
-    mt.speed2 = speed2
+    mt.driveMode = driveMode
     mt.model = model
     mt.drivingStyle = drivingStyle
 
     return mt
 end
 
-function TaskComplexCarDriveToPoint:process()
-    if (TaskComplexCarDriveToPoint.parent.process(self)) then
-        if (not self:getPed():isInVehicle()) then
-            self:setSubTask(TaskComplexEnterCarAsDriver:create(self:getPed(), self.car))
-        else
-            local vehX, vehY, vehZ = self:getPed():getOccupiedVehicle():getPosition()
+function TaskComplexCarDriveToPoint:createFirstSubTask()
+    local ped = self:getPed()
 
-            if (getDistanceBetweenPoints3D(vehX, vehY, vehZ, self.posX, self.posY, self.posZ) <= 3) then
-                self:setFinished()
-                return
-            end
-
-            self:setSubTask(TaskSimpleCarDrive:create(self:getPed(), self.posX, self.posY, self.posZ, self.speed, self.speed2, self.drivingStyle))
-        end
+    if (not ped:isInVehicle()) then
+        return TaskComplexEnterCarAsDriver:create(ped, self.car)
     end
+
+    local vehX, vehY, vehZ = ped:getOccupiedVehicle():getPosition()
+
+    if (getDistanceBetweenPoints3D(vehX, vehY, vehZ, self.posX, self.posY, self.posZ) <= TaskSimpleCarDrive.ARRIVE_DISTANCE) then
+        return false
+    end
+
+    return TaskSimpleCarDrive:create(ped, self.posX, self.posY, self.posZ, self.speed, self.driveMode, self.model, self.drivingStyle)
+end
+
+function TaskComplexCarDriveToPoint:createNextSubTask()
+    return self:createFirstSubTask()
 end
 
 function TaskComplexCarDriveToPoint:getName()

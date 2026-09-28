@@ -218,9 +218,24 @@ Pad.DISABLE_KEYS = {
 
 Pad.moveable = true
 
+-- GTA's CPad stick values are -128..128
+Pad.STICK_MAX = 128
+
 -----------------------------------
 -- * Functions
 -----------------------------------
+
+function Pad.stickToAnalog(units)
+    -- MTA truncates state * 128 to a whole unit, so round to the nearest one and aim at its middle.
+    local rounded = math.min(math.floor(math.abs(units) + 0.5), Pad.STICK_MAX)
+
+    if rounded == 0 then
+        return 0
+    end
+
+    local value = rounded == Pad.STICK_MAX and 1 or (rounded + 0.5) / Pad.STICK_MAX
+    return units < 0 and -value or value
+end
 
 function Pad.convertGtaControlToMta(control)
     return Pad.GTA_TO_MTA_CONVERT_TABLE[control:lower()] or false

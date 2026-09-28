@@ -57,6 +57,18 @@ ActorElement = {
 
 ActorElement.__index = ActorElement
 
+-- GTA's eMoveState (PEDMOVE_*)
+ActorElement.MoveState = {
+    NONE = 0,
+    STILL = 1,
+    TURN_L = 2,
+    TURN_R = 3,
+    WALK = 4,
+    JOG = 5,    -- unused in SA
+    RUN = 6,
+    SPRINT = 7,
+}
+
 -----------------------------------
 -- * Functions
 -----------------------------------
@@ -113,23 +125,7 @@ function ActorElement:create(model, existingElement, parentMT)
     mt.scheduledAdjustment = false
     mt.avoidDuplicateAdjustment = false
 
-    mt.taskSlots = {
-        {
-            TASK_PRIORITY_PHYSICAL_RESPONSE = false,
-            TASK_PRIORITY_EVENT_RESPONSE_TEMP = false,
-            TASK_PRIORITY_EVENT_RESPONSE_NONTEMP = false,
-            TASK_PRIORITY_PRIMARY = false,
-            TASK_PRIORITY_DEFAULT = false,
-        },
-        {
-            TASK_SECONDARY_ATTACK = false,
-            TASK_SECONDARY_DUCK = false,
-            TASK_SECONDARY_SAY = false,
-            TASK_SECONDARY_FACIAL_COMPLEX = false,
-            TASK_SECONDARY_PARTIAL_ANIM = false,
-            TASK_SECONDARY_IK = false,
-        }
-    }
+    mt.taskManager = TaskManager:create(mt)
 
     mt.controlStates = {}
     mt.analogControlStates = {}
@@ -241,23 +237,9 @@ function ActorElement:setLookAt(x, y, z)
 end
 
 function ActorElement:clearTasks()
-    self.taskSlots = {
-        {
-            TASK_PRIORITY_PHYSICAL_RESPONSE = false,
-            TASK_PRIORITY_EVENT_RESPONSE_TEMP = false,
-            TASK_PRIORITY_EVENT_RESPONSE_NONTEMP = false,
-            TASK_PRIORITY_PRIMARY = false,
-            TASK_PRIORITY_DEFAULT = false,
-        },
-        {
-            TASK_SECONDARY_ATTACK = false,
-            TASK_SECONDARY_DUCK = false,
-            TASK_SECONDARY_SAY = false,
-            TASK_SECONDARY_FACIAL_COMPLEX = false,
-            TASK_SECONDARY_PARTIAL_ANIM = false,
-            TASK_SECONDARY_IK = false,
-        }
-    }
+    self.taskManager:flush()
+
+    self.activeTasks = {}
 
     self.trafficPath = false
     self.wearingJetpack = false
@@ -277,10 +259,35 @@ function ActorElement:clearTasks()
     self:setAnalogControlState("vehicle_left", 0)
     self:setAnalogControlState("brake_reverse", 0)
 
+    self:releaseMoveStick()
+
     if (not self:isInVehicle()) then
         self.enteringVehicle = false
         self.enteringVehicleSeat = -1
     end
+end
+
+function ActorElement:setMoveStick(angle, length)
+    local forwards = Pad.stickToAnalog(math.cos(angle) * length)
+    local right = Pad.stickToAnalog(-math.sin(angle) * length)
+
+    self:setAnalogControlState(forwards < 0 and "forwards" or "backwards", 0)
+    self:setAnalogControlState(forwards < 0 and "backwards" or "forwards", math.abs(forwards))
+    self:setAnalogControlState(right < 0 and "right" or "left", 0)
+    self:setAnalogControlState(right < 0 and "left" or "right", math.abs(right))
+end
+
+function ActorElement:releaseMoveStick()
+    self:setAnalogControlState("forwards", 0)
+    self:setAnalogControlState("backwards", 0)
+    self:setAnalogControlState("right", 0)
+    self:setAnalogControlState("left", 0)
+end
+
+function ActorElement:stopMoving()
+    self:releaseMoveStick()
+    self:setControlState("walk", false)
+    self:setControlState("sprint", false)
 end
 
 function ActorElement:addScriptedTask(task, priority, slot)
@@ -288,22 +295,24 @@ function ActorElement:addScriptedTask(task, priority, slot)
         task:getName(), slot, priority, self.id)
 
     task:setScripted(true)
-    self.taskSlots[priority][slot] = task
+    self.taskManager:setTask(task, priority, slot)
 end
 
 function ActorElement:removeTask(priority, slot)
     Logger.info(string.upper(self:getType()), 'Removing task from slot {} with priority {} for ID {}',
         slot, priority, self.id)
 
-    self.taskSlots[priority][slot] = false
+    self.taskManager:setTask(false, priority, slot)
 end
 
 function ActorElement:registerTask(id, task)
     self.activeTasks[id] = task
 end
 
-function ActorElement:unregisterTask(id)
-    self.activeTasks[id] = nil
+function ActorElement:unregisterTask(id, task)
+    if self.activeTasks[id] == task then
+        self.activeTasks[id] = nil
+    end
 end
 
 function ActorElement:setActiveSequence(sequence)
@@ -313,13 +322,7 @@ end
 function ActorElement:markTaskFinished(task)
     Logger.info(string.upper(self:getType()), 'Marking task {} as finished for ID {}', task:getName(), self.id)
 
-    for _, slots in pairs(self.taskSlots) do
-        for slot, checkTask in pairs(slots) do
-            if (checkTask == task) then
-                slots[slot] = false
-            end
-        end
-    end
+    self.taskManager:removeTask(task)
 end
 
 function ActorElement:setPosition(x, y, z, removeFromVehicle)
@@ -365,12 +368,12 @@ function ActorElement:enterVehicle(vehicle, seat)
     self.enteringVehicleSeat = seat
     self.updatedByEvent = true
 
-    setPedEnterVehicle(self.element, vehicle.element, seat ~= 0)
+    setPedEnterVehicle(self.element, vehicle.element, seat)
 
     --Logger.info(string.upper(self:getType()), 'Ped with ID {} is entering vehicle with ID {} in seat {}', self.id, vehicle.id, seat)
 end
 
-function ActorElement:exitVehicle()
+function ActorElement:exitVehicle(force)
     if not self.element or not self:getOccupiedVehicle() then
         return false
     end
@@ -378,7 +381,8 @@ function ActorElement:exitVehicle()
     self.exitingVehicleSeat = self.vehicleSeat
     self.updatedByEvent = true
 
-    setPedExitVehicle(self.element)
+    -- force: leave without waiting for the vehicle to stop (TASK_LEAVE_CAR_IMMEDIATELY)
+    setPedExitVehicle(self.element, force == true)
 
     --Logger.info(string.upper(self:getType()), 'Ped with ID {} is exiting vehicle with ID {} from seat {}', self.id, self.vehicle.id, self.vehicleSeat)
 end
@@ -472,14 +476,16 @@ function ActorElement:warpIntoVehicle(vehicle, seat)
 end
 
 function ActorElement:removeFromVehicle()
-    if (not self.vehicle) then
+    local vehicle = self.vehicle
+
+    if (not vehicle) then
         return false
     end
 
-    Logger.debug(string.upper(self:getType()), 'Removing ped with ID {} from vehicle with ID {}', self.id, self.vehicle.id)
+    Logger.debug(string.upper(self:getType()), 'Removing ped with ID {} from vehicle with ID {}', self.id, vehicle.id)
 
     removePedFromVehicle(self.element)
-    self.vehicle:removeActorFromSeat(self)
+    vehicle:removeActorFromSeat(self)
 
     self.vehicle = false
     self.vehicleSeat = 0
@@ -557,6 +563,10 @@ function ActorElement:getAnimation()
     return getPedAnimation(self.element)
 end
 
+function ActorElement:getAnimationProgress()
+    return getPedAnimationProgress(self.element)
+end
+
 function ActorElement:getActiveEnex()
     return self.activeEnex
 end
@@ -586,7 +596,7 @@ function ActorElement:getWeaponSlot()
 end
 
 function ActorElement:getTasks(priority)
-    return self.taskSlots[priority]
+    return self.taskManager:getTasks(priority)
 end
 
 function ActorElement:getOccupiedVehicle()
@@ -702,13 +712,7 @@ function ActorElement:onPreFrame()
         end
     end
 
-    for _, taskSlot in pairs(self.taskSlots) do
-        for _, task in pairs(taskSlot) do
-            if (task) then
-                task:process()
-            end
-        end
-    end
+    self.taskManager:manageTasks()
 end
 
 function ActorElement:getTaskStatus(taskId)
@@ -748,3 +752,39 @@ Core.mergeInto(ActorElement, ElementWrapper)
 -----------------------------------
 -- * Events
 -----------------------------------
+
+function ActorElement.onVehicleEnter(ped, seat)
+    local actor = ElementManager.getElementByHandle(ped)
+    local vehicle = ElementManager.getElementByHandle(source)
+
+    if not actor or not vehicle or actor.element ~= ped then
+        return
+    end
+
+    if actor.vehicle and actor.vehicle ~= vehicle then
+        actor.vehicle:removeActorFromSeat(actor)
+    end
+
+    actor.vehicle = vehicle
+    actor.vehicleSeat = seat
+    actor.enteringVehicle = false
+    actor.enteringVehicleSeat = -1
+
+    vehicle:assignActorToSeat(actor, seat)
+end
+
+function ActorElement.onVehicleExit(ped)
+    local actor = ElementManager.getElementByHandle(ped)
+
+    if not actor or actor.element ~= ped or not actor.vehicle then
+        return
+    end
+
+    actor.vehicle:removeActorFromSeat(actor)
+
+    actor.vehicle = false
+    actor.vehicleSeat = 0
+end
+
+addEventHandler("onClientVehicleEnter", root, ActorElement.onVehicleEnter)
+addEventHandler("onClientVehicleExit", root, ActorElement.onVehicleExit)

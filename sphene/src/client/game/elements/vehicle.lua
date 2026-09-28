@@ -372,6 +372,16 @@ function VehicleElement:getMaxPassengers()
     return getVehicleMaxPassengers(self.model)
 end
 
+function VehicleElement:getFreePassengerSeat()
+    for seat = 1, self:getMaxPassengers() or 0 do
+        if not self:getOccupantInSeat(seat) then
+            return seat
+        end
+    end
+
+    return false
+end
+
 function VehicleElement:getHeliRotorSpeed()
     return getHelicopterRotorSpeed(self.element)
 end

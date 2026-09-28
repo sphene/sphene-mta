@@ -136,11 +136,11 @@ function ActorClass:exitVehicle(_)
     self.actor:exitVehicle()
 end
 
-function ActorClass:driveTo(_, vehicle, x, y, z, speed, speed2, model, drivingStyle)
+function ActorClass:driveTo(_, vehicle, x, y, z, speed, driveMode, model, drivingStyle)
     if (self:__instanceof(vehicle, VehicleClass)) then
         self.actor:clearTasks()
 
-        local task = TaskComplexCarDriveToPoint:create(self.actor, vehicle, x, y, z, speed, speed2, model, drivingStyle)
+        local task = TaskComplexCarDriveToPoint:create(self.actor, vehicle, x, y, z, speed, driveMode, model, drivingStyle)
 
         self.actor:addScriptedTask(task, 1, "TASK_PRIORITY_PRIMARY")
     end
@@ -149,7 +149,7 @@ end
 function ActorClass:walkTo(_, x, y, z)
     self.actor:clearTasks()
 
-    local task = TaskSimpleGoToPoint:create(self.actor, x, y, z)
+    local task = TaskComplexFollowNodeRoute:create(self.actor, x, y, z)
 
     self.actor:addScriptedTask(task, 1, "TASK_PRIORITY_PRIMARY")
 end

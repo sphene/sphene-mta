@@ -144,10 +144,10 @@ function PlayerElement:enterVehicle(vehicle, seat)
     end
 end
 
-function PlayerElement:exitVehicle()
+function PlayerElement:exitVehicle(force)
     if self:isInVehicle() then
         self.exitingVehicle = true
-        PlayerElement.parent.exitVehicle(self)
+        PlayerElement.parent.exitVehicle(self, force)
         return
     end
 end
