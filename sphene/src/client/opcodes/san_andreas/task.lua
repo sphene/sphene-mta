@@ -345,15 +345,29 @@ end
 -- Opcode: 0x0605
 -- Instruction: task_play_anim {handle} [Char] {animationName} [string] {animationFile} [string] {blendSpeed} [float] {loop} [bool] {lockX} [bool] {lockY} [bool] {keepLastFrame} [bool] {time} [int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0605
-function SanAndreasOpcodeTask.playAnim(actor, animation, block, _, looped, locked, _, _, time)
+function SanAndreasOpcodeTask.playAnim(actor, animation, block, blendSpeed, looped, lockX, lockY, keepLastFrame, time)
     if (actor == -1) then
         return -- Ignore for now, -1 is for AS packs.
     end
 
     Script.setOpcodePartiallyImplemented()
-    return actor:setAnimation(block, animation,
-        time, ((looped == 1) and true or false),
-        ((locked == 1) and false or true), true)
+
+    -- CRunningScript::PlayAnimScriptCommand
+
+    -- MTA turns the blend time (ms) back into GTA's blend delta as 1000 / time
+    local blendTime = blendSpeed > 0 and math.floor(1000 / blendSpeed + 0.5) or nil
+
+    -- TODO: A way to set lockX and lockY separately?
+    return actor:setAnimation(
+        block,
+        animation,
+        time > 0 and time or -1,
+        looped == 1,
+        lockX == 1 or lockY == 1,
+        true,
+        keepLastFrame == 1,
+        blendTime
+    )
 end
 
 -- Opcode: 0x0622
@@ -771,15 +785,38 @@ end
 -- Opcode: 0x0812
 -- Instruction: task_play_anim_non_interruptable {handle} [Char] {animationName} [string] {animationFile} [string] {blendSpeed} [float] {loop} [bool] {lockX} [bool] {lockY} [bool] {keepLastFrame} [bool] {time} [int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0812
-function SanAndreasOpcodeTask.playAnimNonInterruptable(actor, animation, block, _, looped, locked, _, _, time)
+function SanAndreasOpcodeTask.playAnimNonInterruptable(
+    actor,
+    animation, block,
+    blendSpeed,
+    looped,
+    lockX,
+    lockY,
+    keepLastFrame,
+    time
+)
     if (actor == -1) then
         return -- Ignore for now, -1 is for AS packs.
     end
 
     Script.setOpcodePartiallyImplemented()
-    return actor:setAnimation(block, animation,
-        time, ((looped == 1) and true or false),
-        ((locked == 1) and false or true), false)
+
+    -- CRunningScript::PlayAnimScriptCommand
+
+    -- MTA turns the blend time (ms) back into GTA's blend delta as 1000 / time
+    local blendTime = blendSpeed > 0 and math.floor(1000 / blendSpeed + 0.5) or nil
+
+    -- TODO: A way to set lockX and lockY separately?
+    return actor:setAnimation(
+        block,
+        animation,
+        time > 0 and time or -1,
+        looped == 1,
+        lockX == 1 or lockY == 1,
+        false,
+        keepLastFrame == 1,
+        blendTime
+    )
 end
 
 -- Opcode: 0x0817
