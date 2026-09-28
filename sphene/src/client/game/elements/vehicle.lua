@@ -569,6 +569,8 @@ function VehicleElement:onPreFrame()
 
                 self:setMatrix(matrix)
                 self:setVelocity(velX, velY, velZ)
+                -- SA zeroes the turn speed every frame
+                self:setAngularVelocity(0, 0, 0)
 
                 if (i == #carrecData) then
                     self:setCollisionsEnabled(true)
