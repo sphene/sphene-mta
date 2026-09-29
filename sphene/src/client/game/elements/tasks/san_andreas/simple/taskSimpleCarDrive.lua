@@ -5,11 +5,13 @@
 TaskSimpleCarDrive = {}
 TaskSimpleCarDrive.__index = TaskSimpleCarDrive
 
+TaskSimpleCarDrive.ARRIVE_DISTANCE = 3
+
 -----------------------------------
 -- * Functions
 -----------------------------------
 
-function TaskSimpleCarDrive:create(ped, posX, posY, posZ, speed, speed2, model, drivingStyle)
+function TaskSimpleCarDrive:create(ped, posX, posY, posZ, speed, driveMode, model, drivingStyle)
     local mt = setmetatable({}, TaskSimpleCarDrive)
 
     mt.parent.create(mt, ped)
@@ -17,7 +19,7 @@ function TaskSimpleCarDrive:create(ped, posX, posY, posZ, speed, speed2, model, 
     mt.posY = posY
     mt.posZ = posZ
     mt.speed = speed
-    mt.speed2 = speed2
+    mt.driveMode = driveMode
     mt.model = model
     mt.drivingStyle = drivingStyle
     mt.trafficPath = false
@@ -31,13 +33,12 @@ function TaskSimpleCarDrive:process()
 
     if (not ped.element) then
         Logger.debug(string.upper(self:getName()), "Ped element is nil for ped {}", ped.id)
-        return
+        return false
     end
 
     if (not vehicle and not ped.warpingIntoVehicle and not ped.enteringVehicle) then
         Logger.debug(string.upper(self:getName()), "Ped is not in vehicle for ped {}, ending task...", ped.id)
-        self:setFinished()
-        return
+        return true
     end
 
     if (not self.trafficPath) then
@@ -47,7 +48,7 @@ function TaskSimpleCarDrive:process()
 
     local vehX, vehY, vehZ = vehicle:getPosition()
 
-    if (getDistanceBetweenPoints3D(vehX, vehY, vehZ, self.posX, self.posY, self.posZ) <= 3) then
+    if (getDistanceBetweenPoints3D(vehX, vehY, vehZ, self.posX, self.posY, self.posZ) <= TaskSimpleCarDrive.ARRIVE_DISTANCE) then
         ped:setAnalogControlState("accelerate", 0)
         ped:setAnalogControlState("brake_reverse", 0)
         ped:setControlState("vehicle_left", false)
@@ -55,8 +56,7 @@ function TaskSimpleCarDrive:process()
 
         Logger.debug(string.upper(self:getName()), "Ped reached destination for ped {}, ending task...", ped.id)
 
-        self:setFinished()
-        return
+        return true
     end
 
     local speed = vehicle:getSpeed("km/h")
@@ -140,6 +140,8 @@ function TaskSimpleCarDrive:process()
             ped:setControlState("vehicle_right", rotX * 500 / rotY > secondpart)
         end
     end
+
+    return false
 end
 
 function TaskSimpleCarDrive:getName()

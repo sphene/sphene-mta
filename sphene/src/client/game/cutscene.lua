@@ -192,6 +192,8 @@ Cutscene.cutsceneMapping = {
 function Cutscene.load(cutscene)
     Logger.info('CUTSCENE', 'Loading cutscene: {}', cutscene)
 
+    PlayerElement.localPlayer:setVisible(false)
+
     setTimer(function()
         Cutscene.dataImgArchive = ImgArchive:create(Cutscene.DATA_PATH)
         Cutscene.modelImgArchive = ImgArchive:create(Cutscene.MODEL_PATH)
@@ -361,6 +363,11 @@ function Cutscene.endScene()
     Cutscene.isCutsceneSkipped = false
     Cutscene.finishTime = 0
 
+    localPlayer:setDimension(getElementData(getElementParent(localPlayer), 'dimension'))
+    PlayerElement.localPlayer:setVisible(true)
+
+    Camera.restore(true)
+
     showPlayerHudComponent("all", true)
     resetAmbientSounds()
     resetWorldSounds()
@@ -412,8 +419,6 @@ function Cutscene.endScene()
                 destroyElement(modelData.txd)
             end
         end
-
-        localPlayer:setDimension(getElementData(getElementParent(localPlayer), 'dimension'))
     end, 100, 1)
 
     return true

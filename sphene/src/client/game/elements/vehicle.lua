@@ -372,6 +372,16 @@ function VehicleElement:getMaxPassengers()
     return getVehicleMaxPassengers(self.model)
 end
 
+function VehicleElement:getFreePassengerSeat()
+    for seat = 1, self:getMaxPassengers() or 0 do
+        if not self:getOccupantInSeat(seat) then
+            return seat
+        end
+    end
+
+    return false
+end
+
 function VehicleElement:getHeliRotorSpeed()
     return getHelicopterRotorSpeed(self.element)
 end
@@ -559,6 +569,8 @@ function VehicleElement:onPreFrame()
 
                 self:setMatrix(matrix)
                 self:setVelocity(velX, velY, velZ)
+                -- SA zeroes the turn speed every frame
+                self:setAngularVelocity(0, 0, 0)
 
                 if (i == #carrecData) then
                     self:setCollisionsEnabled(true)

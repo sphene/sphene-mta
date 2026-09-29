@@ -84,6 +84,7 @@ function PlayerElement:create(model, player)
     mt.swap = false
     mt.exitingVehicle = false
     mt.networkingActive = false
+    mt.visible = true
 
     setElementAlpha(mt.__player, 255)
     setElementCollisionsEnabled(mt.__player, true)
@@ -144,10 +145,10 @@ function PlayerElement:enterVehicle(vehicle, seat)
     end
 end
 
-function PlayerElement:exitVehicle()
+function PlayerElement:exitVehicle(force)
     if self:isInVehicle() then
         self.exitingVehicle = true
-        PlayerElement.parent.exitVehicle(self)
+        PlayerElement.parent.exitVehicle(self, force)
         return
     end
 end
@@ -190,6 +191,12 @@ function PlayerElement:setAnalogControlState(control, state)
     end
 end
 
+function PlayerElement:setVisible(visible)
+    self.visible = visible
+
+    setElementAlpha(self.element, visible and 255 or 0)
+end
+
 function PlayerElement:setClothes(texture, model, bodyPart)
     self.clothes[bodyPart] = {texture, model}
 end
@@ -212,7 +219,7 @@ function PlayerElement:swapToLocal(skipCamera)
     local worldX, worldY, worldZ = getWorldFromScreenPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 200)
     local cameraRot = getPedCameraRotation(self.__player)
 
-    setElementAlpha(self.__localElement, 255)
+    setElementAlpha(self.__localElement, self.visible and 255 or 0)
     setElementCollisionsEnabled(self.__localElement, true)
 
     setElementMatrix(self.__localElement, matrix)
@@ -314,7 +321,7 @@ function PlayerElement:swapToExternal(skipCamera)
 
             removePedFromVehicle(self.__localElement)
 
-            setElementAlpha(self.__player, 255)
+            setElementAlpha(self.__player, self.visible and 255 or 0)
             setElementCollisionsEnabled(self.__player, true)
 
             setElementMatrix(self.__player, matrix)

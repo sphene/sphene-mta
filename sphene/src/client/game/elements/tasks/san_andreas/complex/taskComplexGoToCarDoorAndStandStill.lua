@@ -5,6 +5,8 @@
 TaskComplexGoToCarDoorAndStandStill = {}
 TaskComplexGoToCarDoorAndStandStill.__index = TaskComplexGoToCarDoorAndStandStill
 
+TaskComplexGoToCarDoorAndStandStill.WALK_TO_DOOR_DISTANCE = 20
+
 -----------------------------------
 -- * Functions
 -----------------------------------
@@ -19,22 +21,22 @@ function TaskComplexGoToCarDoorAndStandStill:create(ped, car, seat)
     return mt
 end
 
-function TaskComplexGoToCarDoorAndStandStill:process()
-    if (TaskComplexGoToCarDoorAndStandStill.parent.process(self)) then
-        if (self:getPed():isInVehicle()) then
-            self:setFinished()
-        end
+function TaskComplexGoToCarDoorAndStandStill:createFirstSubTask()
+    local ped = self:getPed()
+    local walkToDoorDistance = TaskComplexGoToCarDoorAndStandStill.WALK_TO_DOOR_DISTANCE
 
-        local distance = self:getPed():getDistanceFromVehicleEntryPoint(self.car, self.seat)
-
-        if (distance < 1) then
-            self:setFinished()
-        else
-            local x, y, z = self.car:getEntryPoint(self.seat)
-
-            self:setSubTask(TaskSimpleGoToPoint:create(self:getPed(), x, y, z))
-        end
+    if (ped:isInVehicle() or ped:getDistanceFromVehicleEntryPoint(self.car, self.seat) < walkToDoorDistance) then
+        return false
     end
+
+    local x, y, z = self.car:getEntryPoint(self.seat)
+
+    -- TODO: Use desired move state instead of hardcoding RUN state
+    return TaskSimpleGoToPoint:create(ped, ActorElement.MoveState.RUN, x, y, z, walkToDoorDistance)
+end
+
+function TaskComplexGoToCarDoorAndStandStill:createNextSubTask()
+    return false
 end
 
 function TaskComplexGoToCarDoorAndStandStill:getName()

@@ -204,7 +204,7 @@ end
 -- Opcode: 0x05D1
 -- Instruction: task_car_drive_to_coord {driver} [Char] {vehicle} [Car] {x} [float] {y} [float] {z} [float] {speed} [float] {driveStyle} [DriveMode] {modelId} [model_vehicle] {drivingStyle} [DrivingMode]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/05D1
-function SanAndreasOpcodeTask.carDriveToCoord(actor, car, posX, posY, posZ, speed, speed2, model, drivingStyle)
+function SanAndreasOpcodeTask.carDriveToCoord(actor, car, posX, posY, posZ, speed, driveMode, model, drivingStyle)
     if (actor == -1) then
         local sequence = Sequence.getActiveSequence()
 
@@ -212,7 +212,7 @@ function SanAndreasOpcodeTask.carDriveToCoord(actor, car, posX, posY, posZ, spee
             return
         end
 
-        sequence:registerTask(TaskComplexCarDriveToPoint, {car, posX, posY, posZ, speed, speed2, model, drivingStyle}, 1, 'TASK_PRIORITY_PRIMARY')
+        sequence:registerTask(TaskComplexCarDriveToPoint, {car, posX, posY, posZ, speed, driveMode, model, drivingStyle}, 1, 'TASK_PRIORITY_PRIMARY')
         return
     end
 
@@ -220,7 +220,7 @@ function SanAndreasOpcodeTask.carDriveToCoord(actor, car, posX, posY, posZ, spee
 
     actor:clearTasks()
 
-    local task = TaskComplexCarDriveToPoint:create(actor, car, posX, posY, posZ, speed, speed2, model, drivingStyle)
+    local task = TaskComplexCarDriveToPoint:create(actor, car, posX, posY, posZ, speed, driveMode, model, drivingStyle)
 
     actor:addScriptedTask(task, 1, "TASK_PRIORITY_PRIMARY")
 
@@ -245,7 +245,7 @@ function SanAndreasOpcodeTask.goStraightToCoord(actor, posX, posY, posZ, mode, t
             return
         end
 
-        sequence:registerTask(TaskSimpleGoToPoint, {posX, posY, posZ}, 1, 'TASK_PRIORITY_PRIMARY')
+        sequence:registerTask(TaskComplexGoToPointAndStandStill, {posX, posY, posZ, mode, time}, 1, 'TASK_PRIORITY_PRIMARY')
         return
     end
 
@@ -253,7 +253,7 @@ function SanAndreasOpcodeTask.goStraightToCoord(actor, posX, posY, posZ, mode, t
 
     actor:clearTasks()
 
-    local task = TaskSimpleGoToPoint:create(actor, posX, posY, posZ)
+    local task = TaskComplexGoToPointAndStandStill:create(actor, posX, posY, posZ, mode, time)
 
     actor:addScriptedTask(task, 1, "TASK_PRIORITY_PRIMARY")
 
@@ -345,15 +345,29 @@ end
 -- Opcode: 0x0605
 -- Instruction: task_play_anim {handle} [Char] {animationName} [string] {animationFile} [string] {blendSpeed} [float] {loop} [bool] {lockX} [bool] {lockY} [bool] {keepLastFrame} [bool] {time} [int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0605
-function SanAndreasOpcodeTask.playAnim(actor, animation, block, _, looped, locked, _, _, time)
+function SanAndreasOpcodeTask.playAnim(actor, animation, block, blendSpeed, looped, lockX, lockY, keepLastFrame, time)
     if (actor == -1) then
         return -- Ignore for now, -1 is for AS packs.
     end
 
     Script.setOpcodePartiallyImplemented()
-    return actor:setAnimation(block, animation,
-        time, ((looped == 1) and true or false),
-        ((locked == 1) and false or true), true)
+
+    -- CRunningScript::PlayAnimScriptCommand
+
+    -- MTA turns the blend time (ms) back into GTA's blend delta as 1000 / time
+    local blendTime = blendSpeed > 0 and math.floor(1000 / blendSpeed + 0.5) or nil
+
+    -- TODO: A way to set lockX and lockY separately?
+    return actor:setAnimation(
+        block,
+        animation,
+        time > 0 and time or -1,
+        looped == 1,
+        lockX == 1 or lockY == 1,
+        true,
+        keepLastFrame == 1,
+        blendTime
+    )
 end
 
 -- Opcode: 0x0622
@@ -367,7 +381,7 @@ function SanAndreasOpcodeTask.leaveCarImmediately(actor, car)
     Script.setOpcodePartiallyImplemented()
     actor:clearTasks()
 
-    return actor:exitVehicle()
+    return actor:exitVehicle(true)
 end
 
 -- Opcode: 0x0633
@@ -454,7 +468,7 @@ end
 -- Opcode: 0x0673
 -- Instruction: task_dive_and_get_up {handle} [Char] {directionX} [float] {directionY} [float] {timeOnGround} [int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0673
-function SanAndreasOpcodeTask.diveAndGetUp(actor, offsetX, offsetY, timeOnGround)
+function SanAndreasOpcodeTask.diveAndGetUp(actor, directionX, directionY, timeOnGround)
     if (actor == -1) then
         return -- Ignore for now, -1 is for AS packs.
     end
@@ -463,15 +477,9 @@ function SanAndreasOpcodeTask.diveAndGetUp(actor, offsetX, offsetY, timeOnGround
 
     actor:clearTasks()
 
-    local rotX, rotY, _ = actor:getRotation()
-    actor:setAnimation("dodge", "cover_dive_01", timeOnGround, false)
+    local task = TaskComplexEvasiveDiveAndGetUp:create(actor, directionX, directionY, timeOnGround)
 
-    local posX, posY, _ = actor:getPosition()
-
-    local newX = posX + offsetX
-    local newY = posY + offsetY
-
-    actor:setRotation(rotX, rotY, findRotation(posX, posY, newX, newY))
+    actor:addScriptedTask(task, 1, "TASK_PRIORITY_PRIMARY")
 
     return true
 end
@@ -777,15 +785,38 @@ end
 -- Opcode: 0x0812
 -- Instruction: task_play_anim_non_interruptable {handle} [Char] {animationName} [string] {animationFile} [string] {blendSpeed} [float] {loop} [bool] {lockX} [bool] {lockY} [bool] {keepLastFrame} [bool] {time} [int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0812
-function SanAndreasOpcodeTask.playAnimNonInterruptable(actor, animation, block, _, looped, locked, _, _, time)
+function SanAndreasOpcodeTask.playAnimNonInterruptable(
+    actor,
+    animation, block,
+    blendSpeed,
+    looped,
+    lockX,
+    lockY,
+    keepLastFrame,
+    time
+)
     if (actor == -1) then
         return -- Ignore for now, -1 is for AS packs.
     end
 
     Script.setOpcodePartiallyImplemented()
-    return actor:setAnimation(block, animation,
-        time, ((looped == 1) and true or false),
-        ((locked == 1) and false or true), false)
+
+    -- CRunningScript::PlayAnimScriptCommand
+
+    -- MTA turns the blend time (ms) back into GTA's blend delta as 1000 / time
+    local blendTime = blendSpeed > 0 and math.floor(1000 / blendSpeed + 0.5) or nil
+
+    -- TODO: A way to set lockX and lockY separately?
+    return actor:setAnimation(
+        block,
+        animation,
+        time > 0 and time or -1,
+        looped == 1,
+        lockX == 1 or lockY == 1,
+        false,
+        keepLastFrame == 1,
+        blendTime
+    )
 end
 
 -- Opcode: 0x0817

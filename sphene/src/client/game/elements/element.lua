@@ -346,6 +346,10 @@ function ElementWrapper:isFrozen()
     return isElementFrozen(self.element)
 end
 
+function ElementWrapper:isStreamedIn()
+    return isElementStreamedIn(self.element)
+end
+
 function ElementWrapper:getData(key)
     return self.data[key] or false
 end
