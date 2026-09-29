@@ -116,6 +116,8 @@ function Enex:preFrame()
                         player:setTeleportedToEnex(linkedEnex)
                         player:adjustPosition()
 
+                        linkedEnex:applyExtraColor()
+
                         if activeEnex == linkedEnex or interior == 0 then
                             player:setActiveEnex(false)
                             player:setActiveInteriorName('UNKNOWN')
@@ -169,6 +171,59 @@ end
 
 function Enex:getGroup()
     return self.group
+end
+
+-- Get enex on the other side of this one
+function Enex:getLinkedEnex()
+    local group = self:getGroup()
+
+    if (not group) then
+        return self
+    end
+
+    local groupEnexes = group:getEnexes()
+    local linkedEnex = groupEnexes[#groupEnexes]
+
+    if (linkedEnex == self) then
+        for i = 1, #groupEnexes do
+            if (groupEnexes[i] ~= self) then
+                return groupEnexes[i]
+            end
+        end
+
+        return self
+    end
+
+    return linkedEnex or self
+end
+
+function Enex:applyExtraColor()
+    local sky = self.sky or 0
+
+    if (sky > 0) then
+        TimeCycle.startExtraColor(sky, false)
+    else
+        TimeCycle.stopExtraColor(false)
+    end
+end
+
+-- TODO: Might need to look into performance of this
+function Enex.findNearestEnex(x, y, range)
+    local nearestEnex, nearestDistance = nil, range * 2
+
+    for _, enex in ipairs(Enex.enexes) do
+        -- This is how the game checks it. Finds all enexes within 2 * range,
+        -- then return the nearest one.
+        if (math.abs(enex.entranceX - x) <= range and math.abs(enex.entranceY - y) <= range) then
+            local distance = getDistanceBetweenPoints2D(x, y, enex.entranceX, enex.entranceY)
+
+            if (distance < nearestDistance) then
+                nearestEnex, nearestDistance = enex, distance
+            end
+        end
+    end
+
+    return nearestEnex
 end
 
 function Enex.getEnexes()

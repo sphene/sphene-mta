@@ -22,6 +22,7 @@
             "src/client/game/pad.lua",
             "src/client/game/ipl.lua",
             "src/client/game/game.lua",
+            "src/client/game/timecycle.lua",
 
             "src/client/game/map/enex.lua",
             "src/client/game/map/enexGroup.lua",
@@ -129,6 +130,7 @@
             "data/game/san_andreas/data/script/main.scm",
             "data/game/san_andreas/data/vehicles.ide",
             "data/game/san_andreas/data/carcols.dat",
+            "data/game/san_andreas/data/timecyc.dat",
             "data/game/san_andreas/data/script/script.img",
             
             "data/game/san_andreas/models/gta3.img",
