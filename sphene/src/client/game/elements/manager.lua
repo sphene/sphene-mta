@@ -2,7 +2,8 @@
 -- * Locals (for perfomance)
 -----------------------------------
 
-local loadedModels = {}
+local requestedModels = {}
+local streamingReferences = {}
 local handlesToElement = {}
 
 local externalScriptTriggers = {
@@ -42,42 +43,121 @@ end
 
 function ElementManager.unload()
     handlesToElement = {}
-end
 
-function ElementManager.loadModel(model)
-    if (ElementManager.isModelLoaded(model)) then
-        return
+    for model in pairs(streamingReferences) do
+        ElementManager.releaseStreamingReference(model)
     end
-
-    loadedModels[model] = {}
 end
 
-function ElementManager.releaseModel(model)
-    if (not ElementManager.isModelLoaded(model)) then
-        return
-    end
-
-    loadedModels[model] = nil
-end
-
-function ElementManager.isModelLoaded(model)
-    return loadedModels[model] ~= nil
-end
-
-function ElementManager.setModelData(model, data, value)
-    if (not ElementManager.isModelLoaded(model)) then
-        return
-    end
-
-    loadedModels[model][data] = value
-end
-
-function ElementManager.getModelData(model, data)
-    if (not ElementManager.isModelLoaded(model)) then
+-- Script models are either plain GTA model IDs or negative indices in the SCM's used-objects table.
+function ElementManager.resolveModelId(model)
+    if (type(model) ~= 'number') then
         return nil
     end
 
-    return loadedModels[model][data]
+    if (model < 0) then
+        local objectName = Script.objectsById[math.abs(model - 1)]
+
+        if (not objectName) then
+            return nil
+        end
+
+        return engineGetModelIDFromName(objectName) or nil
+    end
+
+    return model
+end
+
+-- Request the model to be loaded/streamed into the game.
+function ElementManager.requestModel(model)
+    if (not ElementManager.isModelRequested(model)) then
+        requestedModels[model] = {}
+    end
+
+    if (streamingReferences[model]) then
+        return
+    end
+
+    local modelId = ElementManager.resolveModelId(model)
+
+    if (modelId and ElementManager.engineStreamingRequestModel(modelId, true)) then
+        streamingReferences[model] = modelId
+    else
+        -- Lets print a warning here, so we can debug if anything goes wrong.
+        Logger.warning('MODEL', "Couldn't request model {}, scripts waiting for it will hang.", model)
+    end
+end
+
+-- Release the loaded/streamed model from the game.
+function ElementManager.releaseStreamingReference(model)
+    local modelId = streamingReferences[model]
+
+    if (not modelId) then
+        return
+    end
+
+    streamingReferences[model] = nil
+    ElementManager.engineStreamingReleaseModel(modelId, true)
+end
+
+-- Unload the model and release the request.
+function ElementManager.releaseModel(model)
+    ElementManager.releaseStreamingReference(model)
+
+    if (not ElementManager.isModelRequested(model)) then
+        return
+    end
+
+    requestedModels[model] = nil
+end
+
+function ElementManager.isModelRequested(model)
+    return requestedModels[model] ~= nil
+end
+
+function ElementManager.hasModelLoaded(model)
+    local modelId = ElementManager.resolveModelId(model)
+
+    if (not modelId) then
+        return false
+    end
+
+    return engineStreamingGetModelLoadState(modelId) == 'loaded'
+end
+
+-- Load all models synchronously - SCM may wait for these to load fully.
+function ElementManager.loadAllRequestedModels()
+    for _, modelId in pairs(streamingReferences) do
+        if (engineStreamingGetModelLoadState(modelId) ~= 'loaded') then
+            ElementManager.engineStreamingRequestModel(modelId, false, true)
+        end
+    end
+end
+
+-- We do pcalls here, because some engine functions return error, which
+-- breaks Sphene. This is a workaround until we have engineIsModelValid.
+function ElementManager.engineStreamingRequestModel(modelId, addReference, blocking)
+    return pcall(engineStreamingRequestModel, modelId, addReference, blocking)
+end
+
+function ElementManager.engineStreamingReleaseModel(modelId, removeReference)
+    return pcall(engineStreamingReleaseModel, modelId, removeReference)
+end
+
+function ElementManager.setModelData(model, data, value)
+    if (not ElementManager.isModelRequested(model)) then
+        return
+    end
+
+    requestedModels[model][data] = value
+end
+
+function ElementManager.getModelData(model, data)
+    if (not ElementManager.isModelRequested(model)) then
+        return nil
+    end
+
+    return requestedModels[model][data]
 end
 
 function ElementManager.registerExternalScriptTrigger(type, scriptId, model, priority, radius, _)
