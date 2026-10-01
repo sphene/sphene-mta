@@ -26,7 +26,7 @@ end
 -- Instruction: [var time: int] = get_cutscene_time
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/02E8
 function SharedOpcodeCutscene.getTime(_)
-    return getTickCount() - Cutscene.startTick
+    return Cutscene.getTime()
 end
 
 -- Opcode: 0x02E9

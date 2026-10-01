@@ -258,7 +258,6 @@ function Cutscene.startScene()
         Cutscene.finishTime = cameraPositionBlock[cameraPositionBlockCount][1] * 1000.0
 
         Cutscene.isCutsceneSkipped = false
-        Cutscene.startTick = getTickCount()
 
         engineSetAsynchronousLoading(false, true)
 
@@ -346,7 +345,7 @@ function Cutscene.startScene()
             ["ped"] = true
         }]]
 
-        Cutscene.cutsceneData["starttick"] = getTickCount()
+        Cutscene.startTick = getTickCount()
         Cutscene.cutscenePlaying = true
 
         return true
@@ -477,6 +476,10 @@ function Cutscene.getFinishTime()
     return Cutscene.finishTime
 end
 
+function Cutscene.getTime()
+    return getTickCount() - Cutscene.startTick
+end
+
 -- Whether the segment [time, nextTime] is short enough that the original
 -- engine never evaluates its curve directly (see Cutscene.INSTANT_CUT_THRESHOLD).
 function Cutscene.isInstantCut(time, nextTime)
@@ -552,7 +555,7 @@ function Cutscene.run()
         }
     end
 
-    local elapsedTime = (getTickCount() - Cutscene.cutsceneData["starttick"])
+    local elapsedTime = Cutscene.getTime()
     local progressed = false
 
     for segmentIndex=Cutscene.cutsceneData["cameraData"][1].currentNode,
@@ -738,9 +741,10 @@ function Cutscene.run()
         for i=Cutscene.cutsceneData["texts"].currentNode,
             #Cutscene.cutsceneData["texts"].data do
             local textData = Cutscene.cutsceneData["texts"].data[i]
-            if (elapsedTime >= textData.time and textData.shown == false) then
+            if (elapsedTime > textData.time and textData.shown == false) then
                 local text = Text.getFormattedTextFromHash(CRC32.getKey(textData.label))
-                Text.addMessageToQueue(text, textData.label, textData.length, 1022)
+
+                Text.addMessageToQueue(text, textData.label, textData.length, 1022, 2)
 
                 textData.shown = true
                 progressed = true
