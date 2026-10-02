@@ -1,11 +1,11 @@
 # Contributing
 
-Sphene is a complex project written in Lua for Multi Theft Auto. This document outlines our expectations oon your contributions and best practices. Information on how to setup and run Sphene is also available.
+Sphene is a complex project written in Lua for Multi Theft Auto. This document outlines our expectations on your contributions and best practices. Information on how to setup and run Sphene is also available.
 
 ## How to setup Sphene
 
 **Multi Theft Auto version 1.7 is required!**  
-Recommended release: https://nightly.multitheftauto.com/mtasa-1.7-untested-25581-20250917.exe
+Recommended release: https://nightly.multitheftauto.com/mtasa-1.7-untested-26337-20260221.exe
 
 **This document assumes that you have already installed Docker and are familiar on how to use it.**  
 **Building Sphene interface requires NodeJS and NPM. We recommend the latest available LTS version.**  

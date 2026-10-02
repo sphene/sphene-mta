@@ -248,17 +248,10 @@ function IPL.loadGroup(group)
 
     Logger.info('IPL', 'Loading IPL group {}', group)
 
-    local gta3Img = ImgArchive:create('data/game/san_andreas/models/gta3.img')
+    local iplFile = Game.getGameArchive():openFile(string.lower(group)..'.ipl')
 
-    if (not gta3Img) then
-        return false
-    end
-
-    local iplFile = gta3Img:openFile(string.lower(group)..'.ipl')
-
-    if (not iplFile) then
+    if not iplFile then
         Logger.error('IPL', 'Failed to open ipl file with group {}', group)
-        gta3Img:close()
         return false
     end
 
@@ -269,7 +262,6 @@ function IPL.loadGroup(group)
     end
 
     iplFile:close()
-    gta3Img:close()
 
     return ipl
 end

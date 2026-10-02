@@ -1,4 +1,11 @@
 -----------------------------------
+-- * Locals (for perfomance)
+-----------------------------------
+
+local _math_min = math.min
+local _math_max = math.max
+
+-----------------------------------
 -- * Variables
 -----------------------------------
 
@@ -15,7 +22,11 @@ Game.totalMissions = 0
 Game.maxProgress = 0
 Game.totalRespectPoints = 0
 
+Game.gameArchive = false
+
 Game.runOnFrame = {}
+
+Game.timeStep = 1.0
 
 Game.stats = {}
 
@@ -49,6 +60,13 @@ function Game.start(game)
         Overlay.triggerEvent("onGameStarted")
     end
 
+    Game.gameArchive = ImgArchive:create('data/game/san_andreas/models/gta3.img')
+
+    if not Game.gameArchive then
+        Logger.error('GAME', 'Failed to load gta3.img!')
+        return false
+    end
+
     Game.startTick = getTickCount()
 
     Game.createEvents()
@@ -69,6 +87,11 @@ function Game.stop()
     Game.policeStations = {}
 
     Game.removeEvents()
+
+    if Game.gameArchive then
+        Game.gameArchive:close()
+        Game.gameArchive = false
+    end
 
     ElementManager.unload()
 
@@ -132,7 +155,10 @@ function Game.onRender()
     end
 end
 
-function Game.onPreRender()
+function Game.onPreRender(timeSlice)
+    -- CTimer::ms_fTimeStep, clamped to 0.01..3.0, like CTimer::GetRealTimeScale()
+    Game.timeStep = _math_min(_math_max(timeSlice * 0.05, 0.01), 3.0)
+
     if (Cutscene.isPlaying()) then
         Cutscene.run()
         return
@@ -222,6 +248,10 @@ end
 
 function Game.setMaxProgress(maxProgress)
     Game.maxProgress = maxProgress
+end
+
+function Game.getGameArchive()
+    return Game.gameArchive
 end
 
 function Game.getMaxWantedLevel()

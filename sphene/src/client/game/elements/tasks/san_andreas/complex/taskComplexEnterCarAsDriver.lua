@@ -14,28 +14,37 @@ function TaskComplexEnterCarAsDriver:create(ped, car)
 
     mt.parent.create(mt, ped)
     mt.car = car
+    mt.seat = 0
 
     return mt
 end
 
-function TaskComplexEnterCarAsDriver:process()
-    if (TaskComplexEnterCarAsDriver.parent.process(self)) then
-        if (not self:getPed():isInVehicle()) then
-            local distance = self:getPed():getDistanceFromVehicleEntryPoint(self.car, 0)
+function TaskComplexEnterCarAsDriver:createFirstSubTask()
+    local ped = self:getPed()
+    local vehicle = ped:getOccupiedVehicle()
 
-            if (distance > 20) then
-                self:setSubTask(TaskComplexGoToCarDoorAndStandStill:create(self:getPed(), self.car, 0))
-            else
-                self:getPed():enterVehicle(self.car, 0)
-            end
-        elseif (self:getPed():getOccupiedVehicle() ~= self.car) then
-            if (not self:getPed():isLeavingCar()) then
-                self:setSubTask(TaskComplexLeaveCar:create(self:getPed()))
-            end
-        else
-            self:setFinished()
-        end
+    if (vehicle == self.car) then
+        return false
     end
+
+    if (vehicle) then
+        return TaskComplexLeaveCar:create(ped)
+    end
+
+    return TaskComplexGoToCarDoorAndStandStill:create(ped, self.car, self.seat)
+end
+
+function TaskComplexEnterCarAsDriver:createNextSubTask()
+    -- One attempt to enter the vehicle, like SA
+    if (self:getSubTask():is(TaskSimpleEnterCar)) then
+        return false
+    end
+
+    if (self:getSubTask():is(TaskComplexGoToCarDoorAndStandStill) and not self:getPed():isInVehicle()) then
+        return TaskSimpleEnterCar:create(self:getPed(), self.car, self.seat)
+    end
+
+    return self:createFirstSubTask()
 end
 
 function TaskComplexEnterCarAsDriver:getName()

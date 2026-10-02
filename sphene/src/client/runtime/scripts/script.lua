@@ -2,7 +2,7 @@
 -- * Locals (for perfomance)
 -----------------------------------
 
-local scriptImgPath = ""
+local scriptImg = false
 local stream = false
 local mainSize = 0
 local mainOffset = 0
@@ -46,7 +46,14 @@ function Script.load(path, imgPath)
         return false
     end
 
-    scriptImgPath = imgPath
+    if imgPath then
+        scriptImg = ImgArchive:create(imgPath)
+
+        if not scriptImg then
+            Logger.error('SCRIPT', 'Failed to load IMG archive [{}].', imgPath)
+            return false
+        end
+    end
 
     stream = BitStream:create(path, true)
 
@@ -224,6 +231,11 @@ function Script.start()
 end
 
 function Script.stop()
+    if scriptImg then
+        scriptImg:close()
+        scriptImg = false
+    end
+
     Thread.threadTable = false
     Thread.currentThread = nil
 end
@@ -241,17 +253,10 @@ function Script.loadExternalScript(id)
 
     Logger.info('SCRIPT', 'Loading external script [{}].', script.name)
 
-    local scriptImgArchive = ImgArchive:create(scriptImgPath)
-
-    if (not scriptImgArchive) then
-        return false
-    end
-
     local scmPath = script.name:lower()..".scm"
-    local scmFile = scriptImgArchive:openFile(scmPath)
+    local scmFile = scriptImg:openFile(scmPath)
 
     if (not scmFile) then
-        scriptImgArchive:close()
         return false
     end
 
@@ -261,14 +266,12 @@ function Script.loadExternalScript(id)
 
     if (not scriptStream) then
         scmFile:close()
-        scriptImgArchive:close()
         return false
     end
 
     local updatedOptimizedScript = Optimizer.optimize(scriptStream, optimizedScript, script.offset)
 
     scmFile:close()
-    scriptImgArchive:close()
 
     if (not updatedOptimizedScript) then
         return false
@@ -308,7 +311,7 @@ function Script.runExternalScript(id, ...)
 
     local args = {unpack(arg)}
 
-    for index,param in pairs(args) do
+    for index, param in pairs(args) do
         thread:setLocalVar(index - 1, param)
     end
 

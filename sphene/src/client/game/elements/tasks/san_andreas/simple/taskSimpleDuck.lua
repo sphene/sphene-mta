@@ -27,14 +27,16 @@ function TaskSimpleDuck:process()
 
         self:setStarted()
     elseif (getTickCount() > self.endTime) then
-        self:setFinished()
-
         local _, anim = self.ped:getAnimation()
 
         if (anim == "duck_cower") then
             self.ped:setAnimation()
         end
+
+        return true
     end
+
+    return false
 end
 
 function TaskSimpleDuck:getDebugParameters()
@@ -52,6 +54,6 @@ function TaskSimpleDuck:getName()
     return "TASK_SIMPLE_DUCK"
 end
 
-Task.register(0x05C5, TaskSimpleCarDrive)
+Task.register(0x05C5, TaskSimpleDuck)
 
 Core.mergeInto(TaskSimpleDuck, SimpleTask)

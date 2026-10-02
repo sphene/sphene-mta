@@ -1,6 +1,6 @@
 <meta>
     <info author="Sphene Team" description="GTA:SA Co-Op and SCM Runtime" version="1.0.0" type="misc" />
-    <min_mta_version client="1.7.0-7.25581" server="1.7.0-7.25581" />
+    <min_mta_version client="1.7.0-7.26337" server="1.7.0-7.26264" />
 
     <include resource="sphene-interface" />
 
@@ -10,6 +10,8 @@
     <script src="src/shared/utils/modelrefs.lua" type="server" />
     <script src="src/shared/utils/util.lua" type="server" />
     <script src="src/shared/utils/vehicles.lua" type="server" />
+    <script src="src/shared/utils/math.lua" type="shared" cache="false" />
+    <script src="src/shared/utils/profiler.lua" type="shared" cache="false" />
     <script src="src/shared/tasks/taskcode.lua" type="server" />
     <script src="src/server/utils/env.lua" type="server" />
 

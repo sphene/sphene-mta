@@ -15,6 +15,7 @@ local _config = {
         asset = env('DISCORD_ASSET', nil),
     },
     debug = env('DEBUG', false),
+    profiler = env('PROFILER', false),
     mode = env('MODE', 'game'),
     api_url = env('API_URL', 'http://127.0.0.1:8080'),
     cdn_url = env('CDN_URL', 'http://127.0.0.1:8080/cdn'),
