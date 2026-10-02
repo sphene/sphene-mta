@@ -13,6 +13,12 @@ function SharedOpcodeMission.finish(_)
 
     Thread.currentThread:clearCleanupList()
 
+    local player = PlayerElement.getLocalPlayer()
+
+    if (player and player:getInterior() == 0) then
+        TimeCycle.stopExtraColor(false)
+    end
+
     return Script.setOpcodePartiallyImplemented()
 end
 

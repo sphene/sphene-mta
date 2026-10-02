@@ -670,6 +670,10 @@ end
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0860
 function SanAndreasOpcodeChar.setAreaVisible(actor, interior)
     actor:setInterior(interior)
+
+    if (interior == 0 and actor:isPlayer()) then
+        TimeCycle.stopExtraColor(false)
+    end
 end
 
 -- Opcode: 0x087E
@@ -710,7 +714,15 @@ end
 -- Opcode: 0x08AD
 -- Instruction: set_char_has_used_entry_exit [Char] {x} [float] {y} [float] {radius} [float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/08AD
-function SanAndreasOpcodeChar.setHasUsedEntryExit(_)
+function SanAndreasOpcodeChar.setHasUsedEntryExit(actor, x, y, radius)
+    if (actor:isPlayer()) then
+        local enex = Enex.findNearestEnex(x, y, radius)
+
+        if (enex) then
+            enex:getLinkedEnex():applyExtraColor()
+        end
+    end
+
     return Script.setOpcodePartiallyImplemented()
 end
 
