@@ -153,12 +153,21 @@ end
 
 local _enginePreloadWorldArea = enginePreloadWorldArea
 
-function enginePreloadWorldArea(x, y, z)
-    local cameraX, cameraY, cameraZ = getCameraMatrix()
+function enginePreloadWorldArea(x, y, z, option)
+    option = option or 'all'
 
-    if (getDistanceBetweenPoints3D(x, y, z, cameraX, cameraY, cameraZ) > 100) then
-        _enginePreloadWorldArea(x, y, z)
+    -- Loading collision is a blocking call, which is why this distance check
+    -- was added? Not sure, lets try it like this.
+    if (option == 'collisions') then
+        local cameraX, cameraY, cameraZ = getCameraMatrix()
+
+        if (getDistanceBetweenPoints3D(x, y, z, cameraX, cameraY, cameraZ) <= 100) then
+            return
+        end
     end
+
+    -- TODO: Add heading in MTA and here.
+    _enginePreloadWorldArea(x, y, z, option)
 end
 
 function onClientDebugMessage(message, level, file, line)

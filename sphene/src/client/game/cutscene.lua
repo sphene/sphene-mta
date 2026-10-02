@@ -243,6 +243,12 @@ function Cutscene.load(cutscene)
             Cutscene.cutsceneData = {}
             return false
         end]]
+
+        local offset = Cutscene.cutsceneData["offset"]
+
+        if (offset) then
+            enginePreloadWorldArea(offset["x"], offset["y"], offset["z"], 'models')
+        end
     end, 100, 1)
 
     return true
