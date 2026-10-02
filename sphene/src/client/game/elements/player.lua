@@ -207,10 +207,15 @@ function PlayerElement:swapToLocal(skipCamera)
 
     local matrix = getElementMatrix(self.__player)
     local velocityX, velocityY, velocityZ = getElementVelocity(self.__player)
+    local angularVelocityX, angularVelocityY, angularVelocityZ = getElementAngularVelocity(self.__player)
     local model = getElementModel(self.__player)
 
     local worldX, worldY, worldZ = getWorldFromScreenPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 200)
     local cameraRot = getPedCameraRotation(self.__player)
+
+    local block, anim, time, loop, updatePosition, interruptable, freezeLastFrame, blendTime, restoreTaskOnAnimEnd = getPedAnimation(self.__player)
+    local animProgress = getPedAnimationProgress(self.__player)
+    local animSpeed = getPedAnimationSpeed(self.__player)
 
     setElementAlpha(self.__localElement, 255)
     setElementCollisionsEnabled(self.__localElement, true)
@@ -266,6 +271,7 @@ function PlayerElement:swapToLocal(skipCamera)
     setElementCollisionsEnabled(self.__player, false)
 
     setElementVelocity(self.__localElement, velocityX, velocityY, velocityZ)
+    setElementAngularVelocity(self.__localElement, angularVelocityX, angularVelocityY, angularVelocityZ)
     setElementModel(self.__localElement, model)
 
     for i=0, 17 do
@@ -277,6 +283,10 @@ function PlayerElement:swapToLocal(skipCamera)
             removePedClothes(self.__localElement, i)
         end
     end
+
+    setPedAnimation(self.__localElement, block, anim, time, loop, updatePosition, interruptable, freezeLastFrame, blendTime, restoreTaskOnAnimEnd)
+    setPedAnimationProgress(self.__localElement, animProgress)
+    setPedAnimationSpeed(self.__localElement, animSpeed)
 
     self.element = self.__localElement
 
@@ -307,10 +317,15 @@ function PlayerElement:swapToExternal(skipCamera)
 
             local matrix = getElementMatrix(self.__localElement)
             local velocityX, velocityY, velocityZ = getElementVelocity(self.__localElement)
+            local angularVelocityX, angularVelocityY, angularVelocityZ = getElementAngularVelocity(self.__localElement)
             local model = getElementModel(self.__localElement)
 
             local worldX, worldY, worldZ = getWorldFromScreenPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 200)
             local cameraRot = getPedCameraRotation(self.__localElement)
+
+            local block, anim, time, loop, updatePosition, interruptable, freezeLastFrame, blendTime, restoreTaskOnAnimEnd = getPedAnimation(self.__localElement)
+            local animProgress = getPedAnimationProgress(self.__localElement)
+            local animSpeed = getPedAnimationSpeed(self.__localElement)
 
             removePedFromVehicle(self.__localElement)
 
@@ -354,6 +369,7 @@ function PlayerElement:swapToExternal(skipCamera)
             setElementCollisionsEnabled(self.__localElement, false)
 
             setElementVelocity(self.__player, velocityX, velocityY, velocityZ)
+            setElementAngularVelocity(self.__player, angularVelocityX, angularVelocityY, angularVelocityZ)
             setElementModel(self.__player, model)
 
             for i=0, 17 do
@@ -365,6 +381,10 @@ function PlayerElement:swapToExternal(skipCamera)
                     removePedClothes(self.__player, i)
                 end
             end
+
+            setPedAnimation(self.__player, block, anim, time, loop, updatePosition, interruptable, freezeLastFrame, blendTime, restoreTaskOnAnimEnd)
+            setPedAnimationProgress(self.__player, animProgress)
+            setPedAnimationSpeed(self.__player, animSpeed)
 
             self.element = self.__player
             self.swap = false

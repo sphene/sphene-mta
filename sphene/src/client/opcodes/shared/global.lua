@@ -61,112 +61,112 @@ end
 -- Instruction: [global var int] += [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0008
 function SharedOpcodeGlobal.opcode0008(retVal, sum)
-    return (retVal.value + sum)
+    return (retVal + sum)
 end
 
 -- Opcode: 0x0009
 -- Instruction: [global var float] += [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0009
 function SharedOpcodeGlobal.opcode0009(retVal, sum)
-    return (retVal.value + sum)
+    return (retVal + sum)
 end
 
 -- Opcode: 0x000A
 -- Instruction: [local var int] += [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/000A
 function SharedOpcodeGlobal.opcode000A(retVal, sum)
-    return (retVal.value + sum)
+    return (retVal + sum)
 end
 
 -- Opcode: 0x000B
 -- Instruction: [local var float] += [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/000B
 function SharedOpcodeGlobal.opcode000B(retVal, sum)
-    return (retVal.value + sum)
+    return (retVal + sum)
 end
 
 -- Opcode: 0x000C
 -- Instruction: [global var int] -= [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/000C
 function SharedOpcodeGlobal.opcode000C(retVal, min)
-    return (retVal.value - min)
+    return (retVal - min)
 end
 
 -- Opcode: 0x000D
 -- Instruction: [global var float] -= [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/000D
 function SharedOpcodeGlobal.opcode000D(retVal, min)
-    return (retVal.value - min)
+    return (retVal - min)
 end
 
 -- Opcode: 0x000E
 -- Instruction: [local var int] -= [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/000E
 function SharedOpcodeGlobal.opcode000E(retVal, min)
-    return (retVal.value - min)
+    return (retVal - min)
 end
 
 -- Opcode: 0x000F
 -- Instruction: [local var float] -= [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/000F
 function SharedOpcodeGlobal.opcode000F(retVal, min)
-    return (retVal.value - min)
+    return (retVal - min)
 end
 
 -- Opcode: 0x0010
 -- Instruction: [global var int] *= [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0010
 function SharedOpcodeGlobal.opcode0010(retVal, numb)
-    return (retVal.value * numb)
+    return (retVal * numb)
 end
 
 -- Opcode: 0x0011
 -- Instruction: [global var float] *= [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0011
 function SharedOpcodeGlobal.opcode0011(retVal, numb)
-    return (retVal.value * numb)
+    return (retVal * numb)
 end
 
 -- Opcode: 0x0012
 -- Instruction: [local var int] *= [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0012
 function SharedOpcodeGlobal.opcode0012(retVal, numb)
-    return (retVal.value * numb)
+    return (retVal * numb)
 end
 
 -- Opcode: 0x0013
 -- Instruction: [local var float] *= [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0013
 function SharedOpcodeGlobal.opcode0013(retVal, numb)
-    return (retVal.value * numb)
+    return (retVal * numb)
 end
 
 -- Opcode: 0x0014
 -- Instruction: [global var int] /= [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0014
 function SharedOpcodeGlobal.opcode0014(retVal, divider)
-    return math.floor(retVal.value / divider)
+    return math.floor(retVal / divider)
 end
 
 -- Opcode: 0x0015
 -- Instruction: [global var float] /= [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0015
 function SharedOpcodeGlobal.opcode0015(retVal, divider)
-    return (retVal.value / divider)
+    return (retVal / divider)
 end
 
 -- Opcode: 0x0016
 -- Instruction: [local var int] /= [literal int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0016
 function SharedOpcodeGlobal.opcode0016(retVal, divider)
-    return math.floor(retVal.value / divider)
+    return math.floor(retVal / divider)
 end
 
 -- Opcode: 0x0017
 -- Instruction: [local var float] /= [literal float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0017
 function SharedOpcodeGlobal.opcode0017(retVal, divider)
-   return (retVal.value / divider)
+   return (retVal / divider)
 end
 
 -- Opcode: 0x0018
@@ -768,7 +768,7 @@ end
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/004E
 function SharedOpcodeGlobal.terminateThisScript()
     if (Thread.currentThread:isMissionThread()) then
-        Game.setMissionFlag(0)
+        Game.setIsOnMission(false)
         Thread.currentThread.originalThread:wake()
     end
 
@@ -878,49 +878,49 @@ end
 -- Instruction: [global var float] -= [global var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0061
 function SharedOpcodeGlobal.opcode0061(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0062
 -- Instruction: [local var int] -= [local var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0062
 function SharedOpcodeGlobal.opcode0062(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0063
 -- Instruction: [local var float] -= [local var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0063
 function SharedOpcodeGlobal.opcode0063(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0064
 -- Instruction: [local var int] -= [global var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0064
 function SharedOpcodeGlobal.opcode0064(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0065
 -- Instruction: [local var float] -= [global var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0065
 function SharedOpcodeGlobal.opcode0065(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0066
 -- Instruction: [global var int] -= [local var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0066
 function SharedOpcodeGlobal.opcode0066(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0067
 -- Instruction: [global var float] -= [local var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0067
 function SharedOpcodeGlobal.opcode0067(retVal, value)
-    return (retVal.value - value)
+    return (retVal - value)
 end
 
 -- Opcode: 0x0068
@@ -983,56 +983,56 @@ end
 -- Instruction: [global var int] /= [global var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0070
 function SharedOpcodeGlobal.opcode0070(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0071
 -- Instruction: [global var float] /= [global var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0071
 function SharedOpcodeGlobal.opcode0071(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0072
 -- Instruction: [local var int] /= [local var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0072
 function SharedOpcodeGlobal.opcode0072(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0073
 -- Instruction: [local var float] /= [local var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0073
 function SharedOpcodeGlobal.opcode0073(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0074
 -- Instruction: [global var int] /= [local var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0074
 function SharedOpcodeGlobal.opcode0074(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0075
 -- Instruction: [global var float] /= [local var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0075
 function SharedOpcodeGlobal.opcode0075(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0076
 -- Instruction: [local var int] /= [global var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0076
 function SharedOpcodeGlobal.opcode0076(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0077
 -- Instruction: [local var float] /= [global var float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0077
 function SharedOpcodeGlobal.opcode0077(retVal, numb)
-    return (retVal.value / numb)
+    return (retVal / numb)
 end
 
 -- Opcode: 0x0078
@@ -1234,22 +1234,22 @@ end
 -- Opcode: 0x0094
 -- Instruction: [global var number: int] = abs_var_int
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0094
-function SharedOpcodeGlobal.absVarInt(_)
-    Script.storeValueAtIndex(1, math.abs(Script.getValueAtIndex(1)))
+function SharedOpcodeGlobal.absVarInt(value)
+    return math.abs(value)
 end
 
 -- Opcode: 0x0095
 -- Instruction: [local var number: int] = abs_lvar_int
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0095
-function SharedOpcodeGlobal.absLvarInt(_)
-    Script.storeValueAtIndex(1, math.abs(Script.getValueAtIndex(1)))
+function SharedOpcodeGlobal.absLvarInt(value)
+    return math.abs(value)
 end
 
 -- Opcode: 0x0096
 -- Instruction: [global var number: float] = abs_var_float
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0096
-function SharedOpcodeGlobal.absVarFloat(_)
-    Script.storeValueAtIndex(1, math.abs(Script.getValueAtIndex(1)))
+function SharedOpcodeGlobal.absVarFloat(value)
+    return math.abs(value)
 end
 
 -- Opcode: 0x0098
@@ -1301,8 +1301,8 @@ end
 -- Opcode: 0x0180
 -- Instruction: declare_mission_flag {var_flag} [global var int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0180
-function SharedOpcodeGlobal.declareMissionFlag(missionFlag)
-    Game.setMissionFlag(missionFlag)
+function SharedOpcodeGlobal.declareMissionFlag(_)
+    Game.setMissionFlag(Thread.currentThread:getLastOpcode().params[1])
 end
 
 -- Opcode: 0x03A4
@@ -1684,195 +1684,382 @@ function SharedOpcodeGlobal.opcode0B1D(_, _)
 end
 
 
-Opcode.register(0x0000, SharedOpcodeGlobal.nop, 'nop')
-Opcode.register(0x0001, SharedOpcodeGlobal.wait, 'wait {time} [int]')
-Opcode.register(0x0002, SharedOpcodeGlobal.gotoLabel, 'goto @label')
-Opcode.register(0x0004, SharedOpcodeGlobal.opcode0004, '[global var int] = [literal int]')
-Opcode.register(0x0005, SharedOpcodeGlobal.opcode0005, '[global var float] = [literal float]')
-Opcode.register(0x0006, SharedOpcodeGlobal.opcode0006, '[local var int] = [literal int]')
-Opcode.register(0x0007, SharedOpcodeGlobal.opcode0007, '[local var float] = [literal float]')
-Opcode.register(0x0008, SharedOpcodeGlobal.opcode0008, '[global var int] += [literal int]')
-Opcode.register(0x0009, SharedOpcodeGlobal.opcode0009, '[global var float] += [literal float]')
-Opcode.register(0x000a, SharedOpcodeGlobal.opcode000A, '[local var int] += [literal int]')
-Opcode.register(0x000b, SharedOpcodeGlobal.opcode000B, '[local var float] += [literal float]')
-Opcode.register(0x000c, SharedOpcodeGlobal.opcode000C, '[global var int] -= [literal int]')
-Opcode.register(0x000d, SharedOpcodeGlobal.opcode000D, '[global var float] -= [literal float]')
-Opcode.register(0x000e, SharedOpcodeGlobal.opcode000E, '[local var int] -= [literal int]')
-Opcode.register(0x000f, SharedOpcodeGlobal.opcode000F, '[local var float] -= [literal float]')
-Opcode.register(0x0010, SharedOpcodeGlobal.opcode0010, '[global var int] *= [literal int]')
-Opcode.register(0x0011, SharedOpcodeGlobal.opcode0011, '[global var float] *= [literal float]')
-Opcode.register(0x0012, SharedOpcodeGlobal.opcode0012, '[local var int] *= [literal int]')
-Opcode.register(0x0013, SharedOpcodeGlobal.opcode0013, '[local var float] *= [literal float]')
-Opcode.register(0x0014, SharedOpcodeGlobal.opcode0014, '[global var int] /= [literal int]')
-Opcode.register(0x0015, SharedOpcodeGlobal.opcode0015, '[global var float] /= [literal float]')
-Opcode.register(0x0016, SharedOpcodeGlobal.opcode0016, '[local var int] /= [literal int]')
-Opcode.register(0x0017, SharedOpcodeGlobal.opcode0017, '[local var float] /= [literal float]')
-Opcode.register(0x0018, SharedOpcodeGlobal.opcode0018, '[global var int] > [literal int]')
-Opcode.register(0x0019, SharedOpcodeGlobal.opcode0019, '[local var int] > [literal int]')
-Opcode.register(0x001a, SharedOpcodeGlobal.opcode001A, '[literal int] > [global var int]')
-Opcode.register(0x001b, SharedOpcodeGlobal.opcode001B, '[literal int] > [local var int]')
-Opcode.register(0x001c, SharedOpcodeGlobal.opcode001C, '[global var int] > [global var int]')
-Opcode.register(0x001d, SharedOpcodeGlobal.opcode001D, '[local var int] > [local var int]')
-Opcode.register(0x001e, SharedOpcodeGlobal.opcode001E, '[global var int] > [local var int]')
-Opcode.register(0x001f, SharedOpcodeGlobal.opcode001F, '[local var int] > [global var int]')
-Opcode.register(0x0020, SharedOpcodeGlobal.opcode0020, '[global var float] > [literal float]')
-Opcode.register(0x0021, SharedOpcodeGlobal.opcode0021, '[local var float] > [literal float]')
-Opcode.register(0x0022, SharedOpcodeGlobal.opcode0022, '[literal float] > [global var float]')
-Opcode.register(0x0023, SharedOpcodeGlobal.opcode0023, '[literal float] > [local var float]')
-Opcode.register(0x0024, SharedOpcodeGlobal.opcode0024, '[global var float] > [global var float]')
-Opcode.register(0x0025, SharedOpcodeGlobal.opcode0025, '[local var float] > [local var float]')
-Opcode.register(0x0026, SharedOpcodeGlobal.opcode0026, '[global var float] > [local var float]')
-Opcode.register(0x0027, SharedOpcodeGlobal.opcode0027, '[local var float] > [global var float]')
-Opcode.register(0x0028, SharedOpcodeGlobal.opcode0028, '[global var int] >= [literal int]')
-Opcode.register(0x0029, SharedOpcodeGlobal.opcode0029, '[local var int] >= [literal int]')
-Opcode.register(0x002a, SharedOpcodeGlobal.opcode002A, '[literal int] >= [global var int]')
-Opcode.register(0x002b, SharedOpcodeGlobal.opcode002B, '[literal int] >= [local var int]')
-Opcode.register(0x002c, SharedOpcodeGlobal.opcode002C, '[global var int] >= [global var int]')
-Opcode.register(0x002d, SharedOpcodeGlobal.opcode002D, '[local var int] >= [local var int]')
-Opcode.register(0x002e, SharedOpcodeGlobal.opcode002E, '[global var int] >= [local var int]')
-Opcode.register(0x002f, SharedOpcodeGlobal.opcode002F, '[local var int] >= [global var int]')
-Opcode.register(0x0030, SharedOpcodeGlobal.opcode0030, '[global var float] >= [literal float]')
-Opcode.register(0x0031, SharedOpcodeGlobal.opcode0031, '[local var float] >= [literal float]')
-Opcode.register(0x0032, SharedOpcodeGlobal.opcode0032, '[literal float] >= [global var float]')
-Opcode.register(0x0033, SharedOpcodeGlobal.opcode0033, '[literal float] >= [local var float]')
-Opcode.register(0x0034, SharedOpcodeGlobal.opcode0034, '[global var float] >= [global var float]')
-Opcode.register(0x0035, SharedOpcodeGlobal.opcode0035, '[local var float] >= [local var float]')
-Opcode.register(0x0036, SharedOpcodeGlobal.opcode0036, '[global var float] >= [local var float]')
-Opcode.register(0x0037, SharedOpcodeGlobal.opcode0037, '[local var float] >= [global var float]')
-Opcode.register(0x0038, SharedOpcodeGlobal.opcode0038, '[global var int] == [literal int]')
-Opcode.register(0x0039, SharedOpcodeGlobal.opcode0039, '[local var int] == [literal int]')
-Opcode.register(0x003a, SharedOpcodeGlobal.opcode003A, '[global var int] == [global var int]')
-Opcode.register(0x003b, SharedOpcodeGlobal.opcode003B, '[local var int] == [local var int]')
-Opcode.register(0x003c, SharedOpcodeGlobal.opcode003C, '[global var int] == [local var int]')
-Opcode.register(0x0042, SharedOpcodeGlobal.opcode0042, '[global var float] == [literal float]')
-Opcode.register(0x0043, SharedOpcodeGlobal.opcode0043, '[local var float] == [literal float]')
-Opcode.register(0x0044, SharedOpcodeGlobal.opcode0044, '[global var float] == [global var float]')
-Opcode.register(0x0045, SharedOpcodeGlobal.opcode0045, '[local var float] == [local var float]')
-Opcode.register(0x0046, SharedOpcodeGlobal.opcode0046, '[global var float] == [local var float]')
-Opcode.register(0x004d, SharedOpcodeGlobal.gotoIfFalse, 'goto_if_false @label')
-Opcode.register(0x004e, SharedOpcodeGlobal.terminateThisScript, 'terminate_this_script')
-Opcode.register(0x004f, SharedOpcodeGlobal.startNewScript, 'start_new_script @label [arguments]')
-Opcode.register(0x0050, SharedOpcodeGlobal.gosub, 'gosub @label')
-Opcode.register(0x0051, SharedOpcodeGlobal.doReturn, 'return')
-Opcode.register(0x0058, SharedOpcodeGlobal.opcode0058, '[global var int] += [global var int]')
-Opcode.register(0x0059, SharedOpcodeGlobal.opcode0059, '[global var float] += [global var float]')
-Opcode.register(0x005a, SharedOpcodeGlobal.opcode005A, '[local var int] += [local var int]')
-Opcode.register(0x005b, SharedOpcodeGlobal.opcode005B, '[local var float] += [local var float]')
-Opcode.register(0x005c, SharedOpcodeGlobal.opcode005C, '[local var int] += [global var int]')
-Opcode.register(0x005d, SharedOpcodeGlobal.opcode005D, '[local var float] += [global var float]')
-Opcode.register(0x005e, SharedOpcodeGlobal.opcode005E, '[global var int] += [local var int]')
-Opcode.register(0x005f, SharedOpcodeGlobal.opcode005F, '[global var float] += [local var float]')
-Opcode.register(0x0060, SharedOpcodeGlobal.opcode0060, '[global var int] -= [global var int]')
-Opcode.register(0x0061, SharedOpcodeGlobal.opcode0061, '[global var float] -= [global var float]')
-Opcode.register(0x0062, SharedOpcodeGlobal.opcode0062, '[local var int] -= [local var int]')
-Opcode.register(0x0063, SharedOpcodeGlobal.opcode0063, '[local var float] -= [local var float]')
-Opcode.register(0x0064, SharedOpcodeGlobal.opcode0064, '[local var int] -= [global var int]')
-Opcode.register(0x0065, SharedOpcodeGlobal.opcode0065, '[local var float] -= [global var float]')
-Opcode.register(0x0066, SharedOpcodeGlobal.opcode0066, '[global var int] -= [local var int]')
-Opcode.register(0x0067, SharedOpcodeGlobal.opcode0067, '[global var float] -= [local var float]')
-Opcode.register(0x0068, SharedOpcodeGlobal.opcode0068, '[global var int] *= [global var int]')
-Opcode.register(0x0069, SharedOpcodeGlobal.opcode0069, '[global var float] *= [global var float]')
-Opcode.register(0x006a, SharedOpcodeGlobal.opcode006A, '[local var int] *= [local var int]')
-Opcode.register(0x006b, SharedOpcodeGlobal.opcode006B, '[local var float] *= [local var float]')
-Opcode.register(0x006c, SharedOpcodeGlobal.opcode006C, '[global var int] *= [local var int]')
-Opcode.register(0x006d, SharedOpcodeGlobal.opcode006D, '[global var float] *= [local var float]')
-Opcode.register(0x006e, SharedOpcodeGlobal.opcode006E, '[local var int] *= [global var int]')
-Opcode.register(0x006f, SharedOpcodeGlobal.opcode006F, '[local var float] *= [global var float]')
-Opcode.register(0x0070, SharedOpcodeGlobal.opcode0070, '[global var int] /= [global var int]')
-Opcode.register(0x0071, SharedOpcodeGlobal.opcode0071, '[global var float] /= [global var float]')
-Opcode.register(0x0072, SharedOpcodeGlobal.opcode0072, '[local var int] /= [local var int]')
-Opcode.register(0x0073, SharedOpcodeGlobal.opcode0073, '[local var float] /= [local var float]')
-Opcode.register(0x0074, SharedOpcodeGlobal.opcode0074, '[global var int] /= [local var int]')
-Opcode.register(0x0075, SharedOpcodeGlobal.opcode0075, '[global var float] /= [local var float]')
-Opcode.register(0x0076, SharedOpcodeGlobal.opcode0076, '[local var int] /= [global var int]')
-Opcode.register(0x0077, SharedOpcodeGlobal.opcode0077, '[local var float] /= [global var float]')
-Opcode.register(0x0078, SharedOpcodeGlobal.opcode0078, '[global var float] +=@ [literal float]')
-Opcode.register(0x0079, SharedOpcodeGlobal.opcode0079, '[local var float] +=@ [literal float]')
-Opcode.register(0x007a, SharedOpcodeGlobal.opcode007A, '[global var float] +=@ [global var float]')
-Opcode.register(0x007b, SharedOpcodeGlobal.opcode007B, '[local var float] +=@ [local var float]')
-Opcode.register(0x007c, SharedOpcodeGlobal.opcode007C, '[local var float] +=@ [global var float]')
-Opcode.register(0x007d, SharedOpcodeGlobal.opcode007D, '[global var float] +=@ [local var float]')
-Opcode.register(0x007e, SharedOpcodeGlobal.opcode007E, '[global var float] -=@ [literal float]')
-Opcode.register(0x007f, SharedOpcodeGlobal.opcode007F, '[local var float] -=@ [literal float]')
-Opcode.register(0x0080, SharedOpcodeGlobal.opcode0080, '[global var float] -=@ [global var float]')
-Opcode.register(0x0081, SharedOpcodeGlobal.opcode0081, '[local var float] -=@ [local var float]')
-Opcode.register(0x0082, SharedOpcodeGlobal.opcode0082, '[local var float] -=@ [global var float]')
-Opcode.register(0x0083, SharedOpcodeGlobal.opcode0083, '[global var float] -=@ [local var float]')
-Opcode.register(0x0084, SharedOpcodeGlobal.opcode0084, '[global var int] = [global var int]')
-Opcode.register(0x0085, SharedOpcodeGlobal.opcode0085, '[local var int] = [local var int]')
-Opcode.register(0x0086, SharedOpcodeGlobal.opcode0086, '[global var float] = [global var float]')
-Opcode.register(0x0087, SharedOpcodeGlobal.opcode0087, '[local var float] = [local var float]')
-Opcode.register(0x0088, SharedOpcodeGlobal.opcode0088, '[global var float] = [local var float]')
-Opcode.register(0x0089, SharedOpcodeGlobal.opcode0089, '[local var float] = [global var float]')
-Opcode.register(0x008a, SharedOpcodeGlobal.opcode008A, '[global var int] = [local var int]')
-Opcode.register(0x008b, SharedOpcodeGlobal.opcode008B, '[local var int] = [global var int]')
-Opcode.register(0x008c, SharedOpcodeGlobal.opcode008C, '[global var int] =# [global var float]')
-Opcode.register(0x008d, SharedOpcodeGlobal.opcode008D, '[global var float] =# [global var int]')
-Opcode.register(0x008e, SharedOpcodeGlobal.opcode008E, '[local var int] =# [global var float]')
-Opcode.register(0x008f, SharedOpcodeGlobal.opcode008F, '[local var float] =# [global var int]')
-Opcode.register(0x0090, SharedOpcodeGlobal.opcode0090, '[global var int] =# [local var float]')
-Opcode.register(0x0091, SharedOpcodeGlobal.opcode0091, '[global var float] =# [local var int]')
-Opcode.register(0x0092, SharedOpcodeGlobal.opcode0092, '[local var int] =# [local var float]')
-Opcode.register(0x0093, SharedOpcodeGlobal.opcode0093, '[local var float] =# [local var int]')
-Opcode.register(0x0094, SharedOpcodeGlobal.absVarInt, '[global var number: int] = abs_var_int')
-Opcode.register(0x0095, SharedOpcodeGlobal.absLvarInt, '[local var number: int] = abs_lvar_int')
-Opcode.register(0x0096, SharedOpcodeGlobal.absVarFloat, '[global var number: float] = abs_var_float')
-Opcode.register(0x0098, SharedOpcodeGlobal.generateRandomFloat, '[var float] = generate_random_float')
-Opcode.register(0x00d6, SharedOpcodeGlobal.ifStatement, 'if [int]')
-Opcode.register(0x00d7, SharedOpcodeGlobal.launchMission, 'launch_mission @label')
-Opcode.register(0x0111, SharedOpcodeGlobal.setDeatharrestState, 'set_deatharrest_state {state} [bool]')
-Opcode.register(0x0112, SharedOpcodeGlobal.hasDeatharrestBeenExecuted, 'has_deatharrest_been_executed')
-Opcode.register(0x0180, SharedOpcodeGlobal.declareMissionFlag, 'declare_mission_flag {var_flag} [global var int]')
-Opcode.register(0x03a4, SharedOpcodeGlobal.scriptName, 'script_name {name} [string]')
-Opcode.register(0x0425, SharedOpcodeGlobal.convertMetresToFeet, '[var feet: float] = convert_metres_to_feet {meters} [float]')
-Opcode.register(0x0459, SharedOpcodeGlobal.terminateAllScriptsWithThisName, 'terminate_all_scripts_with_this_name {name} [string]')
-Opcode.register(0x04a3, SharedOpcodeGlobal.opcode04A3, '[global var int] == [literal int]')
-Opcode.register(0x04a4, SharedOpcodeGlobal.opcode04A4, '[local var int] == [literal int]')
-Opcode.register(0x04ae, SharedOpcodeGlobal.opcode04AE, '[global var int] = [literal int]')
-Opcode.register(0x04af, SharedOpcodeGlobal.opcode04AF, '[local var int] = [literal int]')
-Opcode.register(0x04b0, SharedOpcodeGlobal.opcode04B0, '[global var int] > [literal int]')
-Opcode.register(0x04b1, SharedOpcodeGlobal.opcode04B1, '[local var int] > [literal int]')
-Opcode.register(0x04b2, SharedOpcodeGlobal.opcode04B2, '[literal int] > [global var int]')
-Opcode.register(0x04b3, SharedOpcodeGlobal.opcode04B3, '[literal int] > [local var int]')
-Opcode.register(0x04b4, SharedOpcodeGlobal.opcode04B4, '[global var int] >= [literal int]')
-Opcode.register(0x04b5, SharedOpcodeGlobal.opcode04B5, '[global var int] >= [literal int]')
-Opcode.register(0x04b6, SharedOpcodeGlobal.opcode04B6, '[literal int] >= [global var int]')
-Opcode.register(0x04b7, SharedOpcodeGlobal.opcode04B7, '[literal int] >= [local var int]')
-Opcode.register(0x0a8e, SharedOpcodeGlobal.opcode0A8E, '[var int] = [int] + [int]')
-Opcode.register(0x0a8f, SharedOpcodeGlobal.opcode0A8F, '[var int] = [int] - [int]')
-Opcode.register(0x0a90, SharedOpcodeGlobal.opcode0A90, '[var int] = [int] * [int]')
-Opcode.register(0x0a91, SharedOpcodeGlobal.opcode0A91, '[var int] = [int] / [int]')
-Opcode.register(0x0a92, SharedOpcodeGlobal.streamCustomScript, 'stream_custom_script {scriptFileName} [string] [arguments]')
-Opcode.register(0x0a93, SharedOpcodeGlobal.terminateThisCustomScript, 'terminate_this_custom_script')
-Opcode.register(0x0aa0, SharedOpcodeGlobal.gosubIfFalse, 'gosub_if_false @label')
-Opcode.register(0x0aa1, SharedOpcodeGlobal.returnIfFalse, 'return_if_false')
-Opcode.register(0x0ab1, SharedOpcodeGlobal.cleoCall, 'cleo_call @label {numParams} [int] {params} [arguments]')
-Opcode.register(0x0ab2, SharedOpcodeGlobal.cleoReturn, 'cleo_return {numRet} [int] {retParams} [arguments]')
-Opcode.register(0x0ab3, SharedOpcodeGlobal.setCleoSharedVar, 'set_cleo_shared_var {index} [int] {value} [any]')
-Opcode.register(0x0ab4, SharedOpcodeGlobal.getCleoSharedVar, '[var result: any] = get_cleo_shared_var {index} [int]')
-Opcode.register(0x0aba, SharedOpcodeGlobal.terminateAllCustomScriptsWithThisName, 'terminate_all_custom_scripts_with_this_name {name} [string]')
-Opcode.register(0x0d16, SharedOpcodeGlobal.setMatrixRotationFromQuat, 'set_matrix_rotation_from_quat {matrix} [int] {quat} [int]')
-Opcode.register(0x0d17, SharedOpcodeGlobal.setQuatFromMatrix, 'set_quat_from_matrix {quat} [int] {matrix} [int]')
-Opcode.register(0x0d18, SharedOpcodeGlobal.rotateQuatOnAxis, 'rotate_quat_on_axis {quat} [int] {x} [float] {y} [float] {z} [float] {angle} [float] {rwCombine} [RwCombine]')
-Opcode.register(0x0d19, SharedOpcodeGlobal.getNormalisedQuat, '[var quat: int] = get_normalised_quat {quat} [int]')
-Opcode.register(0x0d1a, SharedOpcodeGlobal.multiplyQuats, '[var quatResult: int] = multiply_quats {quat1} [int] {quat2} [int]')
-Opcode.register(0x0d1e, SharedOpcodeGlobal.quatSlerp, '[var result: int] = quat_slerp {from} [int] {to} [int] {lambda} [float]')
-Opcode.register(0x0d24, SharedOpcodeGlobal.initialiseQuat, 'initialise_quat {quat} [int] {x} [float] {y} [float] {z} [float] {real} [float]')
-Opcode.register(0x0d27, SharedOpcodeGlobal.copyMemory, 'copy_memory {src} [int] {dest} [int] {size} [int]')
-Opcode.register(0x0d29, SharedOpcodeGlobal.getQuatElements, '[var x: float], [var y: float], [var z: float], [var real: float] = get_quat_elements {quat} [int]')
-Opcode.register(0x0d2e, SharedOpcodeGlobal.setScriptVar, 'set_script_var {scriptPointer} [int] {varIndex} [int] {value} [any]')
-Opcode.register(0x0d2f, SharedOpcodeGlobal.getScriptVar, '[var result: any] = get_script_var {scriptPointer} [int] {varIndex} [int]')
-Opcode.register(0x0b10, SharedOpcodeGlobal.opcode0B10, '[var int] = [int] & [int]')
-Opcode.register(0x0b11, SharedOpcodeGlobal.opcode0B11, '[var int] = [int] | [int]')
-Opcode.register(0x0b12, SharedOpcodeGlobal.opcode0B12, '[var int] = [int] ^ [int]')
-Opcode.register(0x0b13, SharedOpcodeGlobal.opcode0B13, '[var int] = ~[int]')
-Opcode.register(0x0b14, SharedOpcodeGlobal.opcode0B14, '[var int] = [int] % [int]')
-Opcode.register(0x0b15, SharedOpcodeGlobal.opcode0B15, '[var int] = [int] >> [int]')
-Opcode.register(0x0b16, SharedOpcodeGlobal.opcode0B16, '[var int] = [int] << [int]')
-Opcode.register(0x0b17, SharedOpcodeGlobal.opcode0B17, '[var int] &= [int]')
-Opcode.register(0x0b18, SharedOpcodeGlobal.opcode0B18, '[var int] |= [int]')
-Opcode.register(0x0b19, SharedOpcodeGlobal.opcode0B19, '[var int] ^= [int]')
-Opcode.register(0x0b1a, SharedOpcodeGlobal.opcode0B1A, '~[var int]')
-Opcode.register(0x0b1b, SharedOpcodeGlobal.opcode0B1B, '[var int] %= [int]')
-Opcode.register(0x0b1c, SharedOpcodeGlobal.opcode0B1C, '[var int] >>= [int]')
-Opcode.register(0x0b1d, SharedOpcodeGlobal.opcode0B1D, '[var int] <<= [int]')
+-- INI: 0000=0,NOP
+Opcode.register(0x0000, SharedOpcodeGlobal.nop, 0, 'nop', {})
+-- INI: 0001=1,wait %1d% ms
+Opcode.register(0x0001, SharedOpcodeGlobal.wait, 1, 'wait ${1}', {false})
+-- INI: 0002=1,jump %1p%
+Opcode.register(0x0002, SharedOpcodeGlobal.gotoLabel, 1, 'goto ${pointer.1}', {false})
+-- INI: 0004=2,%1d% = %2d%  // $ = int
+Opcode.register(0x0004, SharedOpcodeGlobal.opcode0004, 2, '${1} = ${2}', {true, false})
+-- INI: 0005=2,%1d% = %2d%  // $ = float
+Opcode.register(0x0005, SharedOpcodeGlobal.opcode0005, 2, '${1} = ${2}', {true, false})
+-- INI: 0006=2,%1d% = %2d%  // @ = int
+Opcode.register(0x0006, SharedOpcodeGlobal.opcode0006, 2, '${1} = ${2}', {true, false})
+-- INI: 0007=2,%1d% = %2d%  // @ = float
+Opcode.register(0x0007, SharedOpcodeGlobal.opcode0007, 2, '${1} = ${2}', {true, false})
+-- INI: 0008=2,%1d% += %2d%  // $ += int
+Opcode.register(0x0008, SharedOpcodeGlobal.opcode0008, 2, '${1} += ${2}', {true, false})
+-- INI: 0009=2,%1d% += %2d%  // $ += float
+Opcode.register(0x0009, SharedOpcodeGlobal.opcode0009, 2, '${1} += ${2}', {true, false})
+-- INI: 000a=2,%1d% += %2h%  // @ += int
+Opcode.register(0x000a, SharedOpcodeGlobal.opcode000A, 2, '${1} += ${2}', {true, false})
+-- INI: 000b=2,%1d% += %2d%  // @ += float
+Opcode.register(0x000b, SharedOpcodeGlobal.opcode000B, 2, '${1} += ${2}', {true, false})
+-- INI: 000c=2,%1d% -= %2d%  // $ -= int
+Opcode.register(0x000c, SharedOpcodeGlobal.opcode000C, 2, '${1} -= ${2}', {true, false})
+-- INI: 000d=2,%1d% -= %2d%  // $ -= float
+Opcode.register(0x000d, SharedOpcodeGlobal.opcode000D, 2, '${1} -= ${2}', {true, false})
+-- INI: 000e=2,%1d% -= %2h%  // @ -= int
+Opcode.register(0x000e, SharedOpcodeGlobal.opcode000E, 2, '${1} -= ${2}', {true, false})
+-- INI: 000f=2,%1d% -= %2d%  // @ -= float
+Opcode.register(0x000f, SharedOpcodeGlobal.opcode000F, 2, '${1} -= ${2}', {true, false})
+-- INI: 0010=2,%1d% *= %2d%  // $ *= int
+Opcode.register(0x0010, SharedOpcodeGlobal.opcode0010, 2, '${1} *= ${2}', {true, false})
+-- INI: 0011=2,%1d% *= %2d%  // $ *= float
+Opcode.register(0x0011, SharedOpcodeGlobal.opcode0011, 2, '${1} *= ${2}', {true, false})
+-- INI: 0012=2,%1d% *= %2d%  // @ *= int
+Opcode.register(0x0012, SharedOpcodeGlobal.opcode0012, 2, '${1} *= ${2}', {true, false})
+-- INI: 0013=2,%1d% *= %2d%  // @ *= float
+Opcode.register(0x0013, SharedOpcodeGlobal.opcode0013, 2, '${1} *= ${2}', {true, false})
+-- INI: 0014=2,%1d% /= %2d%  // $ /= int
+Opcode.register(0x0014, SharedOpcodeGlobal.opcode0014, 2, '${1} /= ${2}', {true, false})
+-- INI: 0015=2,%1d% /= %2d%  // $ /= float
+Opcode.register(0x0015, SharedOpcodeGlobal.opcode0015, 2, '${1} /= ${2}', {true, false})
+-- INI: 0016=2,%1d% /= %2d%  // @ /= int
+Opcode.register(0x0016, SharedOpcodeGlobal.opcode0016, 2, '${1} /= ${2}', {true, false})
+-- INI: 0017=2,%1d% /= %2d%  // @ /= float
+Opcode.register(0x0017, SharedOpcodeGlobal.opcode0017, 2, '${1} /= ${2}', {true, false})
+-- INI: 0018=2,  %1d% > %2d%  // $ > int
+Opcode.register(0x0018, SharedOpcodeGlobal.opcode0018, 2, '${1} > ${2}', {false, false})
+-- INI: 0019=2,  %1d% > %2d%  // @ > int
+Opcode.register(0x0019, SharedOpcodeGlobal.opcode0019, 2, '${1} > ${2}', {false, false})
+-- INI: 001a=2,  %1d% > %2d%  // int > $
+Opcode.register(0x001a, SharedOpcodeGlobal.opcode001A, 2, '${1} > ${2}', {false, false})
+-- INI: 001b=2,  %1d% > %2d%  // int > @
+Opcode.register(0x001b, SharedOpcodeGlobal.opcode001B, 2, '${1} > ${2}', {false, false})
+-- INI: 001c=2,  %1d% > %2d%  // $ > $ int
+Opcode.register(0x001c, SharedOpcodeGlobal.opcode001C, 2, '${1} > ${2}', {false, false})
+-- INI: 001d=2,  %1d% > %2d%  // @ > @ int
+Opcode.register(0x001d, SharedOpcodeGlobal.opcode001D, 2, '${1} > ${2}', {false, false})
+-- INI: 001e=2,  %1d% > %2d%  // $ > @ int
+Opcode.register(0x001e, SharedOpcodeGlobal.opcode001E, 2, '${1} > ${2}', {false, false})
+-- INI: 001f=2,  %1d% > %2d%  // @ > $ int
+Opcode.register(0x001f, SharedOpcodeGlobal.opcode001F, 2, '${1} > ${2}', {false, false})
+-- INI: 0020=2,  %1d% > %2d%  // $ > float
+Opcode.register(0x0020, SharedOpcodeGlobal.opcode0020, 2, '${1} > ${2}', {false, false})
+-- INI: 0021=2,  %1d% > %2d%  // @ > float
+Opcode.register(0x0021, SharedOpcodeGlobal.opcode0021, 2, '${1} > ${2}', {false, false})
+-- INI: 0022=2,  %1d% > %2d%  // float > $
+Opcode.register(0x0022, SharedOpcodeGlobal.opcode0022, 2, '${1} > ${2}', {false, false})
+-- INI: 0023=2,  %1d% > %2d%  // float > @
+Opcode.register(0x0023, SharedOpcodeGlobal.opcode0023, 2, '${1} > ${2}', {false, false})
+-- INI: 0024=2,  %1d% > %2d%  // $ > $ float
+Opcode.register(0x0024, SharedOpcodeGlobal.opcode0024, 2, '${1} > ${2}', {false, false})
+-- INI: 0025=2,  %1d% > %2d%  // @ > @ float
+Opcode.register(0x0025, SharedOpcodeGlobal.opcode0025, 2, '${1} > ${2}', {false, false})
+-- INI: 0026=2,  %1d% > %2d%  // $ > @ float
+Opcode.register(0x0026, SharedOpcodeGlobal.opcode0026, 2, '${1} > ${2}', {false, false})
+-- INI: 0027=2,  %1d% > %2d%  // @ > $ float
+Opcode.register(0x0027, SharedOpcodeGlobal.opcode0027, 2, '${1} > ${2}', {false, false})
+-- INI: 0028=2,  %1d% >= %2d%  // $ >= int
+Opcode.register(0x0028, SharedOpcodeGlobal.opcode0028, 2, '${1} >= ${2}', {false, false})
+-- INI: 0029=2,  %1d% >= %2d%  // @ >= int
+Opcode.register(0x0029, SharedOpcodeGlobal.opcode0029, 2, '${1} >= ${2}', {false, false})
+-- INI: 002a=2,  %1d% >= %2d%  // int >= $
+Opcode.register(0x002a, SharedOpcodeGlobal.opcode002A, 2, '${1} >= ${2}', {false, false})
+-- INI: 002b=2,  %1d% >= %2d%  // int >= @
+Opcode.register(0x002b, SharedOpcodeGlobal.opcode002B, 2, '${1} >= ${2}', {false, false})
+-- INI: 002c=2,  %1d% >= %2d%  // $ >= $ int
+Opcode.register(0x002c, SharedOpcodeGlobal.opcode002C, 2, '${1} >= ${2}', {false, false})
+-- INI: 002d=2,  %1d% >= %2d%  // @ >= @ int
+Opcode.register(0x002d, SharedOpcodeGlobal.opcode002D, 2, '${1} >= ${2}', {false, false})
+-- INI: 002e=2,  %1d% >= %2d%  // $ >= @ int
+Opcode.register(0x002e, SharedOpcodeGlobal.opcode002E, 2, '${1} >= ${2}', {false, false})
+-- INI: 002f=2,  %1d% >= %2d%  // @ >= $ int
+Opcode.register(0x002f, SharedOpcodeGlobal.opcode002F, 2, '${1} >= ${2}', {false, false})
+-- INI: 0030=2,  %1d% >= %2d%  // $ >= float
+Opcode.register(0x0030, SharedOpcodeGlobal.opcode0030, 2, '${1} >= ${2}', {false, false})
+-- INI: 0031=2,  %1d% >= %2d%  // @ >= float
+Opcode.register(0x0031, SharedOpcodeGlobal.opcode0031, 2, '${1} >= ${2}', {false, false})
+-- INI: 0032=2,  %1d% >= %2d%  // float >= $
+Opcode.register(0x0032, SharedOpcodeGlobal.opcode0032, 2, '${1} >= ${2}', {false, false})
+-- INI: 0033=2,  %1d% >= %2d%  // float >= @
+Opcode.register(0x0033, SharedOpcodeGlobal.opcode0033, 2, '${1} >= ${2}', {false, false})
+-- INI: 0034=2,  %1d% >= %2d%  // $ >= $ float
+Opcode.register(0x0034, SharedOpcodeGlobal.opcode0034, 2, '${1} >= ${2}', {false, false})
+-- INI: 0035=2,  %1d% >= %2d%  // @ >= @ float
+Opcode.register(0x0035, SharedOpcodeGlobal.opcode0035, 2, '${1} >= ${2}', {false, false})
+-- INI: 0036=2,  %1d% >= %2d%  // $ >= @ float
+Opcode.register(0x0036, SharedOpcodeGlobal.opcode0036, 2, '${1} >= ${2}', {false, false})
+-- INI: 0037=2,  %1d% >= %2d%  // @ >= $ float
+Opcode.register(0x0037, SharedOpcodeGlobal.opcode0037, 2, '${1} >= ${2}', {false, false})
+-- INI: 0038=2,  %1d% == %2d%  // $ == int
+Opcode.register(0x0038, SharedOpcodeGlobal.opcode0038, 2, '${1} == ${2}', {false, false})
+-- INI: 0039=2,  %1d% == %2d%  // @ == int
+Opcode.register(0x0039, SharedOpcodeGlobal.opcode0039, 2, '${1} == ${2}', {false, false})
+-- INI: 003a=2,  %1d% == %2d%  // $ == $ int
+Opcode.register(0x003a, SharedOpcodeGlobal.opcode003A, 2, '${1} == ${2}', {false, false})
+-- INI: 003b=2,  %1d% == %2d%  // @ == @ int
+Opcode.register(0x003b, SharedOpcodeGlobal.opcode003B, 2, '${1} == ${2}', {false, false})
+-- INI: 003c=2,  %1d% == %2d%  // $ == @ int
+Opcode.register(0x003c, SharedOpcodeGlobal.opcode003C, 2, '${1} == ${2}', {false, false})
+-- INI: 0042=2,  %1d% == %2d%  // $ == float
+Opcode.register(0x0042, SharedOpcodeGlobal.opcode0042, 2, '${1} == ${2}', {false, false})
+-- INI: 0043=2,  %1d% == %2d%  // @ == float
+Opcode.register(0x0043, SharedOpcodeGlobal.opcode0043, 2, '${1} == ${2}', {false, false})
+-- INI: 0044=2,  %1d% == %2d%  // $ == $ float
+Opcode.register(0x0044, SharedOpcodeGlobal.opcode0044, 2, '${1} == ${2}', {false, false})
+-- INI: 0045=2,  %1d% == %2d%  // @ == @ float
+Opcode.register(0x0045, SharedOpcodeGlobal.opcode0045, 2, '${1} == ${2}', {false, false})
+-- INI: 0046=2,  %1d% == %2d%  // $ == @ float
+Opcode.register(0x0046, SharedOpcodeGlobal.opcode0046, 2, '${1} == ${2}', {false, false})
+-- INI: 004d=1,jump_if_false %1p%
+Opcode.register(0x004d, SharedOpcodeGlobal.gotoIfFalse, 1, 'goto_if_false ${pointer.1}', {false})
+-- INI: 004e=0,terminate_this_script
+Opcode.register(0x004e, SharedOpcodeGlobal.terminateThisScript, 0, 'terminate_this_script', {})
+Opcode.register(0x004f, SharedOpcodeGlobal.startNewScript, -1, 'start_new_script ${1}', {})
+-- INI: 0050=1,gosub %1p%
+Opcode.register(0x0050, SharedOpcodeGlobal.gosub, 1, 'gosub ${pointer.1}', {false})
+-- INI: 0051=0,return
+Opcode.register(0x0051, SharedOpcodeGlobal.doReturn, 0, 'return', {})
+-- INI: 0058=2,%1d% += %2d%  // $ += $ int
+Opcode.register(0x0058, SharedOpcodeGlobal.opcode0058, 2, '${1} += ${2}', {true, false})
+-- INI: 0059=2,%1d% += %2d%  // $ += $ float
+Opcode.register(0x0059, SharedOpcodeGlobal.opcode0059, 2, '${1} += ${2}', {true, false})
+-- INI: 005a=2,%1d% += %2d%  // @ += @ int
+Opcode.register(0x005a, SharedOpcodeGlobal.opcode005A, 2, '${1} += ${2}', {true, false})
+-- INI: 005b=2,%1d% += %2d%  // @ += @ float
+Opcode.register(0x005b, SharedOpcodeGlobal.opcode005B, 2, '${1} += ${2}', {true, false})
+-- INI: 005c=2,%1d% += %2d%  // @ += $ int
+Opcode.register(0x005c, SharedOpcodeGlobal.opcode005C, 2, '${1} += ${2}', {true, false})
+-- INI: 005d=2,%1d% += %2d%  // @ += $ float
+Opcode.register(0x005d, SharedOpcodeGlobal.opcode005D, 2, '${1} += ${2}', {true, false})
+-- INI: 005e=2,%1d% += %2d%  // $ += @ int
+Opcode.register(0x005e, SharedOpcodeGlobal.opcode005E, 2, '${1} += ${2}', {true, false})
+-- INI: 005f=2,%1d% += %2d%  // $ += @ float
+Opcode.register(0x005f, SharedOpcodeGlobal.opcode005F, 2, '${1} += ${2}', {true, false})
+-- INI: 0060=2,%1d% -= %2d%  // $ -= $ int
+Opcode.register(0x0060, SharedOpcodeGlobal.opcode0060, 2, '${1} -= ${2}', {true, false})
+-- INI: 0061=2,%1d% -= %2d%  // $ -= $ float
+Opcode.register(0x0061, SharedOpcodeGlobal.opcode0061, 2, '${1} -= ${2}', {true, false})
+-- INI: 0062=2,%1d% -= %2d%  // @ -= @ int
+Opcode.register(0x0062, SharedOpcodeGlobal.opcode0062, 2, '${1} -= ${2}', {true, false})
+-- INI: 0063=2,%1d% -= %2d%  // @ -= @ float
+Opcode.register(0x0063, SharedOpcodeGlobal.opcode0063, 2, '${1} -= ${2}', {true, false})
+-- INI: 0064=2,%1d% -= %2d%  // @ -= $ int
+Opcode.register(0x0064, SharedOpcodeGlobal.opcode0064, 2, '${1} -= ${2}', {true, false})
+-- INI: 0065=2,%1d% -= %2d%  // @ -= $ float
+Opcode.register(0x0065, SharedOpcodeGlobal.opcode0065, 2, '${1} -= ${2}', {true, false})
+-- INI: 0066=2,%1d% -= %2d%  // $ -= @ int
+Opcode.register(0x0066, SharedOpcodeGlobal.opcode0066, 2, '${1} -= ${2}', {true, false})
+-- INI: 0067=2,%1d% -= %2d%  // $ -= @ float
+Opcode.register(0x0067, SharedOpcodeGlobal.opcode0067, 2, '${1} -= ${2}', {true, false})
+-- INI: 0068=2,%1d% *= %2d%  // $ *= $ int
+Opcode.register(0x0068, SharedOpcodeGlobal.opcode0068, 2, '${1} *= ${2}', {true, false})
+-- INI: 0069=2,%1d% *= %2d%  // $ *= $ float
+Opcode.register(0x0069, SharedOpcodeGlobal.opcode0069, 2, '${1} *= ${2}', {true, false})
+-- INI: 006a=2,%1d% *= %2d%  // @ *= @ int
+Opcode.register(0x006a, SharedOpcodeGlobal.opcode006A, 2, '${1} *= ${2}', {true, false})
+-- INI: 006b=2,%1d% *= %2d%  // @ *= @ float
+Opcode.register(0x006b, SharedOpcodeGlobal.opcode006B, 2, '${1} *= ${2}', {true, false})
+-- INI: 006c=2,%1d% *= %2d%  // @ *= $ int
+Opcode.register(0x006c, SharedOpcodeGlobal.opcode006C, 2, '${1} *= ${2}', {true, false})
+-- INI: 006d=2,%1d% *= %2d%  // @ *= $ float
+Opcode.register(0x006d, SharedOpcodeGlobal.opcode006D, 2, '${1} *= ${2}', {true, false})
+-- INI: 006e=2,%1d% *= %2d%  // $ *= @ int
+Opcode.register(0x006e, SharedOpcodeGlobal.opcode006E, 2, '${1} *= ${2}', {true, false})
+-- INI: 006f=2,%1d% *= %2d%  // $ *= @ float
+Opcode.register(0x006f, SharedOpcodeGlobal.opcode006F, 2, '${1} *= ${2}', {true, false})
+-- INI: 0070=2,%1d% /= %2d%  // $ /= $ int
+Opcode.register(0x0070, SharedOpcodeGlobal.opcode0070, 2, '${1} /= ${2}', {true, false})
+-- INI: 0071=2,%1d% /= %2d%  // $ /= $ float
+Opcode.register(0x0071, SharedOpcodeGlobal.opcode0071, 2, '${1} /= ${2}', {true, false})
+-- INI: 0072=2,%1d% /= %2d%  // @ /= @ int
+Opcode.register(0x0072, SharedOpcodeGlobal.opcode0072, 2, '${1} /= ${2}', {true, false})
+-- INI: 0073=2,%1d% /= %2d%  // @ /= @ float
+Opcode.register(0x0073, SharedOpcodeGlobal.opcode0073, 2, '${1} /= ${2}', {true, false})
+-- INI: 0074=2,%1d% /= %2d%  // @ /= $ int
+Opcode.register(0x0074, SharedOpcodeGlobal.opcode0074, 2, '${1} /= ${2}', {true, false})
+-- INI: 0075=2,%1d% /= %2d%  // @ /= $ float
+Opcode.register(0x0075, SharedOpcodeGlobal.opcode0075, 2, '${1} /= ${2}', {true, false})
+-- INI: 0076=2,%1d% /= %2d%  // $ /= @ int
+Opcode.register(0x0076, SharedOpcodeGlobal.opcode0076, 2, '${1} /= ${2}', {true, false})
+-- INI: 0077=2,%1d% /= %2d%  // $ /= @ float
+Opcode.register(0x0077, SharedOpcodeGlobal.opcode0077, 2, '${1} /= ${2}', {true, false})
+-- INI: 0078=2,%1d% +=@ %2d%  // float
+Opcode.register(0x0078, SharedOpcodeGlobal.opcode0078, 2, '${1} +=@ ${2}', {true, false})
+-- INI: 0079=2,%1d% +=@ %2d%  // float
+Opcode.register(0x0079, SharedOpcodeGlobal.opcode0079, 2, '${1} +=@ ${2}', {true, false})
+-- INI: 007A=2,%1d% +=@ %2d%  // float
+Opcode.register(0x007a, SharedOpcodeGlobal.opcode007A, 2, '${1} +=@ ${2}', {true, false})
+-- INI: 007B=2,%1d% +=@ %2d%  // float
+Opcode.register(0x007b, SharedOpcodeGlobal.opcode007B, 2, '${1} +=@ ${2}', {true, false})
+-- INI: 007C=2,%1d% +=@ %2d%  // float
+Opcode.register(0x007c, SharedOpcodeGlobal.opcode007C, 2, '${1} +=@ ${2}', {true, false})
+-- INI: 007D=2,%1d% +=@ %2d%  // float
+Opcode.register(0x007d, SharedOpcodeGlobal.opcode007D, 2, '${1} +=@ ${2}', {true, false})
+-- INI: 007E=2,%1d% -=@ %2d%  // float
+Opcode.register(0x007e, SharedOpcodeGlobal.opcode007E, 2, '${1} -=@ ${2}', {true, false})
+-- INI: 007F=2,%1d% -=@ %2d%  // float
+Opcode.register(0x007f, SharedOpcodeGlobal.opcode007F, 2, '${1} -=@ ${2}', {true, false})
+-- INI: 0080=2,%1d% -=@ %2d%  // float
+Opcode.register(0x0080, SharedOpcodeGlobal.opcode0080, 2, '${1} -=@ ${2}', {true, false})
+-- INI: 0081=2,%1d% -=@ %2d%  // float
+Opcode.register(0x0081, SharedOpcodeGlobal.opcode0081, 2, '${1} -=@ ${2}', {true, false})
+-- INI: 0082=2,%1d% -=@ %2d%  // float
+Opcode.register(0x0082, SharedOpcodeGlobal.opcode0082, 2, '${1} -=@ ${2}', {true, false})
+-- INI: 0083=2,%1d% -=@ %2d%  // float
+Opcode.register(0x0083, SharedOpcodeGlobal.opcode0083, 2, '${1} -=@ ${2}', {true, false})
+-- INI: 0084=2,%1d% = %2d%  // $ = $ int
+Opcode.register(0x0084, SharedOpcodeGlobal.opcode0084, 2, '${1} = ${2}', {true, false})
+-- INI: 0085=2,%1d% = %2d%  // @ = @ int
+Opcode.register(0x0085, SharedOpcodeGlobal.opcode0085, 2, '${1} = ${2}', {true, false})
+-- INI: 0086=2,%1d% = %2d%  // $ = $ float
+Opcode.register(0x0086, SharedOpcodeGlobal.opcode0086, 2, '${1} = ${2}', {true, false})
+-- INI: 0087=2,%1d% = %2d%  // @ = @ float
+Opcode.register(0x0087, SharedOpcodeGlobal.opcode0087, 2, '${1} = ${2}', {true, false})
+-- INI: 0088=2,%1d% = %2d%  // $ = @ float
+Opcode.register(0x0088, SharedOpcodeGlobal.opcode0088, 2, '${1} = ${2}', {true, false})
+-- INI: 0089=2,%1d% = %2d%  // @ = $ float
+Opcode.register(0x0089, SharedOpcodeGlobal.opcode0089, 2, '${1} = ${2}', {true, false})
+-- INI: 008a=2,%1d% = %2d%  // $ = @ int
+Opcode.register(0x008a, SharedOpcodeGlobal.opcode008A, 2, '${1} = ${2}', {true, false})
+-- INI: 008b=2,%1d% = %2d%  // @ = $ int
+Opcode.register(0x008b, SharedOpcodeGlobal.opcode008B, 2, '${1} = ${2}', {true, false})
+-- INI: 008c=2,%1d% = float_to_integer %2d%
+Opcode.register(0x008c, SharedOpcodeGlobal.opcode008C, 2, '${1} =# ${2}', {true, false})
+-- INI: 008d=2,%1d% = integer_to_float %2d%
+Opcode.register(0x008d, SharedOpcodeGlobal.opcode008D, 2, '${1} =# ${2}', {true, false})
+-- INI: 008e=2,%1d% = float_to_integer %2d%
+Opcode.register(0x008e, SharedOpcodeGlobal.opcode008E, 2, '${1} =# ${2}', {true, false})
+-- INI: 008f=2,%1d% = integer_to_float %2d%
+Opcode.register(0x008f, SharedOpcodeGlobal.opcode008F, 2, '${1} =# ${2}', {true, false})
+-- INI: 0090=2,%1d% = float_to_integer %2d%
+Opcode.register(0x0090, SharedOpcodeGlobal.opcode0090, 2, '${1} =# ${2}', {true, false})
+-- INI: 0091=2,%1d% = integer_to_float %2d%
+Opcode.register(0x0091, SharedOpcodeGlobal.opcode0091, 2, '${1} =# ${2}', {true, false})
+-- INI: 0092=2,%1d% = float_to_integer %2d%
+Opcode.register(0x0092, SharedOpcodeGlobal.opcode0092, 2, '${1} =# ${2}', {true, false})
+-- INI: 0093=2,%1d% = integer_to_float %2d%
+Opcode.register(0x0093, SharedOpcodeGlobal.opcode0093, 2, '${1} =# ${2}', {true, false})
+-- INI: 0094=1,make %1d% absolute_integer
+Opcode.register(0x0094, SharedOpcodeGlobal.absVarInt, 1, '${1} = abs_var_int', {true})
+-- INI: 0095=1,make %1d% absolute_integer
+Opcode.register(0x0095, SharedOpcodeGlobal.absLvarInt, 1, '${1} = abs_lvar_int', {true})
+-- INI: 0096=1,make %1d% absolute_float
+Opcode.register(0x0096, SharedOpcodeGlobal.absVarFloat, 1, '${1} = abs_var_float', {true})
+-- INI: 0098=1,%1d% = random_float_in_ranges_0.0_to_1.0
+Opcode.register(0x0098, SharedOpcodeGlobal.generateRandomFloat, 1, '${1} = generate_random_float', {true})
+-- INI: 00d6=1,if %1d%
+Opcode.register(0x00d6, SharedOpcodeGlobal.ifStatement, 1, 'if ${1}', {false})
+-- INI: 00d7=1,start_new_script %1p% without_parameters
+Opcode.register(0x00d7, SharedOpcodeGlobal.launchMission, 1, 'launch_mission ${1}', {false})
+-- INI: 0111=1,set_wasted_busted_check_to %1b:enabled/disabled%
+Opcode.register(0x0111, SharedOpcodeGlobal.setDeatharrestState, 1, 'set_deatharrest_state ${1}', {false})
+-- INI: 0112=0,  wasted_or_busted
+Opcode.register(0x0112, SharedOpcodeGlobal.hasDeatharrestBeenExecuted, 0, 'has_deatharrest_been_executed', {})
+-- INI: 0180=1,set_on_mission_flag_to %1d%
+Opcode.register(0x0180, SharedOpcodeGlobal.declareMissionFlag, 1, 'declare_mission_flag ${1}', {false})
+-- INI: 03a4=1,script_name %1s%
+Opcode.register(0x03a4, SharedOpcodeGlobal.scriptName, 1, 'script_name ${1}', {false})
+-- INI: 0425=2,%2d% = meters %1d% to_feet  // float
+Opcode.register(0x0425, SharedOpcodeGlobal.convertMetresToFeet, 2, '${2} = convert_metres_to_feet ${1}', {false, true})
+-- INI: 0459=1,end_script_named %1s%
+Opcode.register(0x0459, SharedOpcodeGlobal.terminateAllScriptsWithThisName, 1, 'terminate_all_scripts_with_this_name ${1}', {false})
+-- INI: 04a3=2,  %1d% == %2h%  ;;  == constant
+Opcode.register(0x04a3, SharedOpcodeGlobal.opcode04A3, 2, '${1} == ${2}', {false, false})
+-- INI: 04a4=2,  %1d% == %2h%  ;;  == constant
+Opcode.register(0x04a4, SharedOpcodeGlobal.opcode04A4, 2, '${1} == ${2}', {false, false})
+-- INI: 04ae=2,%1d% = %2d%  ;;  = constant
+Opcode.register(0x04ae, SharedOpcodeGlobal.opcode04AE, 2, '${1} = ${2}', {true, false})
+-- INI: 04af=2,%1d% = %2d%  ;;  = constant
+Opcode.register(0x04af, SharedOpcodeGlobal.opcode04AF, 2, '${1} = ${2}', {true, false})
+-- INI: 04b0=2,  %1d% > %2d%  ; $ > constant
+Opcode.register(0x04b0, SharedOpcodeGlobal.opcode04B0, 2, '${1} > ${2}', {false, false})
+-- INI: 04b1=2,  %1d% > %2d%  ;; @ > constant
+Opcode.register(0x04b1, SharedOpcodeGlobal.opcode04B1, 2, '${1} > ${2}', {false, false})
+-- INI: 04b2=2,  %1d% > %2d%  ; constant > $
+Opcode.register(0x04b2, SharedOpcodeGlobal.opcode04B2, 2, '${1} > ${2}', {false, false})
+-- INI: 04b3=2,  %1d% > %2d%  ; constant  > @
+Opcode.register(0x04b3, SharedOpcodeGlobal.opcode04B3, 2, '${1} > ${2}', {false, false})
+-- INI: 04b4=2,  %1d% >= %2d%  ; $ >= constant
+Opcode.register(0x04b4, SharedOpcodeGlobal.opcode04B4, 2, '${1} >= ${2}', {false, false})
+-- INI: 04b5=2,  %1d% >= %2d%  ; @ >= constant
+Opcode.register(0x04b5, SharedOpcodeGlobal.opcode04B5, 2, '${1} >= ${2}', {false, false})
+-- INI: 04b6=2,  %1d% >= %2d%  ; constant >= $
+Opcode.register(0x04b6, SharedOpcodeGlobal.opcode04B6, 2, '${1} >= ${2}', {false, false})
+-- INI: 04b7=2,  %1d% >= %2d%  ;; constant >= @
+Opcode.register(0x04b7, SharedOpcodeGlobal.opcode04B7, 2, '${1} >= ${2}', {false, false})
+-- INI: 0A8E=3,%3d% = %1d% + %2d% ; int
+Opcode.register(0x0a8e, SharedOpcodeGlobal.opcode0A8E, 3, '${3} = ${1} + ${2}', {false, false, true})
+-- INI: 0A8F=3,%3d% = %1d% - %2d% ; int
+Opcode.register(0x0a8f, SharedOpcodeGlobal.opcode0A8F, 3, '${3} = ${1} - ${2}', {false, false, true})
+-- INI: 0A90=3,%3d% = %1d% * %2d% ; int
+Opcode.register(0x0a90, SharedOpcodeGlobal.opcode0A90, 3, '${3} = ${1} * ${2}', {false, false, true})
+-- INI: 0A91=3,%3d% = %1d% / %2d% ; int
+Opcode.register(0x0a91, SharedOpcodeGlobal.opcode0A91, 3, '${3} = ${1} / ${2}', {false, false, true})
+Opcode.register(0x0a92, SharedOpcodeGlobal.streamCustomScript, -1, 'stream_custom_script ${1}', {})
+-- INI: 0A93=0,terminate_this_custom_script
+Opcode.register(0x0a93, SharedOpcodeGlobal.terminateThisCustomScript, 0, 'terminate_this_custom_script', {})
+-- INI: 0AA0=1,gosub_if_false %1p%
+Opcode.register(0x0aa0, SharedOpcodeGlobal.gosubIfFalse, 1, 'gosub_if_false ${pointer.1}', {false})
+-- INI: 0AA1=0,return_if_false
+Opcode.register(0x0aa1, SharedOpcodeGlobal.returnIfFalse, 0, 'return_if_false', {})
+Opcode.register(0x0ab1, SharedOpcodeGlobal.cleoCall, -1, 'cleo_call ${pointer.1} ${2}', {})
+Opcode.register(0x0ab2, SharedOpcodeGlobal.cleoReturn, -1, 'cleo_return ${1}', {})
+-- INI: 0AB3=2,cleo_shared_var %1d% = %2d%
+Opcode.register(0x0ab3, SharedOpcodeGlobal.setCleoSharedVar, 2, 'set_cleo_shared_var ${1} ${2}', {true, false})
+-- INI: 0AB4=2,%2d% = cleo_shared_var %1d%
+Opcode.register(0x0ab4, SharedOpcodeGlobal.getCleoSharedVar, 2, '${1} = get_cleo_shared_var ${2}', {true, false})
+-- INI: 0ABA=1,terminate_all_custom_scripts_with_this_name %1s%
+Opcode.register(0x0aba, SharedOpcodeGlobal.terminateAllCustomScriptsWithThisName, 1, 'terminate_all_custom_scripts_with_this_name ${1}', {false})
+-- INI: 0D16=2,set_matrix %1d% rotation_from_quat %2d%
+Opcode.register(0x0d16, SharedOpcodeGlobal.setMatrixRotationFromQuat, 2, 'set_matrix_rotation_from_quat ${1} ${2}', {false, false})
+-- INI: 0D17=2,convert_matrix %1d% to_quat %2d%
+Opcode.register(0x0d17, SharedOpcodeGlobal.setQuatFromMatrix, 2, 'set_quat_from_matrix ${1} ${2}', {false, false})
+-- INI: 0D18=6,rotate_quat %1d% axis_vector %2d% %3d% %4d% angle %5d% flag %6d%
+Opcode.register(0x0d18, SharedOpcodeGlobal.rotateQuatOnAxis, 6, 'rotate_quat_on_axis ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0D19=2,get_normalized_quat %1d% to_quat %2d%
+Opcode.register(0x0d19, SharedOpcodeGlobal.getNormalisedQuat, 2, '${1} = get_normalised_quat ${2}', {true, false})
+-- INI: 0D1A=3,quat %3d% = quat %1d% * quat %2d%
+Opcode.register(0x0d1a, SharedOpcodeGlobal.multiplyQuats, 3, '${3} = multiply_quats ${1} ${2}', {false, false, true})
+-- INI: 0D1E=4,quat_slerp %1d% %2d% %3d% %4d%
+Opcode.register(0x0d1e, SharedOpcodeGlobal.quatSlerp, 4, '${1} = quat_slerp ${2} ${3} ${4}', {true, false, false, false})
+-- INI: 0D24=5,set_quat %1d% elements %2d% %3d% %4d% %5d%
+Opcode.register(0x0d24, SharedOpcodeGlobal.initialiseQuat, 5, 'initialise_quat ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 0D27=3,copy_memory_from %1d% to %2d% size %3d%
+Opcode.register(0x0d27, SharedOpcodeGlobal.copyMemory, 3, 'copy_memory ${1} ${2} ${3}', {false, false, false})
+-- INI: 0D29=5,get_quat %1d% elements_to %2d% %3d% %4d% %5d%
+Opcode.register(0x0d29, SharedOpcodeGlobal.getQuatElements, 5, '${1}, ${2}, ${3}, ${4} = get_quat_elements ${5}', {true, true, true, true, false})
+-- INI: 0D2E=3,set_script %1d% var %2d% to %3d%
+Opcode.register(0x0d2e, SharedOpcodeGlobal.setScriptVar, 3, 'set_script_var ${1} ${2} ${3}', {false, false, false})
+-- INI: 0D2F=3,%3d% = get_script_var ${1} ${2}', {false, false, true})
+-- INI: 0B10=3,%3d% = %1d% & %2d%
+Opcode.register(0x0b10, SharedOpcodeGlobal.opcode0B10, 3, '${3} = ${1} & ${2}', {false, false, true})
+-- INI: 0B11=3,%3d% = %1d% | %2d%
+Opcode.register(0x0b11, SharedOpcodeGlobal.opcode0B11, 3, '${3} = ${1} | ${2}', {false, false, true})
+-- INI: 0B12=3,%3d% = %1d% ^ %2d%
+Opcode.register(0x0b12, SharedOpcodeGlobal.opcode0B12, 3, '${3} = ${1} ^ ${2}', {false, false, true})
+-- INI: 0B13=2,%2d% = ~%1d%
+Opcode.register(0x0b13, SharedOpcodeGlobal.opcode0B13, 2, '${2} = ~${1}', {false, true})
+-- INI: 0B14=3,%3d% = %1d% % %2d%
+Opcode.register(0x0b14, SharedOpcodeGlobal.opcode0B14, 3, '${3} = ${1} % ${2}', {false, false, true})
+-- INI: 0B15=3,%3d% = %1d% >> %2d%
+Opcode.register(0x0b15, SharedOpcodeGlobal.opcode0B15, 3, '${3} = ${1} >> ${2}', {false, false, true})
+-- INI: 0B16=3,%3d% = %1d% << %2d%
+Opcode.register(0x0b16, SharedOpcodeGlobal.opcode0B16, 3, '${3} = ${1} << ${2}', {false, false, true})
+-- INI: 0B17=2,%1d% &= %2d%
+Opcode.register(0x0b17, SharedOpcodeGlobal.opcode0B17, 2, '${1} &= ${2}', {true, false})
+-- INI: 0B18=2,%1d% |= %2d%
+Opcode.register(0x0b18, SharedOpcodeGlobal.opcode0B18, 2, '${1} |= ${2}', {true, false})
+-- INI: 0B19=2,%1d% ^= %2d%
+Opcode.register(0x0b19, SharedOpcodeGlobal.opcode0B19, 2, '${1} ^= ${2}', {true, false})
+-- INI: 0B1A=1,~%1d%
+Opcode.register(0x0b1a, SharedOpcodeGlobal.opcode0B1A, 1, '~${1}', {true})
+-- INI: 0B1B=2,%1d% %= %2d%
+Opcode.register(0x0b1b, SharedOpcodeGlobal.opcode0B1B, 2, '${1} %= ${2}', {true, false})
+-- INI: 0B1C=2,%1d% >>= %2d%
+Opcode.register(0x0b1c, SharedOpcodeGlobal.opcode0B1C, 2, '${1} >>= ${2}', {true, false})
+-- INI: 0B1D=2,%1d% <<= %2d%
+Opcode.register(0x0b1d, SharedOpcodeGlobal.opcode0B1D, 2, '${1} <<= ${2}', {true, false})

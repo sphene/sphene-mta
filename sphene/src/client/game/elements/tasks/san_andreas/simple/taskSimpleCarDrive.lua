@@ -98,7 +98,7 @@ function TaskSimpleCarDrive:process()
             nodeX * matrix.forward.x + nodeY * matrix.forward.y + nodeZ * matrix.forward.z,
             nodeX * matrix.up.x + nodeY * matrix.up.y + nodeZ * matrix.up.z
 
-        if (node.bend) then
+        if (node.bend and maxSpeed > 0) then
             maxSpeed = 40 * (1 / (170 / node.angle))
         end
 

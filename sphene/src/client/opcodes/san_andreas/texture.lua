@@ -30,7 +30,11 @@ function SanAndreasOpcodeTexture.cleanLoaded(_)
 end
 
 
-Opcode.register(0x0d61, SanAndreasOpcodeTexture.loadFromBmpFile, '[var texture: any] = load_texture_from_bmp_file {bmp} [string] {mask} [string]')
-Opcode.register(0x0d64, SanAndreasOpcodeTexture.loadFromPngFile, '[var texture: any] = load_texture_from_png_file {png} [string]')
-Opcode.register(0x0d7c, SanAndreasOpcodeTexture.loadFromDdsFile, '[var texture: any] = load_texture_from_dds_file {dds} [string]')
-Opcode.register(0x0d7d, SanAndreasOpcodeTexture.cleanLoaded, 'clean_loaded_texture [Texture]')
+-- INI: 0D61=3, %3d% = load_texture_bmp_from %1s% with_mask %2s% // IF and SET
+Opcode.register(0x0d61, SanAndreasOpcodeTexture.loadFromBmpFile, 3, '${3} = load_texture_from_bmp_file ${1} ${2}', {false, false, true})
+-- INI: 0D64=2, %2d% = load_texture_png_from %1s% // IF and SET
+Opcode.register(0x0d64, SanAndreasOpcodeTexture.loadFromPngFile, 2, '${1} = load_texture_from_png_file ${2}', {true, false})
+-- INI: 0D7C=2, %2d% = load_texture_dds_from %1s% // IF and SET
+Opcode.register(0x0d7c, SanAndreasOpcodeTexture.loadFromDdsFile, 2, '${1} = load_texture_from_dds_file ${2}', {true, false})
+-- INI: 0D7D=1,clean_loaded_texture %1d%
+Opcode.register(0x0d7d, SanAndreasOpcodeTexture.cleanLoaded, 1, 'clean_loaded_texture ${1}', {false})

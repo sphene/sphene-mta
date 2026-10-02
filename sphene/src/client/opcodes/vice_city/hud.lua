@@ -23,6 +23,9 @@ function ViceCityOpcodeHud.areWantedStarsFlashing()
 end
 
 
-Opcode.register(0x0150, ViceCityOpcodeHud.displayCounter, 'display_onscreen_counter {var_counter} [global var int] {display} [CounterDisplay]')
-Opcode.register(0x044d, ViceCityOpcodeHud.loadSplash, 'load_splash_screen {txdName} [string]')
-Opcode.register(0x057b, ViceCityOpcodeHud.areWantedStarsFlashing, 'wanted_stars_are_flashing')
+-- INI: 0150=2,set_status_text %1d% type %2d%  ;; never used in VC or GTA 3
+Opcode.register(0x0150, ViceCityOpcodeHud.displayCounter, 2, 'display_onscreen_counter ${1} ${2}', {false, false})
+-- INI: 044d=1,load_splash %1d%
+Opcode.register(0x044d, ViceCityOpcodeHud.loadSplash, 1, 'load_splash_screen ${1}', {false})
+-- INI: 057b=0,  wanted_level_suspended
+Opcode.register(0x057b, ViceCityOpcodeHud.areWantedStarsFlashing, 0, 'wanted_stars_are_flashing', {})

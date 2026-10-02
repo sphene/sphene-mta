@@ -61,10 +61,17 @@ function SanAndreasOpcodeBlip.setCoordAppearance(blip, type)
 end
 
 
-Opcode.register(0x06c4, SanAndreasOpcodeBlip.addForSearchlight, '[var handle: Blip] = add_blip_for_searchlight {searchlight} [Searchlight]')
-Opcode.register(0x075c, SanAndreasOpcodeBlip.doesExist, 'does_blip_exist {handle} [any]')
-Opcode.register(0x07bf, SanAndreasOpcodeBlip.setAlwaysDisplayOnZoomedRadar, 'set_blip_always_display_on_zoomed_radar [Blip] {state} [bool]')
-Opcode.register(0x07e0, SanAndreasOpcodeBlip.setAsFriendly, 'set_blip_as_friendly [Blip] {state} [bool]')
-Opcode.register(0x0888, SanAndreasOpcodeBlip.addForDeadChar, '[var handle: Blip] = add_blip_for_dead_char {char} [Char]')
-Opcode.register(0x08dc, SanAndreasOpcodeBlip.setEntryExit, 'set_blip_entry_exit [Blip] {x} [float] {y} [float] {radius} [float]')
-Opcode.register(0x08fb, SanAndreasOpcodeBlip.setCoordAppearance, 'set_coord_blip_appearance [Blip] {color} [CoordAppearance]')
+-- INI: 06C4=2,create_marker_above_searchlight %1d% handle_as %2d%
+Opcode.register(0x06c4, SanAndreasOpcodeBlip.addForSearchlight, 2, '${1} = add_blip_for_searchlight ${2}', {false, false})
+-- INI: 075C=1,  marker %1d% enabled
+Opcode.register(0x075c, SanAndreasOpcodeBlip.doesExist, 1, 'does_blip_exist ${1}', {false})
+-- INI: 07BF=2,set_marker %1d% tracking_blip %2h%
+Opcode.register(0x07bf, SanAndreasOpcodeBlip.setAlwaysDisplayOnZoomedRadar, 2, 'set_blip_always_display_on_zoomed_radar ${1} ${2}', {false, false})
+-- INI: 07E0=2,set_marker %1d% type_to %2h%
+Opcode.register(0x07e0, SanAndreasOpcodeBlip.setAsFriendly, 2, 'set_blip_as_friendly ${1} ${2}', {false, false})
+-- INI: 0888=2,create_marker_above_actor %1d% handle_as %2d% ; versionB
+Opcode.register(0x0888, SanAndreasOpcodeBlip.addForDeadChar, 2, '${2} = add_blip_for_dead_char ${1}', {false, true})
+-- INI: 08DC=4,create_interior_marker %1d% at %2d% %3d% radius %4d%
+Opcode.register(0x08dc, SanAndreasOpcodeBlip.setEntryExit, 4, 'set_blip_entry_exit ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 08FB=2,set_checkpoint %1d% type_to %2h%
+Opcode.register(0x08fb, SanAndreasOpcodeBlip.setCoordAppearance, 2, 'set_coord_blip_appearance ${1} ${2}', {false, false})

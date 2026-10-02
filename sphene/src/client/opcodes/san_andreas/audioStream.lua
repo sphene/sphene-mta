@@ -135,22 +135,31 @@ function SanAndreasOpcodeAudioStream.setType()
 end
 
 
-Opcode.register(0x0e3b, SanAndreasOpcodeAudioStream.getInternal, '[var address: int] = get_audiostream_internal [AudioStream]')
-Opcode.register(0x0aac, SanAndreasOpcodeAudioStream.load, '[var handle: AudioStream] = load_audio_stream {audioFileName} [string]')
-Opcode.register(0x0aad, SanAndreasOpcodeAudioStream.setState, 'set_audio_stream_state [AudioStream] {action} [AudioStreamAction]')
-Opcode.register(0x0aae, SanAndreasOpcodeAudioStream.remove, 'remove_audio_stream [AudioStream]')
-Opcode.register(0x0aaf, SanAndreasOpcodeAudioStream.getLength, '[var length: int] = get_audio_stream_length [AudioStream]')
-Opcode.register(0x0ab9, SanAndreasOpcodeAudioStream.getState, '[var state: AudioStreamState] = get_audio_stream_state [AudioStream]')
-Opcode.register(0x0abb, SanAndreasOpcodeAudioStream.getVolume, '[var volume: float] = get_audio_stream_volume [AudioStream]')
-Opcode.register(0x0abc, SanAndreasOpcodeAudioStream.setVolume, 'set_audio_stream_volume [AudioStream] {volume} [float]')
-Opcode.register(0x0ac0, SanAndreasOpcodeAudioStream.setLooped, 'set_audio_stream_looped [AudioStream] {state} [bool]')
-Opcode.register(0x2500, SanAndreasOpcodeAudioStream.isPlaying, 'is_audio_stream_playing [AudioStream]')
-Opcode.register(0x2501, SanAndreasOpcodeAudioStream.getDuration, '[var seconds: float] = get_audio_stream_duration [AudioStream]')
-Opcode.register(0x2502, SanAndreasOpcodeAudioStream.getSpeed, '[var speed: float] = get_audio_stream_speed [AudioStream]')
-Opcode.register(0x2503, SanAndreasOpcodeAudioStream.setSpeed, 'set_audio_stream_speed [AudioStream] {speed} [float]')
-Opcode.register(0x2504, SanAndreasOpcodeAudioStream.setVolumeWithTransition, 'set_audio_stream_volume_with_transition [AudioStream] {volume} [float] {timeMs} [int]')
-Opcode.register(0x2505, SanAndreasOpcodeAudioStream.setSpeedWithTransition, 'set_audio_stream_speed_with_transition [AudioStream] {speed} [float] {timeMs} [int]')
-Opcode.register(0x2507, SanAndreasOpcodeAudioStream.getProgress, '[var progress: float] = get_audio_stream_progress [AudioStream]')
-Opcode.register(0x2508, SanAndreasOpcodeAudioStream.setProgress, 'set_audio_stream_progress [AudioStream] {progress} [float]')
-Opcode.register(0x2509, SanAndreasOpcodeAudioStream.getType, '[var type: AudioStreamType] = get_audio_stream_type [AudioStream]')
-Opcode.register(0x250a, SanAndreasOpcodeAudioStream.setType, 'set_audio_stream_type [AudioStream] {type} [AudioStreamType]')
+-- INI: 0E3B=2,get_audiostream_internal %1d% store_to %2d%
+Opcode.register(0x0e3b, SanAndreasOpcodeAudioStream.getInternal, 2, '${2} = get_audiostream_internal ${1}', {false, true})
+-- INI: 0AAC=2,%2d% = load_audio_stream %1d%
+Opcode.register(0x0aac, SanAndreasOpcodeAudioStream.load, 2, '${2} = load_audio_stream ${1}', {false, true})
+-- INI: 0AAD=2,set_audio_stream %1d% state %2d%
+Opcode.register(0x0aad, SanAndreasOpcodeAudioStream.setState, 2, 'set_audio_stream_state ${1} ${2}', {false, false})
+-- INI: 0AAE=1,remove_audio_stream %1d%
+Opcode.register(0x0aae, SanAndreasOpcodeAudioStream.remove, 1, 'remove_audio_stream ${1}', {false})
+-- INI: 0AAF=2,%2d% = get_audio_stream_length %1d%
+Opcode.register(0x0aaf, SanAndreasOpcodeAudioStream.getLength, 2, '${2} = get_audio_stream_length ${1}', {false, true})
+-- INI: 0AB9=2,get_audio_stream %1d% state_to %2d%
+Opcode.register(0x0ab9, SanAndreasOpcodeAudioStream.getState, 2, '${2} = get_audio_stream_state ${1}', {false, true})
+-- INI: 0ABB=2,%2d% = audio_stream %1d% volume
+Opcode.register(0x0abb, SanAndreasOpcodeAudioStream.getVolume, 2, '${2} = get_audio_stream_volume ${1}', {false, true})
+-- INI: 0ABC=2,set_audio_stream %1d% volume %2d%
+Opcode.register(0x0abc, SanAndreasOpcodeAudioStream.setVolume, 2, 'set_audio_stream_volume ${1} ${2}', {false, false})
+-- INI: 0AC0=2,set_audio_stream %1d% looped %2d%
+Opcode.register(0x0ac0, SanAndreasOpcodeAudioStream.setLooped, 2, 'set_audio_stream_looped ${1} ${2}', {false, false})
+Opcode.register(0x2500, SanAndreasOpcodeAudioStream.isPlaying, 1, 'is_audio_stream_playing [AudioStream]')
+Opcode.register(0x2501, SanAndreasOpcodeAudioStream.getDuration, 2, '${1} = get_audio_stream_duration [AudioStream]')
+Opcode.register(0x2502, SanAndreasOpcodeAudioStream.getSpeed, 2, '${1} = get_audio_stream_speed [AudioStream]')
+Opcode.register(0x2503, SanAndreasOpcodeAudioStream.setSpeed, 2, 'set_audio_stream_speed [AudioStream] ${1}')
+Opcode.register(0x2504, SanAndreasOpcodeAudioStream.setVolumeWithTransition, 3, 'set_audio_stream_volume_with_transition [AudioStream] ${1} ${2}')
+Opcode.register(0x2505, SanAndreasOpcodeAudioStream.setSpeedWithTransition, 3, 'set_audio_stream_speed_with_transition [AudioStream] ${1} ${2}')
+Opcode.register(0x2507, SanAndreasOpcodeAudioStream.getProgress, 2, '${1} = get_audio_stream_progress [AudioStream]')
+Opcode.register(0x2508, SanAndreasOpcodeAudioStream.setProgress, 2, 'set_audio_stream_progress [AudioStream] ${1}')
+Opcode.register(0x2509, SanAndreasOpcodeAudioStream.getType, 2, '${1} = get_audio_stream_type [AudioStream]')
+Opcode.register(0x250a, SanAndreasOpcodeAudioStream.setType, 2, 'set_audio_stream_type [AudioStream] ${1}')

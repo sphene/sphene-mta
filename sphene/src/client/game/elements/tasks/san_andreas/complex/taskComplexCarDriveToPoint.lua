@@ -32,7 +32,7 @@ function TaskComplexCarDriveToPoint:process()
         else
             local vehX, vehY, vehZ = self:getPed():getOccupiedVehicle():getPosition()
 
-            if (getDistanceBetweenPoints3D(vehX, vehY, vehZ, self.posX, self.posY, self.posZ) <= 3) then
+            if (getDistanceBetweenPoints3D(vehX, vehY, vehZ, self.posX, self.posY, self.posZ) <= 1) then
                 self:setFinished()
                 return
             end

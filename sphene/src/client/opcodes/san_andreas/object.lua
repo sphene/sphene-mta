@@ -98,7 +98,7 @@ end
 -- Instruction: [var health: int] = get_object_health [Object]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/071E
 function SanAndreasOpcodeObject.getHealth(object, _)
-    return Script.storeValueAtIndex(2, object:getHealth())
+    return object:getHealth()
 end
 
 -- Opcode: 0x071F
@@ -499,73 +499,141 @@ function SanAndreasOpcodeObject.createRenderObjectToObjectFromSpecial()
 end
 
 
-Opcode.register(0x059f, SanAndreasOpcodeObject.getVelocity, '[var x: float], [var y: float], [var z: float] = get_object_velocity [Object]')
-Opcode.register(0x05a1, SanAndreasOpcodeObject.addToRotationVelocity, 'add_to_object_rotation_velocity [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x05a2, SanAndreasOpcodeObject.setRotationVelocity, 'set_object_rotation_velocity [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x05a3, SanAndreasOpcodeObject.isStatic, 'is_object_static [Object]')
-Opcode.register(0x05a6, SanAndreasOpcodeObject.getRotationVelocity, '[var x: float], [var y: float], [var z: float] = get_object_rotation_velocity [Object]')
-Opcode.register(0x05a7, SanAndreasOpcodeObject.addVelocityRelative, 'add_velocity_relative_to_object_velocity [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x05a8, SanAndreasOpcodeObject.getSpeed, '[var speed: float] = get_object_speed [Object]')
-Opcode.register(0x0654, SanAndreasOpcodeObject.setRenderScorched, 'set_object_render_scorched [Object] {state} [bool]')
-Opcode.register(0x0681, SanAndreasOpcodeObject.attachToCar, 'attach_object_to_car [Object] {handle} [Car] {xOffset} [float] {yOffset} [float] {zOffset} [float] {xRotation} [float] {yRotation} [float] {zRotation} [float]')
-Opcode.register(0x0682, SanAndreasOpcodeObject.detach, 'detach_object [Object] {x} [float] {y} [float] {z} [float] {collisionDetection} [bool]')
-Opcode.register(0x0685, SanAndreasOpcodeObject.isAttached, 'is_object_attached [Object]')
-Opcode.register(0x069a, SanAndreasOpcodeObject.attachToObject, 'attach_object_to_object [Object] {handle} [Object] {xOffset} [float] {yOffset} [float] {zOffset} [float] {xRotation} [float] {yRotation} [float] {zRotation} [float]')
-Opcode.register(0x069b, SanAndreasOpcodeObject.attachToChar, 'attach_object_to_char [Object] {handle} [Char] {xOffset} [float] {yOffset} [float] {zOffset} [float] {xRotation} [float] {yRotation} [float] {zRotation} [float]')
-Opcode.register(0x071e, SanAndreasOpcodeObject.getHealth, '[var health: int] = get_object_health [Object]')
-Opcode.register(0x071f, SanAndreasOpcodeObject.setHealth, 'set_object_health [Object] {health} [int]')
-Opcode.register(0x0723, SanAndreasOpcodeObject.breakObject, 'break_object [Object] {intensity} [int]')
-Opcode.register(0x0750, SanAndreasOpcodeObject.setVisible, 'set_object_visible [Object] {state} [bool]')
-Opcode.register(0x075a, SanAndreasOpcodeObject.playAnim, 'play_object_anim [Object] {animationName} [string] {animationFile} [string] {frameDelta} [float] {lockF} [bool] {loop} [bool]')
-Opcode.register(0x0796, SanAndreasOpcodeObject.getRopeHeight, '[var height: float] = get_rope_height_for_object [Object]')
-Opcode.register(0x0797, SanAndreasOpcodeObject.setRopeHeight, 'set_rope_height_for_object [Object] {height} [float]')
-Opcode.register(0x0798, SanAndreasOpcodeObject.grabEntityOnRope, '[var vehicle: Car], [var char: Char], [var object: Object] = grab_entity_on_rope_for_object [Object]')
-Opcode.register(0x0799, SanAndreasOpcodeObject.releaseEntityFromRope, 'release_entity_from_rope_for_object [Object]')
-Opcode.register(0x07c3, SanAndreasOpcodeObject.getQuaternion, '[var x: float], [var y: float], [var z: float], [var w: float] = get_object_quaternion [Object]')
-Opcode.register(0x07c4, SanAndreasOpcodeObject.setQuaternion, 'set_object_quaternion [Object] {x} [float] {y} [float] {z} [float] {w} [float]')
-Opcode.register(0x07f7, SanAndreasOpcodeObject.setCollisionDamageEffect, 'set_object_collision_damage_effect [Object] {state} [bool]')
-Opcode.register(0x080a, SanAndreasOpcodeObject.getLevelDesignCoords, '[var x: float], [var y: float], [var z: float] = get_level_design_coords_for_object [Object] {nth} [int]')
-Opcode.register(0x0815, SanAndreasOpcodeObject.setCoordinatesAndVelocity, 'set_object_coordinates_and_velocity [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0827, SanAndreasOpcodeObject.connectLods, 'connect_lods [Object] {lodObject} [Object]')
-Opcode.register(0x0833, SanAndreasOpcodeObject.hasBeenPhotographed, 'has_object_been_photographed [Object]')
-Opcode.register(0x0836, SanAndreasOpcodeObject.setAnimSpeed, 'set_object_anim_speed [Object] {animationName} [string] {speed} [float]')
-Opcode.register(0x0837, SanAndreasOpcodeObject.isPlayingAnim, 'is_object_playing_anim [Object] {animationName} [string]')
-Opcode.register(0x0839, SanAndreasOpcodeObject.getAnimCurrentTime, '[var time: float] = get_object_anim_current_time [Object] {animationName} [string]')
-Opcode.register(0x083a, SanAndreasOpcodeObject.setAnimCurrentTime, 'set_object_anim_current_time [Object] {animationName} [string] {time} [float]')
-Opcode.register(0x0875, SanAndreasOpcodeObject.setOnlyDamagedByPlayer, 'set_object_only_damaged_by_player [Object] {state} [bool]')
-Opcode.register(0x08d2, SanAndreasOpcodeObject.setScale, 'set_object_scale [Object] {scale} [float]')
-Opcode.register(0x08e3, SanAndreasOpcodeObject.isInAngledArea2D, 'is_object_in_angled_area_2d [Object] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x08e4, SanAndreasOpcodeObject.isInAngledArea3D, 'is_object_in_angled_area_3d [Object] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x08e9, SanAndreasOpcodeObject.setAsStealable, 'set_object_as_stealable [Object] {state} [bool]')
-Opcode.register(0x08ff, SanAndreasOpcodeObject.hasBeenDamagedByWeapon, 'has_object_been_damaged_by_weapon [Object] {weaponType} [WeaponType]')
-Opcode.register(0x0900, SanAndreasOpcodeObject.clearLastWeaponDamage, 'clear_object_last_weapon_damage [Object]')
-Opcode.register(0x0905, SanAndreasOpcodeObject.lockDoor, 'lock_door [Object] {state} [bool]')
-Opcode.register(0x0906, SanAndreasOpcodeObject.setMass, 'set_object_mass [Object] {mass} [float]')
-Opcode.register(0x0907, SanAndreasOpcodeObject.getMass, '[var mass: float] = get_object_mass [Object]')
-Opcode.register(0x0908, SanAndreasOpcodeObject.setTurnMass, 'set_object_turn_mass [Object] {turnMass} [float]')
-Opcode.register(0x0909, SanAndreasOpcodeObject.getTurnMass, '[var turnMass: float] = get_object_turn_mass [Object]')
-Opcode.register(0x0916, SanAndreasOpcodeObject.winchCanPickUp, 'winch_can_pick_object_up [Object] {state} [bool]')
-Opcode.register(0x095b, SanAndreasOpcodeObject.hasBeenUprooted, 'has_object_been_uprooted [Object]')
-Opcode.register(0x0977, SanAndreasOpcodeObject.isWithinBrainActivationRange, 'is_object_within_brain_activation_range [Object]')
-Opcode.register(0x0984, SanAndreasOpcodeObject.getModel, '[var model: int] = get_object_model [Object]')
-Opcode.register(0x09a2, SanAndreasOpcodeObject.removeElegantly, 'remove_object_elegantly [Object]')
-Opcode.register(0x09ca, SanAndreasOpcodeObject.setProofs, 'set_object_proofs [Object] {bulletProof} [bool] {fireProof} [bool] {explosionProof} [bool] {collisionProof} [bool] {meleeProof} [bool]')
-Opcode.register(0x09cc, SanAndreasOpcodeObject.doesHaveThisModel, 'does_object_have_this_model [Object] {modelId} [model_any]')
-Opcode.register(0x09fc, SanAndreasOpcodeObject.isIntersectingWorld, 'is_object_intersecting_world [Object]')
-Opcode.register(0x0a0a, SanAndreasOpcodeObject.enableDisabledAttractors, 'enable_disabled_attractors_on_object [Object] {state} [bool]')
-Opcode.register(0x0d11, SanAndreasOpcodeObject.setModelAlpha, 'set_object_model_alpha [Object] {alpha} [int]')
-Opcode.register(0x0e01, SanAndreasOpcodeObject.createNoSave, '[var handle: Object] = create_object_no_save {modelId} [model_object] {x} [float] {y} [float] {z} [float] {useOffset} [bool] {useGround} [bool]')
-Opcode.register(0x0e0c, SanAndreasOpcodeObject.isScriptControlled, 'is_object_script_controlled [Object]')
-Opcode.register(0x0e0d, SanAndreasOpcodeObject.markAsNeeded, 'mark_object_as_needed [Object]')
-Opcode.register(0x0e1a, SanAndreasOpcodeObject.initExtendedVars, 'init_extended_object_vars [Object] {identifier} [string] {totalVars} [int]')
-Opcode.register(0x0e1b, SanAndreasOpcodeObject.setExtendedVar, 'set_extended_object_var [Object] {identifier} [string] {varNumber} [int] {value} [any]')
-Opcode.register(0x0e1c, SanAndreasOpcodeObject.getExtendedVar, '[var value: any] = get_extended_object_var [Object] {identifier} [string] {varNumber} [int]')
-Opcode.register(0x0e71, SanAndreasOpcodeObject.getDistanceFromCenterOfMassToBaseOfModel, '[var distance: float] = get_object_centre_of_mass_to_base_of_model [Object]')
-Opcode.register(0x0e94, SanAndreasOpcodeObject.isReallyInAir, 'is_object_really_in_air [Object]')
-Opcode.register(0x0e95, SanAndreasOpcodeObject.simulateDamage, 'simulate_object_damage [Object] {damage} [float] {weaponType} [WeaponType]')
-Opcode.register(0x0eae, SanAndreasOpcodeObject.getProofs, '[var bullet: bool], [var fire: bool], [var explosion: bool], [var collision: bool], [var melee: bool] = get_object_proofs [Object]')
-Opcode.register(0x0eca, SanAndreasOpcodeObject.getRandomSeed, '[var randomSeed: int] = get_object_random_seed [Object]')
-Opcode.register(0x0ee9, SanAndreasOpcodeObject.locateDistanceToObject, 'locate_object_distance_to_object [Object] {object} [Object] {radius} [float]')
-Opcode.register(0x0eec, SanAndreasOpcodeObject.locateDistanceToCoordinates, 'locate_object_distance_to_coordinates [Object] {x} [float] {y} [float] {z} [float] {radius} [float]')
-Opcode.register(0x0f03, SanAndreasOpcodeObject.createRenderObjectToObject, '[var renderobject: int] = create_render_object_to_object [Object] {modelId} [model_any] {x} [float] {y} [float] {z} [float] {rx} [float] {ry} [float] {rz} [float]')
-Opcode.register(0x0f04, SanAndreasOpcodeObject.createRenderObjectToObjectFromSpecial, '[var renderobject: int] = create_render_object_to_object_from_special [Object] {specialModel} [int] {x} [float] {y} [float] {z} [float] {rx} [float] {ry} [float] {rz} [float]')
+-- INI: 059f=4,get_object %1d% velocity %2d% %3d% %4d%  ;; never used in VC
+Opcode.register(0x059f, SanAndreasOpcodeObject.getVelocity, 4, '${2}, ${3}, ${4} = get_object_velocity ${1}', {false, true, true, true})
+-- INI: 05a1=4,set_object %1d% rotation_velocity_about_an_axis %2d% %3d% %4d%  ;; never used in VC
+Opcode.register(0x05a1, SanAndreasOpcodeObject.addToRotationVelocity, 4, 'add_to_object_rotation_velocity ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 05a2=4,set_object %1d% rotation_velocity_about_an_axis %2d% %3d% %4d%  ;; never used in VC
+Opcode.register(0x05a2, SanAndreasOpcodeObject.setRotationVelocity, 4, 'set_object_rotation_velocity ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 05a3=1,  object %1d% stopped  ;; never used in VC
+Opcode.register(0x05a3, SanAndreasOpcodeObject.isStatic, 1, 'is_object_static ${1}', {false})
+-- INI: 05a6=4,get_object %1d% rotation_velocity %2d% %3d% %4d%  ;; never used in VC
+Opcode.register(0x05a6, SanAndreasOpcodeObject.getRotationVelocity, 4, '${2}, ${3}, ${4} = get_object_rotation_velocity ${1}', {false, true, true, true})
+-- INI: 05a7=4,set_object %1d% velocity %2d% %3d% %4d%  ;; never used in VC
+Opcode.register(0x05a7, SanAndreasOpcodeObject.addVelocityRelative, 4, 'add_velocity_relative_to_object_velocity ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 05a8=2,get_object %1d% speed_to %2d%  ;; never used in VC
+Opcode.register(0x05a8, SanAndreasOpcodeObject.getSpeed, 2, '${2} = get_object_speed ${1}', {false, true})
+-- INI: 0654=2,make_object %1d% fireproof %2h%
+Opcode.register(0x0654, SanAndreasOpcodeObject.setRenderScorched, 2, 'set_object_render_scorched ${1} ${2}', {false, false})
+-- INI: 0681=8,attach_object %1d% to_car %2d% with_offset %3d% %4d% %5d% rotation %6d% %7d% %8d%
+Opcode.register(0x0681, SanAndreasOpcodeObject.attachToCar, 8, 'attach_object_to_car ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 0682=5,detach_object %1d% %2d% %3d% %4d% collision_detection %5h%
+Opcode.register(0x0682, SanAndreasOpcodeObject.detach, 5, 'detach_object ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 0685=1,  object %1d% attached
+Opcode.register(0x0685, SanAndreasOpcodeObject.isAttached, 1, 'is_object_attached ${1}', {false})
+-- INI: 069A=8,attach_object %1d% to_object %2d% with_offset %3d% %4d% %5d% rotation %6d% %7d% %8d%
+Opcode.register(0x069a, SanAndreasOpcodeObject.attachToObject, 8, 'attach_object_to_object ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 069B=8,attach_object %1d% to_actor %2d% with_offset %3d% %4d% %5d% rotation %6d% %7d% %8d%
+Opcode.register(0x069b, SanAndreasOpcodeObject.attachToChar, 8, 'attach_object_to_char ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 071E=2,get_object %1d% health_to %2d%
+Opcode.register(0x071e, SanAndreasOpcodeObject.getHealth, 2, '${1} = get_object_health ${2}', {false, false})
+-- INI: 071F=2,set_object %1d% health_to %2h%
+Opcode.register(0x071f, SanAndreasOpcodeObject.setHealth, 2, 'set_object_health ${1} ${2}', {false, false})
+-- INI: 0723=2,break_object %1d% intensity %2h%
+Opcode.register(0x0723, SanAndreasOpcodeObject.breakObject, 2, 'break_object ${1} ${2}', {false, false})
+-- INI: 0750=2,set_object %1d% visibility %2h%
+Opcode.register(0x0750, SanAndreasOpcodeObject.setVisible, 2, 'set_object_visible ${1} ${2}', {false, false})
+-- INI: 075A=6,set_object %1d% animation %2h% IFP_file %3h% %4d% lockF %5h% loop %6h% ; IF AND SET
+Opcode.register(0x075a, SanAndreasOpcodeObject.playAnim, 6, 'play_object_anim ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0796=2,get_crane_magnet %1d% magnet_lane_length_to %2d% ; float
+Opcode.register(0x0796, SanAndreasOpcodeObject.getRopeHeight, 2, '${2} = get_rope_height_for_object ${1}', {false, true})
+-- INI: 0797=2,set_crane_magnet %1d% magnet_lane_length_to %2d% ; float
+Opcode.register(0x0797, SanAndreasOpcodeObject.setRopeHeight, 2, 'set_rope_height_for_object ${1} ${2}', {false, true})
+-- INI: 0798=4,get_crane_magnet %1d% attached_car_handle_to %2d% attached_actor_handle_to %3d% attached_object_handle_to %4d%
+Opcode.register(0x0798, SanAndreasOpcodeObject.grabEntityOnRope, 4, '${2}, ${3}, ${4} = grab_entity_on_rope_for_object ${1}', {false, true, true, true})
+-- INI: 0799=1,set_crane_magnet %1d% release_stuff_from_magnet
+Opcode.register(0x0799, SanAndreasOpcodeObject.releaseEntityFromRope, 1, 'release_entity_from_rope_for_object ${1}', {false})
+-- INI: 07C3=5,get_object %1d% axis_angle_relation_to %2d% %3d% %4d% %5d%
+Opcode.register(0x07c3, SanAndreasOpcodeObject.getQuaternion, 5, '${2}, ${3}, ${4}, ${5} = get_object_quaternion ${1}', {false, true, true, true, true})
+-- INI: 07C4=5,set_object %1d% axis_angle_relation_to %2d% %3d% %4d% %5d%
+Opcode.register(0x07c4, SanAndreasOpcodeObject.setQuaternion, 5, 'set_object_quaternion ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 07F7=2,set_object %1d% destructible %2h%
+Opcode.register(0x07f7, SanAndreasOpcodeObject.setCollisionDamageEffect, 2, 'set_object_collision_damage_effect ${1} ${2}', {false, false})
+-- INI: 080A=5,get_object %1d% spoot %2h% store_to %3d% %4d% %5d%
+Opcode.register(0x080a, SanAndreasOpcodeObject.getLevelDesignCoords, 5, '${3}, ${4}, ${5} = get_level_design_coords_for_object ${1} ${2}', {false, false, true, true, true})
+-- INI: 0815=4,put_object %1d% at %2d% %3d% %4d% and_keep_rotation
+Opcode.register(0x0815, SanAndreasOpcodeObject.setCoordinatesAndVelocity, 4, 'set_object_coordinates_and_velocity ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0827=2,assign_object %1d% to_lod_object %2d%
+Opcode.register(0x0827, SanAndreasOpcodeObject.connectLods, 2, 'connect_lods ${1} ${2}', {false, false})
+-- INI: 0833=1,  object %1d% photographed
+Opcode.register(0x0833, SanAndreasOpcodeObject.hasBeenPhotographed, 1, 'has_object_been_photographed ${1}', {false})
+-- INI: 0836=3,set_object %1d% animation %2h% at %3d% times_normal_rate
+Opcode.register(0x0836, SanAndreasOpcodeObject.setAnimSpeed, 3, 'set_object_anim_speed ${1} ${2} ${3}', {false, false, false})
+-- INI: 0837=2,  object %1d% animation == %2h%
+Opcode.register(0x0837, SanAndreasOpcodeObject.isPlayingAnim, 2, 'is_object_playing_anim ${1} ${2}', {false, false})
+-- INI: 0839=3,get_object %1d% animation %2h% progress_to %3d%
+Opcode.register(0x0839, SanAndreasOpcodeObject.getAnimCurrentTime, 3, '${3} = get_object_anim_current_time ${1} ${2}', {false, false, true})
+-- INI: 083A=3,set_object %1d% animation %2h% progress_to %3d%
+Opcode.register(0x083a, SanAndreasOpcodeObject.setAnimCurrentTime, 3, 'set_object_anim_current_time ${1} ${2} ${3}', {false, false, false})
+-- INI: 0875=2,set_object %1d% immune_to_nonplayer %2h%
+Opcode.register(0x0875, SanAndreasOpcodeObject.setOnlyDamagedByPlayer, 2, 'set_object_only_damaged_by_player ${1} ${2}', {false, false})
+-- INI: 08D2=2,object %1d% scale_model %2d%
+Opcode.register(0x08d2, SanAndreasOpcodeObject.setScale, 2, 'set_object_scale ${1} ${2}', {false, false})
+-- INI: 08E3=7,  object %1d% sphere %7h% in_rectangle_ll_corner_at %2d% %3d% lr_corner_at %4d% %5d% radius %6d%
+Opcode.register(0x08e3, SanAndreasOpcodeObject.isInAngledArea2D, 7, 'is_object_in_angled_area_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 08E4=9,  object %1d% in_cube_fll_corner_at %2d% %3d% %4d% fur_corner_at %5d% %6d% %7d% depth %8d% flag %9h%
+Opcode.register(0x08e4, SanAndreasOpcodeObject.isInAngledArea3D, 9, 'is_object_in_angled_area_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 08E9=2,set_object %1d% liftable %2h%
+Opcode.register(0x08e9, SanAndreasOpcodeObject.setAsStealable, 2, 'set_object_as_stealable ${1} ${2}', {false, false})
+-- INI: 08FF=2,  object %1d% received_damage_type %2h%
+Opcode.register(0x08ff, SanAndreasOpcodeObject.hasBeenDamagedByWeapon, 2, 'has_object_been_damaged_by_weapon ${1} ${2}', {false, false})
+-- INI: 0900=1,clear_object %1d% last_weapon_damage
+Opcode.register(0x0900, SanAndreasOpcodeObject.clearLastWeaponDamage, 1, 'clear_object_last_weapon_damage ${1}', {false})
+-- INI: 0905=2,set_door %1d% lock %2h%
+Opcode.register(0x0905, SanAndreasOpcodeObject.lockDoor, 2, 'lock_door ${1} ${2}', {false, false})
+-- INI: 0906=2,set_object %1d% mass_to %2d% ; float
+Opcode.register(0x0906, SanAndreasOpcodeObject.setMass, 2, 'set_object_mass ${1} ${2}', {false, true})
+-- INI: 0907=2,get_object %1d% mass_to %2d% ; float
+Opcode.register(0x0907, SanAndreasOpcodeObject.getMass, 2, '${2} = get_object_mass ${1}', {false, true})
+-- INI: 0908=2,set_object %1d% turn_mass_to %2d% ; float
+Opcode.register(0x0908, SanAndreasOpcodeObject.setTurnMass, 2, 'set_object_turn_mass ${1} ${2}', {false, true})
+-- INI: 0909=2,get_object %1d% turn_mass_to %2d% ; float
+Opcode.register(0x0909, SanAndreasOpcodeObject.getTurnMass, 2, '${2} = get_object_turn_mass ${1}', {false, true})
+-- INI: 0916=2,set_object %1d% attractive_to_magnet %2h%
+Opcode.register(0x0916, SanAndreasOpcodeObject.winchCanPickUp, 2, 'winch_can_pick_object_up ${1} ${2}', {false, true})
+-- INI: 095B=1,  is_object_moveable %1d%
+Opcode.register(0x095b, SanAndreasOpcodeObject.hasBeenUprooted, 1, 'has_object_been_uprooted ${1}', {false})
+-- INI: 0977=1,  player_in_radius_of_object %1d% external_script_trigger
+Opcode.register(0x0977, SanAndreasOpcodeObject.isWithinBrainActivationRange, 1, 'is_object_within_brain_activation_range ${1}', {false})
+-- INI: 0984=2,%2d% = object %1d% model
+Opcode.register(0x0984, SanAndreasOpcodeObject.getModel, 2, '${2} = get_object_model ${1}', {false, true})
+-- INI: 09A2=1,destroy_object_with_fade %1d%
+Opcode.register(0x09a2, SanAndreasOpcodeObject.removeElegantly, 1, 'remove_object_elegantly ${1}', {false})
+-- INI: 09CA=6,set_object %1d% immunities BP %2h% FP %3h% EP %4h% CP %5h% MP %6h%
+Opcode.register(0x09ca, SanAndreasOpcodeObject.setProofs, 6, 'set_object_proofs ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 09CC=2,  object %1d% model %2o%
+Opcode.register(0x09cc, SanAndreasOpcodeObject.doesHaveThisModel, 2, 'does_object_have_this_model ${1} ${object.2}', {false, false})
+-- INI: 09FC=1,  anything_entered_objects_position %1d%
+Opcode.register(0x09fc, SanAndreasOpcodeObject.isIntersectingWorld, 1, 'is_object_intersecting_world ${1}', {false})
+-- INI: 0A0A=2,unknown_object %1d% flag %2h%
+Opcode.register(0x0a0a, SanAndreasOpcodeObject.enableDisabledAttractors, 2, 'enable_disabled_attractors_on_object ${1} ${2}', {false, false})
+-- INI: 0D11=2,set_object %1d% model_alpha %2d% // IF and SET
+Opcode.register(0x0d11, SanAndreasOpcodeObject.setModelAlpha, 2, 'set_object_model_alpha ${1} ${2}', {false, false})
+-- INI: 0E01=7,create_object_no_save %1o% at %2d% %3d% %4d% offset %5d% ground %6d% to %7d%
+Opcode.register(0x0e01, SanAndreasOpcodeObject.createNoSave, 7, '${7} = create_object_no_save ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false, true})
+-- INI: 0E0C=1,is_object_script_controlled %1d%
+Opcode.register(0x0e0c, SanAndreasOpcodeObject.isScriptControlled, 1, 'is_object_script_controlled ${1}', {false})
+-- INI: 0E0D=1,mark_object_as_needed %1d%
+Opcode.register(0x0e0d, SanAndreasOpcodeObject.markAsNeeded, 1, 'mark_object_as_needed ${1}', {false})
+-- INI: 0E1A=3,init_extended_object_vars %1d% id %2d% new_vars %3d%
+Opcode.register(0x0e1a, SanAndreasOpcodeObject.initExtendedVars, 3, 'init_extended_object_vars ${1} ${2} ${3}', {false, false, false})
+-- INI: 0E1B=4,set_extended_object_var %1d% id %2d% var %3d% value %4d%
+Opcode.register(0x0e1b, SanAndreasOpcodeObject.setExtendedVar, 4, 'set_extended_object_var ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0E1C=4,get_extended_object_var %1d% id %2d% var %3d% to %4d%
+Opcode.register(0x0e1c, SanAndreasOpcodeObject.getExtendedVar, 4, '${4} = get_extended_object_var ${1} ${2} ${3}', {false, false, false, true})
+-- INI: 0E71=2,get_object_centre_of_mass_to_base_of_model %1d% %2d%
+Opcode.register(0x0e71, SanAndreasOpcodeObject.getDistanceFromCenterOfMassToBaseOfModel, 2, '${1} = get_object_centre_of_mass_to_base_of_model ${2}', {false, false})
+-- INI: 0E94=1,is_object_really_in_air %1d%
+Opcode.register(0x0e94, SanAndreasOpcodeObject.isReallyInAir, 1, 'is_object_really_in_air ${1}', {false})
+-- INI: 0E95=3,simulate_object_damage %1d% damage %2d% type %3d%
+Opcode.register(0x0e95, SanAndreasOpcodeObject.simulateDamage, 3, 'simulate_object_damage ${1} ${2} ${3}', {false, false, false})
+-- INI: 0EAE=6,get_object_proofs %1d% bullet %2d% fire %3d% explosion %4d% collision %5d% melee %6d%
+Opcode.register(0x0eae, SanAndreasOpcodeObject.getProofs, 6, '${2}, ${3}, ${4}, ${5}, ${6} = get_object_proofs ${1}', {false, true, true, true, true, true})
+-- INI: 0ECA=2,get_object_random_seed %1d% store_to %2d%
+Opcode.register(0x0eca, SanAndreasOpcodeObject.getRandomSeed, 2, '${1} = get_object_random_seed ${2}', {true, false})
+-- INI: 0EE9=3,locate_object_distance_to_object %1d% object %2d% radius %3d%
+Opcode.register(0x0ee9, SanAndreasOpcodeObject.locateDistanceToObject, 3, 'locate_object_distance_to_object ${1} ${2} ${3}', {false, false, false})
+-- INI: 0EEC=5,locate_object_distance_to_coordinates %1d% pos %2d% %3d% %4d% radius %5d%
+Opcode.register(0x0eec, SanAndreasOpcodeObject.locateDistanceToCoordinates, 5, 'locate_object_distance_to_coordinates ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+Opcode.register(0x0f03, SanAndreasOpcodeObject.createRenderObjectToObject, 9, '${1} = create_render_object_to_object [Object] ${2} ${3} ${4} ${5} ${6} ${7} ${8}')
+Opcode.register(0x0f04, SanAndreasOpcodeObject.createRenderObjectToObjectFromSpecial, 9, '${1} = create_render_object_to_object_from_special [Object] ${2} ${3} ${4} ${5} ${6} ${7} ${8}')

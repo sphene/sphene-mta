@@ -352,10 +352,16 @@ function Script.releaseExternalScript(id)
 end
 
 function Script.panic(message)
-    Logger.error('SCRIPT', 'Panic [{}]: {} Pausing all threads.', string.format("%.4X", Thread.currentThread:getLastOpcode().opcode), message)
+    if Thread.currentThread then
+        Logger.error('SCRIPT', 'Panic [{}]: {} Pausing all threads.', string.format("%.4X", Thread.currentThread:getLastOpcode().opcode), message)
+    else
+        Logger.error('SCRIPT', 'Panic: {} Pausing all threads.', message)
+    end
+
     Overlay.triggerEvent("onError", "SCRIPT_PANIC", message)
 
     Script.stop()
+    Core.stop()
 
     local thread = Thread.threadTable
 

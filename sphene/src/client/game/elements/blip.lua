@@ -162,7 +162,7 @@ function BlipElement:onPreFrame()
             setBlipColor(self.element, color[1], color[2], color[3], self.alpha)
         end
 
-        if (self.hideInMission and Game.getMissionFlag() == 1) then
+        if self.hideInMission and Game.isOnMission() then
             if (getBlipVisibleDistance(self.element) > 0) then
                 Logger.debug('BLIP', 'Hiding blip with ID {} in mission', self.id)
                 setBlipVisibleDistance(self.element, 0)

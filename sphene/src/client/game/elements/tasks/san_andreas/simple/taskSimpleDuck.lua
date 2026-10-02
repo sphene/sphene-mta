@@ -37,6 +37,17 @@ function TaskSimpleDuck:process()
     end
 end
 
+function TaskSimpleDuck:getDebugParameters()
+    local ped = self:getPed()
+
+    return {
+        Ped = tostring(ped:getId() or 'UNKNOWN'),
+        TotalTimeMs = tostring(self.timeInMs),
+        EndTime = tostring(self.endTime),
+        TimeLeft = tostring(math.max(0, self.endTime - getTickCount()))
+    }
+end
+
 function TaskSimpleDuck:getName()
     return "TASK_SIMPLE_DUCK"
 end

@@ -79,8 +79,6 @@
     -->
     <file src="assets/logo.png" />
     <file src="assets/fonts/futheavy.ttf" />
-    <file src="assets/opcodes/SASCM.ini" />
-    <file src="assets/opcodes/VCSCM.ini" />
 
     <file src="assets/demo/demo.scm" />
     <file src="assets/demo/demo.gxt" />

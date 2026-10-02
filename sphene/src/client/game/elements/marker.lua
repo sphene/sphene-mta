@@ -51,7 +51,6 @@ function MarkerElement:create(x, y, z, type, size, r, g, b, a)
 
     Logger.debug('MARKER', 'Creating marker with type {}', type)
 
-    mt:setInterior(getElementInterior(localPlayer))
     setElementDimension(mt.element, getElementData(getElementParent(localPlayer), 'dimension'))
 
     return mt
@@ -116,9 +115,11 @@ function MarkerElement:setCheckpointType(type)
     elseif (type == 3) then
         self.element:setIcon("arrow")
         self.element:setType(MarkerType.RING)
+        self.type = MarkerType.RING
     elseif (type == 4) then
         self.element:setIcon("finish")
         self.element:setType(MarkerType.RING)
+        self.type = MarkerType.RING
     end
 end
 
@@ -188,7 +189,7 @@ function MarkerElement:onPreFrame()
     MarkerElement.parent.onPreFrame(self)
 
     if (self.element) then
-        if (self.hideInMission and Game.getMissionFlag() == 1) then
+        if self.hideInMission and Game.isOnMission() then
             if (getElementDimension(self.element) ~= 65534) then
                 Logger.debug('MARKER', 'Hiding marker with ID {} in mission', self.id)
                 setElementDimension(self.element, 65534)
@@ -239,6 +240,20 @@ function MarkerElement:onPreFrame()
             self.resetPosition = false
         end
     end
+end
+
+function MarkerElement:getDebugParameters()
+    return {
+        Color = tocolor(3, 202, 252, 255),
+        Title = self:getType()..":"..self:getId(),
+        Position = string.format("x: %.2f, y: %.2f, z: %.2f", self:getPosition()),
+        Rotation = string.format("rx: %.2f, ry: %.2f, rz: %.2f", self:getRotation()),
+        Marker_Color = string.format("r: %d, g: %d, b: %d", self.color[1], self.color[2], self.color[3]),
+        Alpha = self:getAlpha(),
+        Type = self.type,
+        Size = self.size,
+        HiddenInMission = tostring(self:isHiddenInMission())
+    }
 end
 
 function MarkerElement:getType()

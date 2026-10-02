@@ -30,7 +30,11 @@ function SharedOpcodeBoat.anchor(_, _)
 end
 
 
-Opcode.register(0x02d3, SharedOpcodeBoat.gotoCoordinates, 'boat_goto_coords [Boat] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x02d4, SharedOpcodeBoat.stop, 'boat_stop [Boat]')
-Opcode.register(0x02db, SharedOpcodeBoat.setCruiseSpeed, 'set_boat_cruise_speed [Boat] {maxSpeed} [float]')
-Opcode.register(0x0323, SharedOpcodeBoat.anchor, 'anchor_boat [Boat] {state} [bool]')
+-- INI: 02d3=4,boat %1d% drive_to %2d% %3d% %4d%
+Opcode.register(0x02d3, SharedOpcodeBoat.gotoCoordinates, 4, 'boat_goto_coords ${1} ${2} ${3} ${4}', {false, true, false, false})
+-- INI: 02d4=1,car %1d% turn_off_engine
+Opcode.register(0x02d4, SharedOpcodeBoat.stop, 1, 'boat_stop ${1}', {false})
+-- INI: 02db=2,set_boat %1d% speed_to %2d%
+Opcode.register(0x02db, SharedOpcodeBoat.setCruiseSpeed, 2, 'set_boat_cruise_speed ${1} ${2}', {false, true})
+-- INI: 0323=2,enable_boat %1d% anchor %2d%
+Opcode.register(0x0323, SharedOpcodeBoat.anchor, 2, 'anchor_boat ${1} ${2}', {false, false})

@@ -46,9 +46,15 @@ function SharedOpcodeGarage.isClosed(_)
 end
 
 
-Opcode.register(0x021b, SharedOpcodeGarage.setTargetCarForMission, 'set_target_car_for_mission_garage {garageName} [GarageName] {vehicle} [Car]')
-Opcode.register(0x02fa, SharedOpcodeGarage.changeType, 'change_garage_type {garageId} [string] {type} [GarageType]')
-Opcode.register(0x0360, SharedOpcodeGarage.open, 'open_garage {garageId} [string]')
-Opcode.register(0x0361, SharedOpcodeGarage.close, 'close_garage {garageId} [string]')
-Opcode.register(0x03b0, SharedOpcodeGarage.isOpen, 'is_garage_open {garageId} [string]')
-Opcode.register(0x03b1, SharedOpcodeGarage.isClosed, 'is_garage_closed {garageId} [string]')
+-- INI: 021b=2,set_garage %1d% to_accept_car %2d%
+Opcode.register(0x021b, SharedOpcodeGarage.setTargetCarForMission, 2, 'set_target_car_for_mission_garage ${1} ${2}', {false, false})
+-- INI: 02fa=2,garage %1d% change_to_type %2d%
+Opcode.register(0x02fa, SharedOpcodeGarage.changeType, 2, 'change_garage_type ${1} ${2}', {false, true})
+-- INI: 0360=1,open_garage %1d%
+Opcode.register(0x0360, SharedOpcodeGarage.open, 1, 'open_garage ${1}', {false})
+-- INI: 0361=1,close_garage %1d%
+Opcode.register(0x0361, SharedOpcodeGarage.close, 1, 'close_garage ${1}', {false})
+-- INI: 03b0=1,  garage %1d% door_open
+Opcode.register(0x03b0, SharedOpcodeGarage.isOpen, 1, 'is_garage_open ${1}', {false})
+-- INI: 03b1=1,  garage %1d% door_closed
+Opcode.register(0x03b1, SharedOpcodeGarage.isClosed, 1, 'is_garage_closed ${1}', {false})

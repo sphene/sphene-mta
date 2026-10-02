@@ -9,4 +9,5 @@ function SanAndreasOpcodeKillFrenzy.fail()
 end
 
 
-Opcode.register(0x09c2, SanAndreasOpcodeKillFrenzy.fail, 'fail_kill_frenzy')
+-- INI: 09C2=0,cancel_rampage
+Opcode.register(0x09c2, SanAndreasOpcodeKillFrenzy.fail, 0, 'fail_kill_frenzy', {})

@@ -79,14 +79,23 @@ function SharedOpcodeFile.scan()
 end
 
 
-Opcode.register(0x0a9a, SharedOpcodeFile.open, '[var handle: File] = open_file {filePathName} [string] {mode} [FileMode]')
-Opcode.register(0x0a9b, SharedOpcodeFile.close, 'close_file [File]')
-Opcode.register(0x0a9c, SharedOpcodeFile.getSize, '[var size: int] = get_file_size [File]')
-Opcode.register(0x0a9d, SharedOpcodeFile.read, '[var destination: int] = read_from_file [File] {size} [int]')
-Opcode.register(0x0a9e, SharedOpcodeFile.write, 'write_to_file [File] {size} [int] {var_source} [var int]')
-Opcode.register(0x0ad5, SharedOpcodeFile.seek, 'file_seek [File] {offset} [int] {origin} [SeekOrigin]')
-Opcode.register(0x0ad6, SharedOpcodeFile.isEndReached, 'is_end_of_file_reached [File]')
-Opcode.register(0x0ad7, SharedOpcodeFile.readString, 'read_string_from_file [File] {storeTo} [string] {maxLength} [int]')
-Opcode.register(0x0ad8, SharedOpcodeFile.writeString, 'write_string_to_file [File] {source} [string]')
-Opcode.register(0x0ad9, SharedOpcodeFile.writeFormattedString, 'write_formatted_string_to_file [File] {format} [string] {args} [arguments]')
-Opcode.register(0x0ada, SharedOpcodeFile.scan, '[var nValues: int], [var values: arguments] = scan_file [File] {format} [string]')
+-- INI: 0A9A=3,%3d% = open_file %1s% mode %2d% ; IF and SET
+Opcode.register(0x0a9a, SharedOpcodeFile.open, 3, '${3} = open_file ${1} ${2}', {false, false, true})
+-- INI: 0A9B=1,close_file %1d%
+Opcode.register(0x0a9b, SharedOpcodeFile.close, 1, 'close_file ${1}', {false})
+-- INI: 0A9C=2,%2d% = file %1d% size
+Opcode.register(0x0a9c, SharedOpcodeFile.getSize, 2, '${1} = get_file_size ${2}', {true, false})
+-- INI: 0A9D=3,read_file %1d% size %2d% to %3d%
+Opcode.register(0x0a9d, SharedOpcodeFile.read, 3, '${3} = read_from_file ${1} ${2}', {false, false, true})
+-- INI: 0A9E=3,write_file %1d% size %2d% from %3d%
+Opcode.register(0x0a9e, SharedOpcodeFile.write, 3, 'write_to_file ${1} ${2} ${3}', {false, false, false})
+-- INI: 0AD5=3,file %1d% seek %2d% from_origin %3d% // IF and SET
+Opcode.register(0x0ad5, SharedOpcodeFile.seek, 3, 'file_seek ${1} ${2} ${3}', {false, false, false})
+-- INI: 0AD6=1,  is_end_of_file_reached %1d%
+Opcode.register(0x0ad6, SharedOpcodeFile.isEndReached, 1, 'is_end_of_file_reached ${1}', {false})
+-- INI: 0AD7=3,read_string_from_file %1d% to %2d% size %3d% // IF and SET
+Opcode.register(0x0ad7, SharedOpcodeFile.readString, 3, 'read_string_from_file ${1} ${2} ${3}', {false, false, false})
+-- INI: 0AD8=2,write_string_to_file %1d% from %2d% // IF and SET
+Opcode.register(0x0ad8, SharedOpcodeFile.writeString, 2, 'write_string_to_file ${1} ${2}', {false, false})
+Opcode.register(0x0ad9, SharedOpcodeFile.writeFormattedString, -1, 'write_formatted_string_to_file [File] ${1}', {})
+Opcode.register(0x0ada, SharedOpcodeFile.scan, -1, '${1}, ${2} = scan_file [File] ${3}', {3})

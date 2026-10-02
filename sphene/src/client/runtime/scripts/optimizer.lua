@@ -81,7 +81,6 @@ function Optimizer.optimize(stream, optimizedScript, startOffset, endOffset)
         end
 
         local opcode = Optimizer.parseOpcode(stream)
-
         local debugParamsData = {}
 
         local prefix = ""
@@ -129,41 +128,41 @@ function Optimizer.optimize(stream, optimizedScript, startOffset, endOffset)
                 if (type(param.value) == "table" and param.value.pointer ~= nil) then
                     if ((param.value.type or -1) == 0) then
                         if (param.assignment) then
-                            prefix = "globalVars["..param.value.pointer.."] = "
-                            suffix = ""
+                            if prefix == "" then
+                                prefix = "globalVars["..param.value.pointer.."]".." "
+                            else
+                                prefix = prefix..", globalVars["..param.value.pointer.."]".." "
+                            end
 
                             assignment = "globalVars["..param.value.pointer.."]"
-
-                            parameters = parameters.."{ value=globalVars["..param.value.pointer.."] or 0, pointer="..param.value.pointer..", type=0 }"
-                            debugParameters = debugParameters.."globalVars["..param.value.pointer.."] or 0"
-                        else
-                            parameters = parameters.."globalVars["..param.value.pointer.."] or 0"
-                            debugParameters = debugParameters.."globalVars["..param.value.pointer.."] or 0"
                         end
+
+                        parameters = parameters.."globalVars["..param.value.pointer.."] or 0"
+                        debugParameters = debugParameters.."globalVars["..param.value.pointer.."] or 0"
                     elseif ((param.value.type or -1) == 1) then
                         if (param.assignment) then
-                            prefix = "Thread.currentThread:setLocalVar("..param.value.pointer..", "
-                            suffix = ")"
+                            if prefix == "" then
+                                prefix = "Thread.currentThread.localVars["..param.value.pointer.."] "
+                            else
+                                prefix = prefix..", Thread.currentThread.localVars["..param.value.pointer.."] "
+                            end
 
-                            assignment = "Thread.currentThread:getLocalVar("..param.value.pointer..")"
-
-                            parameters = parameters.."{ value=Thread.currentThread:getLocalVar("..param.value.pointer.."), pointer="..param.value.pointer..", type=1 }"
-                            debugParameters = debugParameters.."Thread.currentThread:getLocalVar("..param.value.pointer..")"
-                        else
-                            parameters = parameters.."Thread.currentThread:getLocalVar("..param.value.pointer..")"
-                            debugParameters = debugParameters.."Thread.currentThread:getLocalVar("..param.value.pointer..")"
+                            assignment = "Thread.currentThread.localVars["..param.value.pointer.."] or 0"
                         end
+
+                        parameters = parameters.."Thread.currentThread.localVars["..param.value.pointer.."] or 0"
+                        debugParameters = debugParameters.."Thread.currentThread.localVars["..param.value.pointer.."] or 0"
                     end
                 elseif (type(param.value) == "table" and param.value.index ~= nil) then
                     local indexParam = ""
 
                     if (param.value.flags >= 0 and param.value.flags <= 0x3) then
                         if (param.value.flags == 0 or param.value.flags == 1) then
-                            indexParam = "Thread.currentThread:getLocalVar("..param.value.index..")"
+                            indexParam = "Thread.currentThread.localVars["..param.value.index.."] or 0"
                         elseif (param.value.flags == 2) then
-                            indexParam = "Thread.currentThread:getLocalVar("..param.value.index..") * 2"
+                            indexParam = "(Thread.currentThread.localVars["..param.value.index.."] or 0) * 2"
                         elseif (param.value.flags == 3) then
-                            indexParam = "Thread.currentThread:getLocalVar("..param.value.index..") * 4"
+                            indexParam = "(Thread.currentThread.localVars["..param.value.index.."] or 0) * 4"
                         end
                     elseif (param.value.flags >= 0x80 and param.value.flags <= 0x83) then
                         if (param.value.flags == 0x80 or param.value.flags == 0x81) then
@@ -179,30 +178,30 @@ function Optimizer.optimize(stream, optimizedScript, startOffset, endOffset)
 
                     if ((param.value.type or -1) == 0) then
                         if (param.assignment) then
-                            prefix = "globalVars["..(param.value.offset / 4).." + ("..indexParam..")] = "
-                            suffix = ""
+                            if prefix == "" then
+                                prefix = "globalVars["..(param.value.offset / 4).." + ("..indexParam..")]".." "
+                            else
+                                prefix = prefix..", globalVars["..(param.value.offset / 4).." + ("..indexParam..")]".." "
+                            end
 
                             assignment = "globalVars["..(param.value.offset / 4).." + ("..indexParam..")]"
-
-                            parameters = parameters.."{ value=globalVars["..(param.value.offset / 4).." + ("..indexParam..")] or 0, pointer=("..(param.value.offset / 4).." + ("..indexParam..")), type=0 }"
-                            debugParameters = debugParameters.."globalVars["..(param.value.offset / 4).." + ("..indexParam..")] or 0"
-                        else
-                            parameters = parameters.."globalVars["..(param.value.offset / 4).." + ("..indexParam..")] or 0"
-                            debugParameters = debugParameters.."globalVars["..(param.value.offset / 4).." + ("..indexParam..")] or 0"
                         end
+
+                        parameters = parameters.."globalVars["..(param.value.offset / 4).." + ("..indexParam..")] or 0"
+                        debugParameters = debugParameters.."globalVars["..(param.value.offset / 4).." + ("..indexParam..")] or 0"
                     elseif ((param.value.type or -1) == 1) then
                         if (param.assignment) then
-                            prefix = "Thread.currentThread:setLocalVar("..param.value.offset.." + ("..indexParam.."), "
-                            suffix = ")"
+                            if prefix == "" then
+                                prefix = "Thread.currentThread.localVars["..param.value.offset.." + ("..indexParam..")] "
+                            else
+                                prefix = prefix..", Thread.currentThread.localVars["..param.value.offset.." + ("..indexParam..")] "
+                            end
 
-                            assignment = "Thread.currentThread:getLocalVar("..param.value.offset.." + ("..indexParam.."))"
-
-                            parameters = parameters.."{ value=Thread.currentThread:getLocalVar("..param.value.offset.." + ("..indexParam..")), pointer=("..param.value.offset.." + ("..indexParam..")), type=1 }"
-                            debugParameters = debugParameters.."Thread.currentThread:getLocalVar("..param.value.offset.." + ("..indexParam.."))"
-                        else
-                            parameters = parameters.."Thread.currentThread:getLocalVar("..param.value.offset.." + ("..indexParam.."))"
-                            debugParameters = debugParameters.."Thread.currentThread:getLocalVar("..param.value.offset.." + ("..indexParam.."))"
+                            assignment = "Thread.currentThread.localVars["..param.value.offset.." + ("..indexParam..")] or 0"
                         end
+
+                        parameters = parameters.."Thread.currentThread.localVars["..param.value.offset.." + ("..indexParam..")] or 0"
+                        debugParameters = debugParameters.."Thread.currentThread.localVars["..param.value.offset.." + ("..indexParam..")] or 0"
                     end
                 else
                     if (type(param.value) == "string") then
@@ -220,6 +219,8 @@ function Optimizer.optimize(stream, optimizedScript, startOffset, endOffset)
 
             if (prefix == "" and not insideIf) then
                 prefix = "return "
+            elseif prefix ~= "" then
+                prefix = prefix.." = "
             end
 
             if (insideIf and opcode.opcode ~= 0x00d6) then
@@ -390,19 +391,8 @@ function Optimizer.parseOpcode(stream)
     end
 
     if (opcodeData[opcode] ~= nil) then
-        local example = opcodeData[opcode].example
-
-        local resultIndex = example:match("^ *%%([0-9]+)[a-z]+%% */=")
-            or example:match("^ *%%([0-9]+)[a-z]+%% *%+=")
-            or example:match("^ *%%([0-9]+)[a-z]+%% *%-=")
-            or example:match("^ *%%([0-9]+)[a-z]+%% *%*=")
-            or example:match("^ *%%([0-9]+)[a-z]+%% *=[^=]")
-
-        if (opcode == 0x07D3 or opcode == 0x0884) then
-            resultIndex = nil
-        end
-
         local parameterCount = opcodeData[opcode]["parameterCount"]
+        local parameters = opcodeData[opcode]["parameters"] or {}
 
         if (parameterCount == -1) then
             local dataType = stream:readByte()
@@ -419,7 +409,7 @@ function Optimizer.parseOpcode(stream)
                 params[#params + 1] = {
                     ["type"] = dataType,
                     ["value"] = param,
-                    ['assignment'] = (resultIndex ~= nil and i == tonumber(resultIndex))
+                    ['assignment'] = parameters[i] and parameters[i] or false
                 }
 
                 dataType = stream:readByte()
@@ -441,7 +431,7 @@ function Optimizer.parseOpcode(stream)
                 params[#params + 1] = {
                     ["type"] = dataType,
                     ["value"] = param,
-                    ['assignment'] = (resultIndex ~= nil and i == tonumber(resultIndex))
+                    ['assignment'] = parameters[i] and parameters[i] or false
                 }
             end
         end

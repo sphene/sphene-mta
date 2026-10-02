@@ -9,4 +9,5 @@ function ViceCityOpcodeTank.setDetonateCars(_, _)
 end
 
 
-Opcode.register(0x0493, ViceCityOpcodeTank.setDetonateCars, 'set_tank_detonate_cars [Tank] {state} [bool]')
+-- INI: 0493=2,set_tank %1d% contact_explosion %2h%
+Opcode.register(0x0493, ViceCityOpcodeTank.setDetonateCars, 2, 'set_tank_detonate_cars ${1} ${2}', {false, false})

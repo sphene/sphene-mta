@@ -194,7 +194,14 @@ end
 
 function Game.setMissionFlag(flag)
     Game.missionFlag = flag
-    Logger.info('GAME', 'Setting mission flag to {}', flag)
+end
+
+function Game.setIsOnMission(flag)
+    if Game.missionFlag == 0 then
+        return
+    end
+
+    Script.setVarValue(Game.missionFlag.pointer, (flag == true or flag == 1) and 1 or 0, Game.missionFlag.type)
 end
 
 function Game.setTime(hour, minutes)
@@ -225,8 +232,12 @@ function Game.getTotalRespectPoints()
     return Game.totalRespectPoints
 end
 
-function Game.getMissionFlag()
-    return Game.missionFlag
+function Game.isOnMission()
+    if (Game.missionFlag == 0) then
+        return false
+    end
+
+    return Script.getVarValue(Game.missionFlag.pointer, Game.missionFlag.type) ~= 0
 end
 
 function Game.getStat(stat)

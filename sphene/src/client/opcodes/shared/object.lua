@@ -42,11 +42,7 @@ end
 function SharedOpcodeObject.getCoordinates(object, _, _, _)
     local posX, posY, posZ = object:getPosition()
 
-    Script.storeValueAtIndex(2, posX)
-    Script.storeValueAtIndex(3, posY)
-    Script.storeValueAtIndex(4, posZ)
-
-    return true
+    return posX, posY, posZ
 end
 
 -- Opcode: 0x01BC
@@ -264,36 +260,69 @@ function SharedOpcodeObject.setAreaVisible(object, interior)
 end
 
 
-Opcode.register(0x0107, SharedOpcodeObject.create, '[var handle: Object] = create_object {modelId} [model_object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0108, SharedOpcodeObject.delete, 'delete_object [Object]')
-Opcode.register(0x0176, SharedOpcodeObject.getHeading, '[var heading: float] = get_object_heading [Object]')
-Opcode.register(0x0177, SharedOpcodeObject.setHeading, 'set_object_heading [Object] {heading} [float]')
-Opcode.register(0x01bb, SharedOpcodeObject.getCoordinates, '[var x: float], [var y: float], [var z: float] = get_object_coordinates [Object]')
-Opcode.register(0x01bc, SharedOpcodeObject.setCoordinates, 'set_object_coordinates [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x01c4, SharedOpcodeObject.markAsNoLongerNeeded, 'mark_object_as_no_longer_needed [Object]')
-Opcode.register(0x01c7, SharedOpcodeObject.dontRemove, 'dont_remove_object [Object]')
-Opcode.register(0x029b, SharedOpcodeObject.createNoOffset, '[var handle: Object] = create_object_no_offset {modelId} [model_object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x02cc, SharedOpcodeObject.isOnScreen, 'is_object_on_screen [Object]')
-Opcode.register(0x034d, SharedOpcodeObject.rotate, 'rotate_object [Object] {fromAngle} [float] {toAngle} [float] {collisionCheck} [bool]')
-Opcode.register(0x034e, SharedOpcodeObject.slide, 'slide_object [Object] {fromX} [float] {fromY} [float] {fromZ} [float] {xSpeed} [float] {ySpeed} [float] {zSpeed} [float] {collisionCheck} [bool]')
-Opcode.register(0x035c, SharedOpcodeObject.placeRelativeToCar, 'place_object_relative_to_car [Object] {vehicle} [Car] {xOffset} [float] {yOffset} [float] {zOffset} [float]')
-Opcode.register(0x035d, SharedOpcodeObject.makeTargetable, 'make_object_targettable [Object] {state} [bool]')
-Opcode.register(0x0366, SharedOpcodeObject.hasBeenDamaged, 'has_object_been_damaged [Object]')
-Opcode.register(0x0381, SharedOpcodeObject.setVelocity, 'set_object_velocity [Object] {xSpeed} [float] {ySpeed} [float] {zSpeed} [float]')
-Opcode.register(0x0382, SharedOpcodeObject.setCollision, 'set_object_collision [Object] {state} [bool]')
-Opcode.register(0x038c, SharedOpcodeObject.addToVelocity, 'add_to_object_velocity [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0392, SharedOpcodeObject.setDynamic, 'set_object_dynamic [Object] {state} [bool]')
-Opcode.register(0x03ca, SharedOpcodeObject.doesExist, 'does_object_exist {handle} [any]')
-Opcode.register(0x0400, SharedOpcodeObject.getOffsetInWorldCoords, '[var x: float], [var y: float], [var z: float] = get_offset_from_object_in_world_coords [Object] {xOffset} [float] {yOffset} [float] {zOffset} [float]')
-Opcode.register(0x0418, SharedOpcodeObject.setDrawLast, 'set_object_draw_last [Object] {state} [bool]')
-Opcode.register(0x0453, SharedOpcodeObject.setRotation, 'set_object_rotation [Object] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x04d9, SharedOpcodeObject.setRecordsCollisions, 'set_object_records_collisions [Object] {state} [bool]')
-Opcode.register(0x04da, SharedOpcodeObject.hasCollidedWithAnything, 'has_object_collided_with_anything [Object]')
-Opcode.register(0x04e5, SharedOpcodeObject.locate2D, 'locate_object_2d [Object] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x04e6, SharedOpcodeObject.locate3D, 'locate_object_3d [Object] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x04e7, SharedOpcodeObject.isInWater, 'is_object_in_water [Object]')
-Opcode.register(0x04e9, SharedOpcodeObject.isInArea2D, 'is_object_in_area_2d [Object] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x04ea, SharedOpcodeObject.isInArea3D, 'is_object_in_area_3d [Object] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x050e, SharedOpcodeObject.sortOutCollisionWithCar, 'sort_out_object_collision_with_car [Object] {handle} [Car]')
-Opcode.register(0x0550, SharedOpcodeObject.freezePosition, 'freeze_object_position [Object] {state} [bool]')
-Opcode.register(0x0566, SharedOpcodeObject.setAreaVisible, 'set_object_area_visible [Object] {areaId} [int]')
+-- INI: 0107=5,%5d% = create_object %1o% at %2d% %3d% %4d%
+Opcode.register(0x0107, SharedOpcodeObject.create, 5, '${5} = create_object ${object.1} ${2} ${3} ${4}', {false, false, false, false, true})
+-- INI: 0108=1,destroy_object %1d%
+Opcode.register(0x0108, SharedOpcodeObject.delete, 1, 'delete_object ${1}', {false})
+-- INI: 0176=2,%2d% = object %1d% z_angle
+Opcode.register(0x0176, SharedOpcodeObject.getHeading, 2, '${2} = get_object_heading ${1}', {false, true})
+-- INI: 0177=2,set_object %1d% z_angle_to %2d%
+Opcode.register(0x0177, SharedOpcodeObject.setHeading, 2, 'set_object_heading ${1} ${2}', {false, false})
+-- INI: 01bb=4,store_object %1d% position_to %2d% %3d% %4d%
+Opcode.register(0x01bb, SharedOpcodeObject.getCoordinates, 4, '${2}, ${3}, ${4} = get_object_coordinates ${1}', {false, true, true, true})
+-- INI: 01bc=4,put_object %1d% at %2d% %3d% %4d%
+Opcode.register(0x01bc, SharedOpcodeObject.setCoordinates, 4, 'set_object_coordinates ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 01c4=1,mark_object_as_no_longer_needed %1d%
+Opcode.register(0x01c4, SharedOpcodeObject.markAsNoLongerNeeded, 1, 'mark_object_as_no_longer_needed ${1}', {false})
+-- INI: 01c7=1,remove_object_from_mission_cleanup_list %1d%
+Opcode.register(0x01c7, SharedOpcodeObject.dontRemove, 1, 'dont_remove_object ${1}', {false})
+-- INI: 029b=5,%5d% = init_object %1o% at %2d% %3d% %4d%
+Opcode.register(0x029b, SharedOpcodeObject.createNoOffset, 5, '${5} = create_object_no_offset ${object.1} ${2} ${3} ${4}', {false, false, false, false, true})
+-- INI: 02cc=1,  object %1d% bounding_sphere_visible
+Opcode.register(0x02cc, SharedOpcodeObject.isOnScreen, 1, 'is_object_on_screen ${1}', {false})
+-- INI: 034d=4,rotate_object %1d% from_angle %2d% to_angle %3d% flag %4d%
+Opcode.register(0x034d, SharedOpcodeObject.rotate, 4, 'rotate_object ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 034e=8,move_object %1d% to %2d% %3d% %4d% speed %5d% %6d% %7d% collision_check %8d%
+Opcode.register(0x034e, SharedOpcodeObject.slide, 8, 'slide_object ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 035c=5,place_object %1d% relative_to_car %2d% offset %3d% %4d% %5d%
+Opcode.register(0x035c, SharedOpcodeObject.placeRelativeToCar, 5, 'place_object_relative_to_car ${1} ${2} ${3} ${4} ${5}', {false, true, true, true, true})
+-- INI: 035d=1,make_object %1d% targetable
+Opcode.register(0x035d, SharedOpcodeObject.makeTargetable, 2, 'make_object_targettable ${1} ${2}', {false, false})
+-- INI: 0366=1,  object %1d% damaged
+Opcode.register(0x0366, SharedOpcodeObject.hasBeenDamaged, 1, 'has_object_been_damaged ${1}', {false})
+-- INI: 0381=4,throw_object %1d% distance %2d% %3d% %4d%
+Opcode.register(0x0381, SharedOpcodeObject.setVelocity, 4, 'set_object_velocity ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0382=2,set_object %1d% collision_detection %2d%
+Opcode.register(0x0382, SharedOpcodeObject.setCollision, 2, 'set_object_collision ${1} ${2}', {false, false})
+-- INI: 038c=4,object %1d% scatter %2d% %3d% %4d%
+Opcode.register(0x038c, SharedOpcodeObject.addToVelocity, 4, 'add_to_object_velocity ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0392=2,object %1d% toggle_in_moving_list %2d%
+Opcode.register(0x0392, SharedOpcodeObject.setDynamic, 2, 'set_object_dynamic ${1} ${2}', {false, false})
+-- INI: 03ca=1,  object %1d% exists
+Opcode.register(0x03ca, SharedOpcodeObject.doesExist, 1, 'does_object_exist ${1}', {false})
+-- INI: 0400=7,create_coordinate %5d% %6d% %7d% from_object %1d% offset %2d% %3d% %4d%
+Opcode.register(0x0400, SharedOpcodeObject.getOffsetInWorldCoords, 7, '${5}, ${6}, ${7} = get_offset_from_object_in_world_coords ${1} ${2} ${3} ${4}', {false, false, false, false, true, true, true})
+-- INI: 0418=2,set_object %1d% draw_last %2h%
+Opcode.register(0x0418, SharedOpcodeObject.setDrawLast, 2, 'set_object_draw_last ${1} ${2}', {false, false})
+-- INI: 0453=4,object %1d% set_rotation %2d% %3d% %4d%
+Opcode.register(0x0453, SharedOpcodeObject.setRotation, 4, 'set_object_rotation ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 04d9=2,object %1d% set_scripted_collision_check %2h%
+Opcode.register(0x04d9, SharedOpcodeObject.setRecordsCollisions, 2, 'set_object_records_collisions ${1} ${2}', {false, false})
+-- INI: 04da=1,  has_object %1d% collided
+Opcode.register(0x04da, SharedOpcodeObject.hasCollidedWithAnything, 1, 'has_object_collided_with_anything ${1}', {false})
+-- INI: 04e5=6,  object %1d% near_point %2d% %3d% radius %4d% %5d% sphere %6h%
+Opcode.register(0x04e5, SharedOpcodeObject.locate2D, 6, 'locate_object_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 04e6=8,  object %1d% near_point %2d% %3d% %4d% radius %5d% %6d% %7d% flag %8h%
+Opcode.register(0x04e6, SharedOpcodeObject.locate3D, 8, 'locate_object_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 04e7=1,  object %1d% in_water
+Opcode.register(0x04e7, SharedOpcodeObject.isInWater, 1, 'is_object_in_water ${1}', {false})
+-- INI: 04e9=6,  object %1d% in_rectangle_cornerA %2d% %3d% cornerB %4d% %5d% sphere %6d%
+Opcode.register(0x04e9, SharedOpcodeObject.isInArea2D, 6, 'is_object_in_area_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 04ea=8,  object %1d% in_cube %2d% %3d% %4d% %5d% %6d% %7d% flag %8h%
+Opcode.register(0x04ea, SharedOpcodeObject.isInArea3D, 8, 'is_object_in_area_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 050e=2,sort_out_object %1d% collision_with_car %2d%
+Opcode.register(0x050e, SharedOpcodeObject.sortOutCollisionWithCar, 2, 'sort_out_object_collision_with_car ${1} ${2}', {false, false})
+-- INI: 0550=2,keep_object %1d% in_memory %2h%
+Opcode.register(0x0550, SharedOpcodeObject.freezePosition, 2, 'freeze_object_position ${1} ${2}', {false, false})
+-- INI: 0566=2,object %1d% set_interior %2h%
+Opcode.register(0x0566, SharedOpcodeObject.setAreaVisible, 2, 'set_object_area_visible ${1} ${2}', {false, false})

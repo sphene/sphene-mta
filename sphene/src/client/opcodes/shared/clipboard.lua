@@ -16,5 +16,7 @@ function SharedOpcodeClipboard.writeData(_, _)
 end
 
 
-Opcode.register(0x0b20, SharedOpcodeClipboard.readData, 'read_clipboard_data {address} [int] {number} [int]')
-Opcode.register(0x0b21, SharedOpcodeClipboard.writeData, 'write_clipboard_data {address} [int] {number} [int]')
+-- INI: 0B20=2,read_clipboard_data %1d% size %2d%
+Opcode.register(0x0b20, SharedOpcodeClipboard.readData, 2, 'read_clipboard_data ${1} ${2}', {false, false})
+-- INI: 0B21=2,write_clipboard_data %1d% size %2d%
+Opcode.register(0x0b21, SharedOpcodeClipboard.writeData, 2, 'write_clipboard_data ${1} ${2}', {false, false})

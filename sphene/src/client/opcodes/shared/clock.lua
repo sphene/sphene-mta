@@ -5,10 +5,7 @@ SharedOpcodeClock.__index = SharedOpcodeClock
 -- Instruction: [var hours: int], [var minutes: int] = get_time_of_day
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/00BF
 function SharedOpcodeClock.getTimeOfDay(_, _)
-    local hours, minutes = Game.getTime()
-
-    Script.storeValueAtIndex(1, hours)
-    Script.storeValueAtIndex(2, minutes)
+    return Game.getTime()
 end
 
 -- Opcode: 0x00C0
@@ -55,10 +52,17 @@ function SharedOpcodeClock.restore()
 end
 
 
-Opcode.register(0x00bf, SharedOpcodeClock.getTimeOfDay, '[var hours: int], [var minutes: int] = get_time_of_day')
-Opcode.register(0x00c0, SharedOpcodeClock.setTimeOfDay, 'set_time_of_day {hours} [int] {minutes} [int]')
-Opcode.register(0x00c1, SharedOpcodeClock.getMinutesToTimeOfDay, '[var minutesLeft: int] = get_minutes_to_time_of_day {hours} [int] {minutes} [int]')
-Opcode.register(0x015d, SharedOpcodeClock.setTimeScale, 'set_time_scale {scale} [float]')
-Opcode.register(0x01bd, SharedOpcodeClock.getGameTimer, '[var time: int] = get_game_timer')
-Opcode.register(0x0253, SharedOpcodeClock.store, 'store_clock')
-Opcode.register(0x0254, SharedOpcodeClock.restore, 'restore_clock')
+-- INI: 00bf=2,%1d% = current_time_hours, %2d% = current_time_minutes
+Opcode.register(0x00bf, SharedOpcodeClock.getTimeOfDay, 2, '${1}, ${2} = get_time_of_day', {true, true})
+-- INI: 00c0=2,set_current_time %1d% %2d%
+Opcode.register(0x00c0, SharedOpcodeClock.setTimeOfDay, 2, 'set_time_of_day ${1} ${2}', {false, false})
+-- INI: 00c1=3,%3d% = minutes_to_current_time %1d% %2d%
+Opcode.register(0x00c1, SharedOpcodeClock.getMinutesToTimeOfDay, 3, '${3} = get_minutes_to_time_of_day ${1} ${2}', {false, false, true})
+-- INI: 015d=1,set_gamespeed %1d%
+Opcode.register(0x015d, SharedOpcodeClock.setTimeScale, 1, 'set_time_scale ${1}', {false})
+-- INI: 01bd=1,%1d% = current_time_in_ms
+Opcode.register(0x01bd, SharedOpcodeClock.getGameTimer, 1, '${1} = get_game_timer', {true})
+-- INI: 0253=0,save_current_time
+Opcode.register(0x0253, SharedOpcodeClock.store, 0, 'store_clock', {})
+-- INI: 0254=0,restore_current_time
+Opcode.register(0x0254, SharedOpcodeClock.restore, 0, 'restore_clock', {})

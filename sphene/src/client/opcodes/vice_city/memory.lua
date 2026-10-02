@@ -9,4 +9,5 @@ function ViceCityOpcodeMemory.setOffset(_, _, _, _)
 end
 
 
-Opcode.register(0x0606, ViceCityOpcodeMemory.setOffset, 'load_path_nodes_in_area {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float]')
+-- INI: 0606=3, set_memory_offset memory_pointer %1d% memory_to_point %2d% virtual_protect %3d%
+Opcode.register(0x0606, ViceCityOpcodeMemory.setOffset, 4, 'load_path_nodes_in_area ${1} ${2} ${3} ${4}', {false, true, true, false})

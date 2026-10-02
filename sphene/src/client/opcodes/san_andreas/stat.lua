@@ -121,20 +121,37 @@ function SanAndreasOpcodeStat.incrementFloatNoMessage(_, _)
 end
 
 
-Opcode.register(0x0623, SanAndreasOpcodeStat.incrementInt, 'increment_int_stat {id} [StatId] {value} [int]')
-Opcode.register(0x0624, SanAndreasOpcodeStat.incrementFloat, 'increment_float_stat {id} [StatId] {value} [float]')
-Opcode.register(0x0625, SanAndreasOpcodeStat.decrementInt, 'decrement_int_stat {id} [StatId] {value} [int]')
-Opcode.register(0x0626, SanAndreasOpcodeStat.decrementFloat, 'decrement_float_stat {id} [StatId] {value} [float]')
-Opcode.register(0x0627, SanAndreasOpcodeStat.registerInt, 'register_int_stat {id} [StatId] {value} [int]')
-Opcode.register(0x0628, SanAndreasOpcodeStat.registerFloat, 'register_float_stat {id} [StatId] {value} [float]')
-Opcode.register(0x0629, SanAndreasOpcodeStat.setInt, 'set_int_stat {id} [StatId] {value} [int]')
-Opcode.register(0x062a, SanAndreasOpcodeStat.setFloat, 'set_float_stat {id} [StatId] {value} [float]')
-Opcode.register(0x0652, SanAndreasOpcodeStat.getInt, '[var value: int] = get_int_stat {id} [StatId]')
-Opcode.register(0x0653, SanAndreasOpcodeStat.getFloat, '[var value: float] = get_float_stat {id} [StatId]')
-Opcode.register(0x08e1, SanAndreasOpcodeStat.findNumberTagsTagged, '[var numTags: int] = find_number_tags_tagged')
-Opcode.register(0x08e2, SanAndreasOpcodeStat.getTerritoryUnderControlPercentage, '[var percentage: int] = get_territory_under_control_percentage')
-Opcode.register(0x08f8, SanAndreasOpcodeStat.showUpdateStats, 'show_update_stats {state} [bool]')
-Opcode.register(0x0997, SanAndreasOpcodeStat.setMissionRespectTotal, 'set_mission_respect_total {totalRespect} [int]')
-Opcode.register(0x0998, SanAndreasOpcodeStat.awardPlayerMissionRespect, 'award_player_mission_respect {value} [int]')
-Opcode.register(0x0a10, SanAndreasOpcodeStat.incrementIntNoMessage, 'increment_int_stat_no_message {id} [StatId] {value} [int]')
-Opcode.register(0x0a1f, SanAndreasOpcodeStat.incrementFloatNoMessage, 'increment_float_stat_no_message {id} [StatId] {value} [float]')
+-- INI: 0623=2,add %2d% to_integer_stat %1d%
+Opcode.register(0x0623, SanAndreasOpcodeStat.incrementInt, 2, 'increment_int_stat ${1} ${2}', {false, false})
+-- INI: 0624=2,add %2d% to_float_stat %1d%
+Opcode.register(0x0624, SanAndreasOpcodeStat.incrementFloat, 2, 'increment_float_stat ${1} ${2}', {false, false})
+-- INI: 0625=2,decrease_integer_stat %1d% by %2d%
+Opcode.register(0x0625, SanAndreasOpcodeStat.decrementInt, 2, 'decrement_int_stat ${1} ${2}', {false, false})
+-- INI: 0626=2,decrease_float_stat %1d% by %2d%
+Opcode.register(0x0626, SanAndreasOpcodeStat.decrementFloat, 2, 'decrement_float_stat ${1} ${2}', {false, false})
+-- INI: 0627=2,update_integer_stat %1d% to %2d%
+Opcode.register(0x0627, SanAndreasOpcodeStat.registerInt, 2, 'register_int_stat ${1} ${2}', {false, false})
+-- INI: 0628=2,update_float_stat_to %2d% stat_id %1h%
+Opcode.register(0x0628, SanAndreasOpcodeStat.registerFloat, 2, 'register_float_stat ${1} ${2}', {false, true})
+-- INI: 0629=2,change_integer_stat %1d% to %2h%
+Opcode.register(0x0629, SanAndreasOpcodeStat.setInt, 2, 'set_int_stat ${1} ${2}', {false, false})
+-- INI: 062A=2,change_float_stat %1d% to %2d%
+Opcode.register(0x062a, SanAndreasOpcodeStat.setFloat, 2, 'set_float_stat ${1} ${2}', {false, false})
+-- INI: 0652=2,%2d% = integer_stat %1d%
+Opcode.register(0x0652, SanAndreasOpcodeStat.getInt, 2, '${2} = get_int_stat ${1}', {false, true})
+-- INI: 0653=2,%2d% = float_stat %1d%
+Opcode.register(0x0653, SanAndreasOpcodeStat.getFloat, 2, '${2} = get_float_stat ${1}', {false, true})
+-- INI: 08E1=1,%1d% = total_tags_sprayed
+Opcode.register(0x08e1, SanAndreasOpcodeStat.findNumberTagsTagged, 1, '${1} = find_number_tags_tagged', {true})
+-- INI: 08E2=1,%1d% = territories_controlled_percentage
+Opcode.register(0x08e2, SanAndreasOpcodeStat.getTerritoryUnderControlPercentage, 1, '${1} = get_territory_under_control_percentage', {true})
+-- INI: 08F8=1,display_stat_update_box %1h%
+Opcode.register(0x08f8, SanAndreasOpcodeStat.showUpdateStats, 1, 'show_update_stats ${1}', {false})
+-- INI: 0997=1,set_total_respect_points_to %1d%
+Opcode.register(0x0997, SanAndreasOpcodeStat.setMissionRespectTotal, 1, 'set_mission_respect_total ${1}', {true})
+-- INI: 0998=1,add_respect %1h%
+Opcode.register(0x0998, SanAndreasOpcodeStat.awardPlayerMissionRespect, 1, 'award_player_mission_respect ${1}', {false})
+-- INI: 0A10=2,increase_integer_stat %1d% by %2h%
+Opcode.register(0x0a10, SanAndreasOpcodeStat.incrementIntNoMessage, 2, 'increment_int_stat_no_message ${1} ${2}', {false, false})
+-- INI: 0A1F=2,increase_float_stat %1h% by %2d%
+Opcode.register(0x0a1f, SanAndreasOpcodeStat.incrementFloatNoMessage, 2, 'increment_float_stat_no_message ${1} ${2}', {false, false})

@@ -31,7 +31,7 @@ function Path:find(destX, destY, destZ)
     local closestNode = Path.findClosestPoint(x, y, z, true, self.isVehicle)
     local closestDestNode = Path.findClosestPoint(destX, destY, destZ, false, self.isVehicle)
 
-    if (not closestNode or not closestDestNode) then
+    if (not closestNode) then
         return {
             flags = 0,
             isHighway = false,
@@ -50,6 +50,12 @@ function Path:find(destX, destY, destZ)
         }
     end
 
+    local useNearbyNode = false
+    if (not closestDestNode) then
+        useNearbyNode = true
+        closestDestNode = closestNode
+    end
+
     local areas = TrafficArea.getAll()
     local _, _, rotZ = self.element:getRotation()
 
@@ -63,8 +69,9 @@ function Path:find(destX, destY, destZ)
         end
     end
 
-    local closedSet = {}
+    local closedSetLookup = {}
     local openSet = {closestNode}
+    local openSetLookup = {[closestNode] = 1}
     local cameFrom = {}
 
     local gScore, fScore = {}, {}
@@ -73,15 +80,18 @@ function Path:find(destX, destY, destZ)
     fScore[closestNode] = gScore[closestNode] +
         getDistanceBetweenPoints3D(closestNode.x, closestNode.y, closestNode.z, closestDestNode.x, closestDestNode.y, closestDestNode.z)
 
+    local bestNodeToDestination = closestNode
+    local bestDistanceToDestination = getDistanceBetweenPoints3D(closestNode.x, closestNode.y, closestNode.z, destX, destY, destZ)
+
     while (#openSet > 0) do
-        local lowest, current = INFINITE, nil
+        local lowest, current, currentIndex = INFINITE, nil, nil
 
         for i=1, #openSet do
             local node = openSet[i]
             local score = fScore[node]
 
             if (score < lowest) then
-                lowest, current = score, node
+                lowest, current, currentIndex = score, node, i
             end
         end
 
@@ -330,60 +340,293 @@ function Path:find(destX, destY, destZ)
             return true
         end
 
-        for i=1, #openSet do
-            if (openSet[i] == current) then
-                openSet[i] = openSet[#openSet]
-                openSet[#openSet] = nil
-                break
-            end
+        -- Remove current from openSet
+        openSetLookup[current] = nil
+        local lastNode = openSet[#openSet]
+        openSet[currentIndex] = lastNode
+        openSet[#openSet] = nil
+        if (lastNode) then
+            openSetLookup[lastNode] = currentIndex
         end
 
-        closedSet[#closedSet + 1] = current
+        closedSetLookup[current] = true
+
+        -- Track the node closest to the actual destination
+        local distanceToActualDest = getDistanceBetweenPoints3D(current.x, current.y, current.z, destX, destY, destZ)
+        if (distanceToActualDest < bestDistanceToDestination) then
+            bestNodeToDestination = current
+            bestDistanceToDestination = distanceToActualDest
+        end
 
         for _, linkedNode in pairs(current.linkedNodes) do
             local neighbor = areas[linkedNode[1] + 1][self.isVehicle and TrafficArea.NODE_TYPE_VEHICLE or TrafficArea.NODE_TYPE_PED][linkedNode[2] + 1]
 
-            local notIn = true
-
-            for i=1, #closedSet do
-                if (closedSet[i] == neighbor) then
-                    notIn = false
-                end
-            end
-
-            if (notIn) then
+            if (not closedSetLookup[neighbor]) then
                 local tentativeGScore = gScore[current] +
                     getDistanceBetweenPoints3D(current.x, current.y, current.z, neighbor.x, neighbor.y, neighbor.z)
 
-                notIn = true
+                local inOpenSet = openSetLookup[neighbor]
 
-                for i=1, #openSet do
-                    if (openSet[i] == neighbor) then
-                        notIn = false
-                    end
-                end
-
-                if (notIn or (tentativeGScore < gScore[neighbor])) then
+                if (not inOpenSet or (tentativeGScore < gScore[neighbor])) then
                     cameFrom[neighbor] = current
                     gScore[neighbor] = neighbor.heuristicCost
                     fScore[neighbor] = gScore[neighbor] +
                         getDistanceBetweenPoints3D(closestDestNode.x, closestDestNode.y, closestDestNode.z,
                         neighbor.x, neighbor.y, neighbor.z)
 
-                    notIn = true
-
-                    for i=1, #openSet do
-                        if (openSet[i] == neighbor) then
-                            notIn = false
-                        end
-                    end
-
-                    if (notIn) then
+                    if (not inOpenSet) then
                         openSet[#openSet + 1] = neighbor
+                        openSetLookup[neighbor] = #openSet
                     end
                 end
             end
         end
+    end
+
+    -- If we didn't find an exact path, use the closest node we found
+    if (useNearbyNode or bestNodeToDestination ~= closestNode) then
+        local path = Path.unwind({}, cameFrom, bestNodeToDestination)
+        path[#path + 1] = bestNodeToDestination
+
+        local updatedPath = {}
+
+        for i=1, #path do
+            local node = path[i]
+
+            local nodeX = node.x
+            local nodeY = node.y
+            local nodeZ = node.z
+            local isBend = false
+            local angle = 0
+            local trafficLight = 0
+
+            local previousNode = updatedPath[#updatedPath] or false
+            local nextNode = path[i + 1] or false
+            local nextNaviNode = false
+            --local nextLinkedNode = false
+
+            if (nextNode and self.isVehicle) then
+                for _, linkedNode in pairs(node.linkedNodes) do
+                    if (linkedNode[1] == nextNode.areaId and linkedNode[2] == nextNode.nodeId) then
+                        nextNaviNode = areas[linkedNode[3] + 1][TrafficArea.NODE_TYPE_NAVI][linkedNode[4] + 1]
+                        --nextLinkedNode = areas[linkedNode[1] + 1][TrafficArea.NODE_TYPE_VEHICLE][linkedNode[2] + 1]
+                        break
+                    end
+                end
+
+                if (nextNaviNode.trafficLightDirectionBehavior == 1) then
+                    trafficLight = nextNaviNode.trafficLightBehavior
+                end
+            end
+
+            if (previousNode and self.isVehicle) then
+                local previousNaviNode = false
+                local previousLinkedNode = false
+
+                for _, linkedNode in pairs(node.linkedNodes) do
+                    if (linkedNode[1] == previousNode.areaId and linkedNode[2] == previousNode.nodeId) then
+                        previousNaviNode = areas[linkedNode[3] + 1][TrafficArea.NODE_TYPE_NAVI][linkedNode[4] + 1]
+                        previousLinkedNode = areas[linkedNode[1] + 1][self.isVehicle and TrafficArea.NODE_TYPE_VEHICLE or TrafficArea.NODE_TYPE_PED][linkedNode[2] + 1]
+                        break
+                    end
+                end
+
+                local laneWidth = 2.8
+                local laneCount = previousNaviNode.leftLanes + previousNaviNode.rightLanes
+                local matrix = Matrix(Vector3(node.x, node.y, 0), Vector3(0, 0, findRotation(previousLinkedNode.x, previousLinkedNode.y, node.x, node.y)))
+                local closestDistance = -1
+
+                if (laneCount > 1) then
+                    local leftOfCenter = math.floor(laneCount / 2)
+                    local rightOfCenter = laneCount - leftOfCenter
+                    local lanesProcessed = 0
+
+                    for j=1, leftOfCenter do
+                        if (lanesProcessed >= previousNaviNode.leftLanes) then
+                            local lane = matrix.position - matrix.right * ((node.pathWidth / 2) + (laneWidth * j))
+                            local laneDistance = getDistanceBetweenPoints2D(lane.x, lane.y, previousNode.x, previousNode.y)
+
+                            if (laneDistance < closestDistance or closestDistance == -1) then
+                                closestDistance = laneDistance
+                                nodeX, nodeY = lane.x, lane.y
+                            end
+
+                            lanesProcessed = lanesProcessed + 1
+                        end
+                    end
+
+                    for j=1, rightOfCenter do
+                        local lane = matrix.position + matrix.right * ((node.pathWidth / 2) + (laneWidth * j))
+                        local laneDistance = getDistanceBetweenPoints2D(lane.x, lane.y, previousNode.x, previousNode.y)
+
+                        if (laneDistance < closestDistance or closestDistance == -1) then
+                            closestDistance = laneDistance
+                            nodeX, nodeY = lane.x, lane.y
+                        end
+                    end
+                end
+
+                if (nextNode) then
+                    local previousAngle = findRotation(previousLinkedNode.x, previousLinkedNode.y, node.x, node.y)
+                    local nextAngle = findRotation(node.x, node.y, nextNode.x, nextNode.y)
+
+                    if (nextAngle - previousAngle > 180) then
+                        previousAngle = previousAngle + 360
+                    elseif (previousAngle - nextAngle > 180) then
+                        nextAngle = nextAngle + 360
+                    end
+
+                    local angleDifference = nextAngle - previousAngle
+                    angle = math.abs(angleDifference)
+
+                    if (angle > 35) then
+                        local nextNodeX, nextNodeY, nextNodeZ = nextNode.x, nextNode.y, nextNode.z
+
+                        laneCount = nextNaviNode.leftLanes + nextNaviNode.rightLanes
+                        closestDistance = -1
+
+                        local nextNodeMatrix = Matrix(Vector3(nextNode.x, nextNode.y, 0), Vector3(0, 0, findRotation(node.x, node.y, nextNode.x, nextNode.y)))
+                        local isLeft = false
+                        local laneId = 0
+
+                        if (laneCount > 1) then
+                            local leftOfCenter = math.floor(laneCount / 2)
+                            local rightOfCenter = laneCount - leftOfCenter
+                            local lanesProcessed = 0
+
+                            for j=1, leftOfCenter do
+                                if (lanesProcessed >= nextNaviNode.leftLanes) then
+                                    local lane = nextNodeMatrix.position - nextNodeMatrix.right * ((nextNode.pathWidth / 2) + (laneWidth * j))
+                                    local laneDistance = getDistanceBetweenPoints2D(lane.x, lane.y, nodeX, nodeY)
+
+                                    if (laneDistance < closestDistance or closestDistance == -1) then
+                                        closestDistance = laneDistance
+                                        nextNodeX, nextNodeY = lane.x, lane.y
+                                        isLeft = true
+                                        laneId = j
+                                    end
+
+                                    lanesProcessed = lanesProcessed + 1
+                                end
+                            end
+
+                            for j=1, rightOfCenter do
+                                local lane = nextNodeMatrix.position + nextNodeMatrix.right * ((nextNode.pathWidth / 2) + (laneWidth * j))
+                                local laneDistance = getDistanceBetweenPoints2D(lane.x, lane.y, nodeX, nodeY)
+
+                                if (laneDistance < closestDistance or closestDistance == -1) then
+                                    closestDistance = laneDistance
+                                    nextNodeX, nextNodeY = lane.x, lane.y
+                                    isLeft = false
+                                    laneId = j
+                                end
+                            end
+                        end
+
+                        matrix = Matrix(Vector3(nodeX, nodeY, 0), Vector3(0, 0, findRotation(nodeX, nodeY, nextNodeX, nextNodeY)))
+                        local lane
+
+                        if (isLeft) then
+                            lane = matrix.position - matrix.right * ((nextNode.pathWidth / 2) + (laneWidth * laneId))
+                        else
+                            lane = matrix.position + matrix.right * ((nextNode.pathWidth / 2) + (laneWidth * laneId))
+                        end
+
+                        local curveFirstDistance = getDistanceBetweenPoints2D(lane.x, lane.y, previousNode.x, previousNode.y)
+
+                        if (curveFirstDistance > 10) then
+                            curveFirstDistance = 10
+                        end
+
+                        local curveFirstMatrix = Matrix(Vector3(lane.x, lane.y, 0), Vector3(0, 0, findRotation(lane.x, lane.y, previousNode.x, previousNode.y)))
+                        curveFirstMatrix = curveFirstMatrix.position + curveFirstMatrix.forward * curveFirstDistance
+
+                        local curveFirstX = curveFirstMatrix.x
+                        local curveFirstY = curveFirstMatrix.y
+
+                        local curveSecondDistance = getDistanceBetweenPoints2D(lane.x, lane.y, nextNodeX, nextNodeY)
+
+                        if (curveSecondDistance > 10) then
+                            curveSecondDistance = 10
+                        end
+
+                        local curveSecondMatrix = Matrix(Vector3(lane.x, lane.y, 0), Vector3(0, 0, findRotation(lane.x, lane.y, nextNodeX, nextNodeY)))
+                        curveSecondMatrix = curveSecondMatrix.position + curveSecondMatrix.forward * curveSecondDistance
+
+                        local curveSecondX = curveSecondMatrix.x
+                        local curveSecondY = curveSecondMatrix.y
+
+                        for n=1, 5 do
+                            local point = getQuadBezier(
+                                Vector2(curveFirstX, curveFirstY),
+                                Vector2(lane.x, lane.y),
+                                Vector2(curveSecondX, curveSecondY),
+                                n / 5
+                            )
+
+                            updatedPath[#updatedPath + 1] = {
+                                flags = node.flags,
+                                isHighway = node.isHighway,
+                                linkId = node.linkId,
+                                linkedNodes = node.linkedNodes,
+                                areaId = node.areaId,
+                                nodeId = node.nodeId,
+                                pathWidth = node.pathWidth,
+                                type = node.type,
+                                x = point.x,
+                                y = point.y,
+                                z = previousNode.z + (((nextNodeZ - previousNode.z) / 10) * n),
+                                bend = true,
+                                angle = angle,
+                                trafficLight = (i == 1) and trafficLight or 0,
+                            }
+                        end
+
+                        isBend = true
+                    end
+                end
+            end
+
+            if (not isBend) then
+                updatedPath[#updatedPath + 1] = {
+                    flags = node.flags,
+                    isHighway = node.isHighway,
+                    linkId = node.linkId,
+                    linkedNodes = node.linkedNodes,
+                    areaId = node.areaId,
+                    nodeId = node.nodeId,
+                    pathWidth = node.pathWidth,
+                    type = node.type,
+                    x = nodeX,
+                    y = nodeY,
+                    z = nodeZ,
+                    bend = isBend,
+                    angle = angle,
+                    trafficLight = trafficLight,
+                }
+            end
+        end
+
+        updatedPath[#updatedPath + 1] = {
+            flags = 0,
+            isHighway = false,
+            linkId = 0,
+            linkedNodes = {},
+            areaId = 0,
+            nodeId = 0,
+            pathWidth = 0,
+            type = 0,
+            x = destX,
+            y = destY,
+            z = destZ,
+            bend = false,
+            angle = 0,
+            trafficLight = 0,
+        }
+
+        self.path = updatedPath
+
+        return true
     end
 
     return {

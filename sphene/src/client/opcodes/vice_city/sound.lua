@@ -9,4 +9,5 @@ function ViceCityOpcodeSound.addContinuous(_, _, _, _, _)
 end
 
 
-Opcode.register(0x018d, ViceCityOpcodeSound.addContinuous, '[var handle: Sound] = add_continuous_sound {x} [float] {y} [float] {z} [float] {soundId} [ScriptSound]')
+-- INI: 018d=5,%5d% = create_sound %4d% at %1d% %2d% %3d%
+Opcode.register(0x018d, ViceCityOpcodeSound.addContinuous, 5, '${5} = add_continuous_sound ${4} ${1} ${2} ${3}', {false, false, false, false, true})

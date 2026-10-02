@@ -91,15 +91,27 @@ function SanAndreasOpcodeGroup.setFollowStatus(_, _)
 end
 
 
-Opcode.register(0x062f, SanAndreasOpcodeGroup.create, '[var handle: Group] = create_group {defaultTaskAllocator} [DefaultTaskAllocator]')
-Opcode.register(0x0630, SanAndreasOpcodeGroup.setLeader, 'set_group_leader [Group] {handle} [Char]')
-Opcode.register(0x0631, SanAndreasOpcodeGroup.setMember, 'set_group_member [Group] {handle} [Char]')
-Opcode.register(0x0632, SanAndreasOpcodeGroup.remove, 'remove_group [Group]')
-Opcode.register(0x06ad, SanAndreasOpcodeGroup.setDecisionMaker, 'set_group_decision_maker [Group] {handleOrTemplate} [DecisionMakerGroupTemplate]')
-Opcode.register(0x06f0, SanAndreasOpcodeGroup.setSeparationRange, 'set_group_separation_range [Group] {range} [float]')
-Opcode.register(0x07b3, SanAndreasOpcodeGroup.setDefaultTaskAllocator, 'set_group_default_task_allocator [Group] {defaultTaskAllocator} [DefaultTaskAllocator]')
-Opcode.register(0x07f6, SanAndreasOpcodeGroup.getSize, '[var numLeaders: int], [var numMembers: int] = get_group_size [Group]')
-Opcode.register(0x07fd, SanAndreasOpcodeGroup.doesExist, 'does_group_exist {handle} [any]')
-Opcode.register(0x087d, SanAndreasOpcodeGroup.setSequence, 'set_group_sequence [Group] {sequence} [Sequence]')
-Opcode.register(0x092b, SanAndreasOpcodeGroup.getMember, '[var handle: Char] = get_group_member [Group] {slotId} [int]')
-Opcode.register(0x0940, SanAndreasOpcodeGroup.setFollowStatus, 'set_group_follow_status [Group] {state} [bool]')
+-- INI: 062F=2,%2d% = create_group_type %1h%
+Opcode.register(0x062f, SanAndreasOpcodeGroup.create, 2, '${1} = create_group ${2}', {true, false})
+-- INI: 0630=2,put_actor %2d% in_group %1d% as_leader
+Opcode.register(0x0630, SanAndreasOpcodeGroup.setLeader, 2, 'set_group_leader ${1} ${2}', {false, false})
+-- INI: 0631=2,put_actor %2d% in_group %1d%
+Opcode.register(0x0631, SanAndreasOpcodeGroup.setMember, 2, 'set_group_member ${1} ${2}', {false, false})
+-- INI: 0632=1,release_group %1d%
+Opcode.register(0x0632, SanAndreasOpcodeGroup.remove, 1, 'remove_group ${1}', {false})
+-- INI: 06AD=2,set_group %1d% group_decision_maker_to %2d%
+Opcode.register(0x06ad, SanAndreasOpcodeGroup.setDecisionMaker, 2, 'set_group_decision_maker ${1} ${2}', {false, false})
+-- INI: 06F0=2,set_group %1d% distance_limit_to %2d%
+Opcode.register(0x06f0, SanAndreasOpcodeGroup.setSeparationRange, 2, 'set_group_separation_range ${1} ${2}', {false, false})
+-- INI: 07B3=2,set_group %1d% give_command %2h%
+Opcode.register(0x07b3, SanAndreasOpcodeGroup.setDefaultTaskAllocator, 2, 'set_group_default_task_allocator ${1} ${2}', {false, false})
+-- INI: 07F6=3,get_group %1d% number_of_leaders_to %2d% number_of_members_to %3d%
+Opcode.register(0x07f6, SanAndreasOpcodeGroup.getSize, 3, '${2}, ${3} = get_group_size ${1}', {false, true, true})
+-- INI: 07FD=1,  group %1d% alive
+Opcode.register(0x07fd, SanAndreasOpcodeGroup.doesExist, 1, 'does_group_exist ${1}', {false})
+-- INI: 087D=2,assign_group %1d% to_AS_pack %2d%
+Opcode.register(0x087d, SanAndreasOpcodeGroup.setSequence, 2, 'set_group_sequence ${1} ${2}', {false, false})
+-- INI: 092B=3,%3d% = group %1d% member %2d%
+Opcode.register(0x092b, SanAndreasOpcodeGroup.getMember, 3, '${3} = get_group_member ${1} ${2}', {false, false, true})
+-- INI: 0940=2,set_group %1d% enters_leaders_vehicle %2h%
+Opcode.register(0x0940, SanAndreasOpcodeGroup.setFollowStatus, 2, 'set_group_follow_status ${1} ${2}', {false, false})

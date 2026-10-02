@@ -704,101 +704,199 @@ function ViceCityOpcodePlayer.isInShortcutTaxi(_)
 end
 
 
-Opcode.register(0x0054, ViceCityOpcodePlayer.getCoordinates, '[var x: float], [var y: float], [var z: float] = get_player_coordinates [Player]')
-Opcode.register(0x0055, ViceCityOpcodePlayer.setCoordinates, 'set_player_coordinates [Player] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0056, ViceCityOpcodePlayer.isInArea2D, 'is_player_in_area_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x0057, ViceCityOpcodePlayer.isInArea3D, 'is_player_in_area_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x00da, ViceCityOpcodePlayer.storeCarIsIn, '[var handle: Car] = store_car_player_is_in [Player]')
-Opcode.register(0x00dc, ViceCityOpcodePlayer.isInCar, 'is_player_in_car [Player] {vehicle} [Car]')
-Opcode.register(0x00de, ViceCityOpcodePlayer.isInModel, 'is_player_in_model [Player] {modelId} [model_vehicle]')
-Opcode.register(0x00e0, ViceCityOpcodePlayer.isInAnyCar, 'is_player_in_any_car [Player]')
-Opcode.register(0x00e3, ViceCityOpcodePlayer.locateAnyMeans2D, 'locate_player_any_means_2d [Player] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00e4, ViceCityOpcodePlayer.locateOnFoot2D, 'locate_player_on_foot_2d [Player] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00e5, ViceCityOpcodePlayer.locateInCar2D, 'locate_player_in_car_2d [Player] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00e6, ViceCityOpcodePlayer.locateStoppedAnyMeans2D, 'locate_stopped_player_any_means_2d [Player] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00e7, ViceCityOpcodePlayer.locateStoppedOnFoot2D, 'locate_stopped_player_on_foot_2d [Player] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00e8, ViceCityOpcodePlayer.locateStoppedInCar2D, 'locate_stopped_player_in_car_2d [Player] {x} [float] {y} [float] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00e9, ViceCityOpcodePlayer.locateAnyMeansChar2D, 'locate_player_any_means_char_2d [Player] {target} [Char] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00ea, ViceCityOpcodePlayer.locateOnFootChar2D, 'locate_player_on_foot_char_2d [Player] {target} [Char] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00eb, ViceCityOpcodePlayer.locateInCarChar2D, 'locate_player_in_car_char_2d [Player] {target} [Char] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00f5, ViceCityOpcodePlayer.locateAnyMeans3D, 'locate_player_any_means_3d [Player] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00f6, ViceCityOpcodePlayer.locateOnFoot3D, 'locate_player_on_foot_3d [Player] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00f7, ViceCityOpcodePlayer.locateInCar3D, 'locate_player_in_car_3d [Player] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00f8, ViceCityOpcodePlayer.locateStoppedAnyMeans3D, 'locate_stopped_player_any_means_3d [Player] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00f9, ViceCityOpcodePlayer.locateStoppedOnFoot3D, 'locate_stopped_player_on_foot_3d [Player] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00fa, ViceCityOpcodePlayer.locateStoppedInCar3D, 'locate_stopped_player_in_car_3d [Player] {x} [float] {y} [float] {z} [float] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00fb, ViceCityOpcodePlayer.locateAnyMeansChar3D, 'locate_player_any_means_char_3d [Player] {target} [Char] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00fc, ViceCityOpcodePlayer.locateOnFootChar3D, 'locate_player_on_foot_char_3d [Player] {target} [Char] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x00fd, ViceCityOpcodePlayer.locateInCarChar3D, 'locate_player_in_car_char_3d [Player] {target} [Char] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x0121, ViceCityOpcodePlayer.isInZone, 'is_player_in_zone [Player] {zone} [zone_key]')
-Opcode.register(0x012a, ViceCityOpcodePlayer.warpFromCarToCoord, 'warp_player_from_car_to_coord [Player] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0170, ViceCityOpcodePlayer.getHeading, '[var heading: float] = get_player_heading [Player]')
-Opcode.register(0x0171, ViceCityOpcodePlayer.setHeading, 'set_player_heading [Player] {heading} [float]')
-Opcode.register(0x017a, ViceCityOpcodePlayer.setAmmo, 'set_player_ammo [Player] {weaponType} [WeaponType] {ammo} [int]')
-Opcode.register(0x0183, ViceCityOpcodePlayer.isHealthGreater, 'is_player_health_greater [Player] {health} [int]')
-Opcode.register(0x0197, ViceCityOpcodePlayer.isInAreaOnFoot2D, 'is_player_in_area_on_foot_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x0198, ViceCityOpcodePlayer.isInAreaInCar2D, 'is_player_in_area_in_car_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x0199, ViceCityOpcodePlayer.isStoppedInArea2D, 'is_player_stopped_in_area_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x019a, ViceCityOpcodePlayer.isStoppedInAreaOnFoot2D, 'is_player_stopped_in_area_on_foot_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x019b, ViceCityOpcodePlayer.isStoppedInAreaInCar2D, 'is_player_stopped_in_area_in_car_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x019c, ViceCityOpcodePlayer.isInAreaOnFoot3D, 'is_player_in_area_on_foot_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x019d, ViceCityOpcodePlayer.isInAreaInCar3D, 'is_player_in_area_in_car_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x019e, ViceCityOpcodePlayer.isStoppedInArea3D, 'is_player_stopped_in_area_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x019f, ViceCityOpcodePlayer.isStoppedInAreaOnFoot3D, 'is_player_stopped_in_area_on_foot_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x01a0, ViceCityOpcodePlayer.isStoppedInAreaInCar3D, 'is_player_stopped_in_area_in_car_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {drawSphere} [bool]')
-Opcode.register(0x01b1, ViceCityOpcodePlayer.giveWeapon, 'give_weapon_to_player [Player] {weaponType} [WeaponType] {ammo} [int]')
-Opcode.register(0x01b8, ViceCityOpcodePlayer.setCurrentWeapon, 'set_current_player_weapon [Player] {weaponType} [WeaponType]')
-Opcode.register(0x01fc, ViceCityOpcodePlayer.locateAnyMeansCar2D, 'locate_player_any_means_car_2d [Player] {handle} [Car] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x01fd, ViceCityOpcodePlayer.locateOnFootCar2D, 'locate_player_on_foot_car_2d [Player] {handle} [Car] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x01fe, ViceCityOpcodePlayer.locateInCarCar2D, 'locate_player_in_car_car_2d [Player] {handle} [Car] {xRadius} [float] {yRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x01ff, ViceCityOpcodePlayer.locateAnyMeansCar3D, 'locate_player_any_means_car_3d [Player] {handle} [Car] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x0200, ViceCityOpcodePlayer.locateOnFootCar3D, 'locate_player_on_foot_car_3d [Player] {handle} [Car] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x0201, ViceCityOpcodePlayer.locateInCarCar3D, 'locate_player_in_car_car_3d [Player] {handle} [Car] {xRadius} [float] {yRadius} [float] {zRadius} [float] {drawSphere} [bool]')
-Opcode.register(0x0210, ViceCityOpcodePlayer.turnToFaceChar, 'turn_player_to_face_char [Player] {char} [Char]')
-Opcode.register(0x0222, ViceCityOpcodePlayer.setHealth, 'set_player_health [Player] {health} [int]')
-Opcode.register(0x0225, ViceCityOpcodePlayer.getHealth, '[var health: int] = get_player_health [Player]')
-Opcode.register(0x022e, ViceCityOpcodePlayer.lookAtCharAlways, 'player_look_at_char_always [Player] {target} [Char]')
-Opcode.register(0x0230, ViceCityOpcodePlayer.stopLooking, 'stop_player_looking [Player]')
-Opcode.register(0x029f, ViceCityOpcodePlayer.isStopped, 'is_player_stopped [Player]')
-Opcode.register(0x02ad, ViceCityOpcodePlayer.isInAngledArea2D, 'is_player_in_angled_area_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02ae, ViceCityOpcodePlayer.isInAngledAreaOnFoot2D, 'is_player_in_angled_area_on_foot_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02af, ViceCityOpcodePlayer.isInAngledAreaInCar2D, 'is_player_in_angled_area_in_car_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b0, ViceCityOpcodePlayer.isStoppedInAngledArea2D, 'is_player_stopped_in_angled_area_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b1, ViceCityOpcodePlayer.isStoppedInAngledAreaOnFoot2D, 'is_player_stopped_in_angled_area_on_foot_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b2, ViceCityOpcodePlayer.isStoppedInAngledAreaInCar2D, 'is_player_stopped_in_angled_area_in_car_2d [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b3, ViceCityOpcodePlayer.isInAngledArea3D, 'is_player_in_angled_area_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b4, ViceCityOpcodePlayer.isInAngledAreaOnFoot3D, 'is_player_in_angled_area_on_foot_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b5, ViceCityOpcodePlayer.isInAngledAreaInCar3D, 'is_player_in_angled_area_in_car_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b6, ViceCityOpcodePlayer.isStoppedInAngledArea3D, 'is_player_stopped_in_angled_area_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b7, ViceCityOpcodePlayer.isStoppedInAngledAreaOnFoot3D, 'is_player_stopped_in_angled_area_on_foot_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02b8, ViceCityOpcodePlayer.isStoppedInAngledAreaInCar3D, 'is_player_stopped_in_angled_area_in_car_3d [Player] {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float] {angle} [float] {drawSphere} [bool]')
-Opcode.register(0x02d5, ViceCityOpcodePlayer.isShootingInArea, 'is_player_shooting_in_area [Player] {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {drawSphere} [bool]')
-Opcode.register(0x02d7, ViceCityOpcodePlayer.isCurrentWeapon, 'is_current_player_weapon [Player] {weaponType} [WeaponType]')
-Opcode.register(0x02de, ViceCityOpcodePlayer.isInTaxi, 'is_player_in_taxi [Player]')
-Opcode.register(0x02df, ViceCityOpcodePlayer.isShooting, 'is_player_shooting [Player]')
-Opcode.register(0x0322, ViceCityOpcodePlayer.explodeHead, 'explode_player_head [Player]')
-Opcode.register(0x0336, ViceCityOpcodePlayer.setVisible, 'set_player_visible [Player] {state} [bool]')
-Opcode.register(0x035e, ViceCityOpcodePlayer.addArmour, 'add_armour_to_player [Player] {amount} [int]')
-Opcode.register(0x0369, ViceCityOpcodePlayer.warpIntoCar, 'warp_player_into_car [Player] {vehicle} [Car]')
-Opcode.register(0x03b8, ViceCityOpcodePlayer.removeAllWeapons, 'remove_all_player_weapons [Player]')
-Opcode.register(0x03c1, ViceCityOpcodePlayer.storeCarIsInNoSave, '[var handle: Car] = store_car_player_is_in_no_save [Player]')
-Opcode.register(0x0419, ViceCityOpcodePlayer.getAmmoInWeapon, '[var ammo: int] = get_ammo_in_player_weapon [Player] {weaponType} [WeaponType]')
-Opcode.register(0x043e, ViceCityOpcodePlayer.setHooker, 'set_player_hooker [Player] {hooker} [Char]')
-Opcode.register(0x0442, ViceCityOpcodePlayer.isSittingInCar, 'is_player_sitting_in_car [Player] {vehicle} [Car]')
-Opcode.register(0x0443, ViceCityOpcodePlayer.isSittingInAnyCar, 'is_player_sitting_in_any_car [Player]')
-Opcode.register(0x044a, ViceCityOpcodePlayer.isOnFoot, 'is_player_on_foot [Player]')
-Opcode.register(0x046f, ViceCityOpcodePlayer.getCurrentWeapon, '[var weaponType: WeaponType] = get_current_player_weapon [Player]')
-Opcode.register(0x047e, ViceCityOpcodePlayer.isOnAnyBike, 'is_player_on_any_bike [Player]')
-Opcode.register(0x0490, ViceCityOpcodePlayer.hasGotWeapon, 'has_player_got_weapon [Player] {weaponId} [WeaponType]')
-Opcode.register(0x04a8, ViceCityOpcodePlayer.isInAnyBoat, 'is_player_in_any_boat [Player]')
-Opcode.register(0x04aa, ViceCityOpcodePlayer.isInAnyHeli, 'is_player_in_any_heli [Player]')
-Opcode.register(0x04ac, ViceCityOpcodePlayer.isInAnyPlane, 'is_player_in_any_plane [Player]')
-Opcode.register(0x04be, ViceCityOpcodePlayer.resetHavoc, 'reset_havoc_caused_by_player [Player]')
-Opcode.register(0x04bf, ViceCityOpcodePlayer.getHavoc, '[var level: int] = get_havoc_caused_by_player [Player]')
-Opcode.register(0x04c9, ViceCityOpcodePlayer.isInFlyingVehicle, 'is_player_in_flying_vehicle [Player]')
-Opcode.register(0x04e2, ViceCityOpcodePlayer.shutUp, 'shut_player_up [Player] {state} [bool]')
-Opcode.register(0x0540, ViceCityOpcodePlayer.setAutoAim, 'set_player_auto_aim [Player] {state} [bool]')
-Opcode.register(0x0546, ViceCityOpcodePlayer.isTouchingVehicle, 'is_player_touching_vehicle [Player] {vehicle} [Car]')
-Opcode.register(0x0551, ViceCityOpcodePlayer.setHasMetDebbieHarry, 'set_player_has_met_debbie_harry {state} [bool]')
-Opcode.register(0x057f, ViceCityOpcodePlayer.getBusFaresCollected, '[var num: int] = get_bus_fares_collected_by_player [Player]')
-Opcode.register(0x0596, ViceCityOpcodePlayer.isInShortcutTaxi, 'is_player_in_shortcut_taxi [Player]')
+-- INI: 0054=4,store_player %1d% position_to %2d% %3d% %4d%
+Opcode.register(0x0054, ViceCityOpcodePlayer.getCoordinates, 4, '${2}, ${3}, ${4} = get_player_coordinates ${1}', {false, true, true, true})
+-- INI: 0055=4,put_player %1d% at %2d% %3d% %4d%
+Opcode.register(0x0055, ViceCityOpcodePlayer.setCoordinates, 4, 'set_player_coordinates ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0056=6,  player %1d% %6b:in-sphere/%in_rectangle %2d% %3d% %4d% %5d%
+Opcode.register(0x0056, ViceCityOpcodePlayer.isInArea2D, 6, 'is_player_in_area_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0057=8,  player %1d% %8b:in-sphere/%in_cube %2d% %3d% %4d% %5d% %6d% %7d%
+Opcode.register(0x0057, ViceCityOpcodePlayer.isInArea3D, 8, 'is_player_in_area_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00da=2,%2d% = player %1d% car
+Opcode.register(0x00da, ViceCityOpcodePlayer.storeCarIsIn, 2, '${2} = store_car_player_is_in ${1}', {false, true})
+-- INI: 00dc=2,  player %1d% in_car %2d%
+Opcode.register(0x00dc, ViceCityOpcodePlayer.isInCar, 2, 'is_player_in_car ${1} ${2}', {false, false})
+-- INI: 00de=2,  player %1d% driving_vehicle_type %2m%
+Opcode.register(0x00de, ViceCityOpcodePlayer.isInModel, 2, 'is_player_in_model ${1} ${2}', {false, false})
+-- INI: 00e0=1,  player %1d% in_any_car
+Opcode.register(0x00e0, ViceCityOpcodePlayer.isInAnyCar, 1, 'is_player_in_any_car ${1}', {false})
+-- INI: 00e3=6,  player %1d% %6b:in-sphere/%near_point %2d% %3d% radius %4d% %5d%
+Opcode.register(0x00e3, ViceCityOpcodePlayer.locateAnyMeans2D, 6, 'locate_player_any_means_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00e4=6,  player %1d% %6b:in-sphere/%near_point_on_foot %2d% %3d% radius %4d% %5d%
+Opcode.register(0x00e4, ViceCityOpcodePlayer.locateOnFoot2D, 6, 'locate_player_on_foot_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00e5=6,  player %1d% %6b:in-sphere/%near_point_in_car %2d% %3d% radius %4d% %5d%
+Opcode.register(0x00e5, ViceCityOpcodePlayer.locateInCar2D, 6, 'locate_player_in_car_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00e6=6,  player %1d% stopped %6b:in-sphere/%near_point %2d% %3d% radius %4d% %5d%  ;; never used in VC
+Opcode.register(0x00e6, ViceCityOpcodePlayer.locateStoppedAnyMeans2D, 6, 'locate_stopped_player_any_means_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00e7=6,  player %1d% stopped %6b:in-sphere/%near_point_on_foot %2d% %3d% radius %4d% %5d%
+Opcode.register(0x00e7, ViceCityOpcodePlayer.locateStoppedOnFoot2D, 6, 'locate_stopped_player_on_foot_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00e8=6,  player %1d% stopped %6b:in-sphere/%near_point_in_car %2d% %3d% radius %4d% %5d%  ;; never used in VC
+Opcode.register(0x00e8, ViceCityOpcodePlayer.locateStoppedInCar2D, 6, 'locate_stopped_player_in_car_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00e9=5,  player %1d% %5b:in-sphere/%near_actor %2d% radius %3d% %4d%
+Opcode.register(0x00e9, ViceCityOpcodePlayer.locateAnyMeansChar2D, 5, 'locate_player_any_means_char_2d ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 00ea=5,  player %1d% %5b:in-sphere/%near_actor_on_foot %2d% radius %3d% %4d%
+Opcode.register(0x00ea, ViceCityOpcodePlayer.locateOnFootChar2D, 5, 'locate_player_on_foot_char_2d ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 00eb=5,  player %1d% %5b:in-sphere/%near_actor_in_car %2d% radius %3d% %4d%
+Opcode.register(0x00eb, ViceCityOpcodePlayer.locateInCarChar2D, 5, 'locate_player_in_car_char_2d ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 00f5=8,  player %1d% %8b:in-sphere/%near_point %2d% %3d% %4d% radius %5d% %6d% %7d%
+Opcode.register(0x00f5, ViceCityOpcodePlayer.locateAnyMeans3D, 8, 'locate_player_any_means_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00f6=8,  player %1d% %8b:in-sphere/%near_point_on_foot %2d% %3d% %4d% radius %5d% %6d% %7d%
+Opcode.register(0x00f6, ViceCityOpcodePlayer.locateOnFoot3D, 8, 'locate_player_on_foot_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00f7=8,  player %1d% sphere %8b% near_point_in_car %2d% %3d% %4d% radius %5d% %6d% %7d%
+Opcode.register(0x00f7, ViceCityOpcodePlayer.locateInCar3D, 8, 'locate_player_in_car_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00f8=8,  player %1d% stopped %8b:in-sphere/%near_point %2d% %3d% %4d% radius %5d% %6d% %7d%
+Opcode.register(0x00f8, ViceCityOpcodePlayer.locateStoppedAnyMeans3D, 8, 'locate_stopped_player_any_means_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00f9=8,  player %1d% stopped %8b:in-sphere/%near_point_on_foot %2d% %3d% %4d% radius %5d% %6d% %7d%
+Opcode.register(0x00f9, ViceCityOpcodePlayer.locateStoppedOnFoot3D, 8, 'locate_stopped_player_on_foot_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00fa=8,  player %1d% stopped %8b:in-sphere/%near_point_in_car %2d% %3d% %4d% radius %5d% %6d% %7d%
+Opcode.register(0x00fa, ViceCityOpcodePlayer.locateStoppedInCar3D, 8, 'locate_stopped_player_in_car_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 00fb=6,  player %1d% %6b:in-sphere/%near_actor %2d% radius %3d% %4d% %5d%
+Opcode.register(0x00fb, ViceCityOpcodePlayer.locateAnyMeansChar3D, 6, 'locate_player_any_means_char_3d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00fc=6,  player %1d% %6b:in-sphere/%near_actor %2d% on_foot radius %3d% %4d% %5d%
+Opcode.register(0x00fc, ViceCityOpcodePlayer.locateOnFootChar3D, 6, 'locate_player_on_foot_char_3d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 00fd=6,  player %1d% %6b:in-sphere/%near_actor %2d% in_car radius %3d% %4d% %5d%
+Opcode.register(0x00fd, ViceCityOpcodePlayer.locateInCarChar3D, 6, 'locate_player_in_car_char_3d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0121=2,  player %1d% in_zone %2z%
+Opcode.register(0x0121, ViceCityOpcodePlayer.isInZone, 2, 'is_player_in_zone ${1} ${2}', {false, false})
+-- INI: 012a=4,put_player %1d% at %2d% %3d% %4d% and_remove_from_car
+Opcode.register(0x012a, ViceCityOpcodePlayer.warpFromCarToCoord, 4, 'warp_player_from_car_to_coord ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0170=2,%2d% = player %1d% z_angle
+Opcode.register(0x0170, ViceCityOpcodePlayer.getHeading, 2, '${2} = get_player_heading ${1}', {false, true})
+-- INI: 0171=2,set_player %1d% z_angle_to %2d%
+Opcode.register(0x0171, ViceCityOpcodePlayer.setHeading, 2, 'set_player_heading ${1} ${2}', {false, true})
+-- INI: 017a=3,set_player %1d% weapon %2d% ammo_to %3d%
+Opcode.register(0x017a, ViceCityOpcodePlayer.setAmmo, 3, 'set_player_ammo ${1} ${2} ${3}', {false, false, true})
+-- INI: 0183=2,  player %1d% health > %2h%
+Opcode.register(0x0183, ViceCityOpcodePlayer.isHealthGreater, 2, 'is_player_health_greater ${1} ${2}', {false, false})
+-- INI: 0197=6,  player %1d% %6b:in-sphere/%in_rectangle_on_foot %2d% %3d% %4d% %5d%  ;; never used in VC
+Opcode.register(0x0197, ViceCityOpcodePlayer.isInAreaOnFoot2D, 6, 'is_player_in_area_on_foot_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0198=6,  player %1d% %6b:in-sphere/%in_rectangle_in_car %2d% %3d% %4d% %5d%  ;; never used in VC
+Opcode.register(0x0198, ViceCityOpcodePlayer.isInAreaInCar2D, 6, 'is_player_in_area_in_car_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0199=6,  player %1d% %6b:in-sphere/%in_rectangle %2d% %3d% %4d% %5d%  ;; never used in VC
+Opcode.register(0x0199, ViceCityOpcodePlayer.isStoppedInArea2D, 6, 'is_player_stopped_in_area_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 019a=6,  player %1d% stopped %6b:in-sphere/%in_rectangle_on_foot %2d% %3d% %4d% %5d%  ;; never used in VC
+Opcode.register(0x019a, ViceCityOpcodePlayer.isStoppedInAreaOnFoot2D, 6, 'is_player_stopped_in_area_on_foot_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 019b=6,  player %1d% stopped %6b:in-sphere/%in_rectangle_in_car %2d% %3d% %4d% %5d%  ;; never used in VC
+Opcode.register(0x019b, ViceCityOpcodePlayer.isStoppedInAreaInCar2D, 6, 'is_player_stopped_in_area_in_car_2d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 019c=8,  player %1d% %8b:in-sphere/%in_cube_on_foot %2d% %3d% %4d% %5d% %6d% %7d%  ;; never used in VC
+Opcode.register(0x019c, ViceCityOpcodePlayer.isInAreaOnFoot3D, 8, 'is_player_in_area_on_foot_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 019d=8,  player %1d% %8b:in-sphere/%in_cube_in_car %2d% %3d% %4d% %5d% %6d% %7d%  ;; never used in VC
+Opcode.register(0x019d, ViceCityOpcodePlayer.isInAreaInCar3D, 8, 'is_player_in_area_in_car_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 019e=8,  player %1d% stopped %8b:in-sphere/%in_cube %2d% %3d% %4d% %5d% %6d% %7d%  ;; never used in VC
+Opcode.register(0x019e, ViceCityOpcodePlayer.isStoppedInArea3D, 8, 'is_player_stopped_in_area_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 019f=8,  player %1d% stopped %8b:in-sphere/%in_cube_on_foot %2d% %3d% %4d% %5d% %6d% %7d%  ;; never used in VC
+Opcode.register(0x019f, ViceCityOpcodePlayer.isStoppedInAreaOnFoot3D, 8, 'is_player_stopped_in_area_on_foot_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 01a0=8,  player %1d% stopped %8b:in-sphere/%in_cube_in_car %2d% %3d% %4d% %5d% %6d% %7d%  ;; never used in VC
+Opcode.register(0x01a0, ViceCityOpcodePlayer.isStoppedInAreaInCar3D, 8, 'is_player_stopped_in_area_in_car_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 01b1=3,give_player %1d% weapon %2c% ammo %3d%  ;; Load the weapon model before using this
+Opcode.register(0x01b1, ViceCityOpcodePlayer.giveWeapon, 3, 'give_weapon_to_player ${1} ${2} ${3}', {false, false, false})
+-- INI: 01b8=2,set_player %1d% armed_weapon_to %2c%
+Opcode.register(0x01b8, ViceCityOpcodePlayer.setCurrentWeapon, 2, 'set_current_player_weapon ${1} ${2}', {false, true})
+-- INI: 01fc=5,  player %1d% near_car %2d% radius %3d% %4d% %5d%
+Opcode.register(0x01fc, ViceCityOpcodePlayer.locateAnyMeansCar2D, 5, 'locate_player_any_means_car_2d ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 01fd=5,  player %1d% near_car_on_foot %2d% radius %3d% %4d% %5d%  ;; never used in VC
+Opcode.register(0x01fd, ViceCityOpcodePlayer.locateOnFootCar2D, 5, 'locate_player_on_foot_car_2d ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 01fe=5,  player %1d% near_car_in_car %2d% radius %3d% %4d% %5d%
+Opcode.register(0x01fe, ViceCityOpcodePlayer.locateInCarCar2D, 5, 'locate_player_in_car_car_2d ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 01ff=6,  player %1d% near_car %2d% radius %3d% %4d% %5d% unknown %6h%
+Opcode.register(0x01ff, ViceCityOpcodePlayer.locateAnyMeansCar3D, 6, 'locate_player_any_means_car_3d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0200=6,  player %1d% near_car_on_foot %2d% radius %3d% %4d% %5d% unknown %6h%  ;; never used in VC
+Opcode.register(0x0200, ViceCityOpcodePlayer.locateOnFootCar3D, 6, 'locate_player_on_foot_car_3d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0201=6,  player %1d% near_car_in_car %2d% radius %3d% %4d% %5d% unknown %6h%  ;; never used in VC
+Opcode.register(0x0201, ViceCityOpcodePlayer.locateInCarCar3D, 6, 'locate_player_in_car_car_3d ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0210=2,player %1d% look_at_actor %2d%
+Opcode.register(0x0210, ViceCityOpcodePlayer.turnToFaceChar, 2, 'turn_player_to_face_char ${1} ${2}', {false, false})
+-- INI: 0222=2,set_player %1d% health_to %2d%
+Opcode.register(0x0222, ViceCityOpcodePlayer.setHealth, 2, 'set_player_health ${1} ${2}', {false, true})
+-- INI: 0225=2,%2d% = player %1d% health
+Opcode.register(0x0225, ViceCityOpcodePlayer.getHealth, 2, '${2} = get_player_health ${1}', {false, true})
+-- INI: 022e=2,set_player %1d% to_look_at_actor %2d%
+Opcode.register(0x022e, ViceCityOpcodePlayer.lookAtCharAlways, 2, 'player_look_at_char_always ${1} ${2}', {false, false})
+-- INI: 0230=1,set_player %1d% stop_looking
+Opcode.register(0x0230, ViceCityOpcodePlayer.stopLooking, 1, 'stop_player_looking ${1}', {false})
+-- INI: 029f=1,  player %1d% stopped
+Opcode.register(0x029f, ViceCityOpcodePlayer.isStopped, 1, 'is_player_stopped ${1}', {false})
+-- INI: 02ad=7,  player %1d% in_area %2d% %3d% %4d% %5d% radius %6d% sphere %7h%
+Opcode.register(0x02ad, ViceCityOpcodePlayer.isInAngledArea2D, 7, 'is_player_in_angled_area_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 02ae=7,  player %1d% in_area_on_foot %2d% %3d% %4d% %5d% radius %6d% sphere %7h%  ;; never used anywhere
+Opcode.register(0x02ae, ViceCityOpcodePlayer.isInAngledAreaOnFoot2D, 7, 'is_player_in_angled_area_on_foot_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 02af=7,  player %1d% in_area_in_car %2d% %3d% %4d% %5d% radius %6d% sphere %7h%  ;; never used anywhere
+Opcode.register(0x02af, ViceCityOpcodePlayer.isInAngledAreaInCar2D, 7, 'is_player_in_angled_area_in_car_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 02b0=7,  player %1d% stopped_in_area %2d% %3d% %4d% %5d% radius %6d% sphere %7h%  ;; never used anywhere
+Opcode.register(0x02b0, ViceCityOpcodePlayer.isStoppedInAngledArea2D, 7, 'is_player_stopped_in_angled_area_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 02b1=7,  player %1d% stopped_in_area_on_foot %2d% %3d% %4d% %5d% radius %6d% sphere %7h%  ;; never used anywhere
+Opcode.register(0x02b1, ViceCityOpcodePlayer.isStoppedInAngledAreaOnFoot2D, 7, 'is_player_stopped_in_angled_area_on_foot_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 02b2=7,  player %1d% stopped_in_area_in_car %2d% %3d% %4d% %5d% radius %6d% sphere %7h%  ;; never used anywhere
+Opcode.register(0x02b2, ViceCityOpcodePlayer.isStoppedInAngledAreaInCar2D, 7, 'is_player_stopped_in_angled_area_in_car_2d ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 02b3=9,  player %1d% in_cube %2d% %3d% %4d% %5d% %6d% %7d% radius %8d% sphere %9h%
+Opcode.register(0x02b3, ViceCityOpcodePlayer.isInAngledArea3D, 9, 'is_player_in_angled_area_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 02b4=9,  player %1d% in_cube_on_foot %2d% %3d% %4d% %5d% %6d% %7d% radius %8d% sphere %9h%
+Opcode.register(0x02b4, ViceCityOpcodePlayer.isInAngledAreaOnFoot3D, 9, 'is_player_in_angled_area_on_foot_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 02b5=9,  player %1d% in_cube_in_car %2d% %3d% %4d% %5d% %6d% %7d% radius %8d% sphere %9h%
+Opcode.register(0x02b5, ViceCityOpcodePlayer.isInAngledAreaInCar3D, 9, 'is_player_in_angled_area_in_car_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 02b6=9,  player %1d% stopped_in_cube %2d% %3d% %4d% %5d% %6d% %7d% radius %8d% sphere %9h%  ;; never used anywhere
+Opcode.register(0x02b6, ViceCityOpcodePlayer.isStoppedInAngledArea3D, 9, 'is_player_stopped_in_angled_area_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 02b7=9,  player %1d% stopped_in_cube_on_foot %2d% %3d% %4d% %5d% %6d% %7d% radius %8d% sphere %9h%  ;; never used anywhere
+Opcode.register(0x02b7, ViceCityOpcodePlayer.isStoppedInAngledAreaOnFoot3D, 9, 'is_player_stopped_in_angled_area_on_foot_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 02b8=9,  player %1d% stopped_in_cube_in_car %2d% %3d% %4d% %5d% %6d% %7d% radius %8d% sphere %9h%  ;; never used anywhere
+Opcode.register(0x02b8, ViceCityOpcodePlayer.isStoppedInAngledAreaInCar3D, 9, 'is_player_stopped_in_angled_area_in_car_3d ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 02d5=6,  player %1d% shooting_in_area %2d% %3d% %4d% %5d% %6d%
+Opcode.register(0x02d5, ViceCityOpcodePlayer.isShootingInArea, 6, 'is_player_shooting_in_area ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 02d7=2,  player %1d% current_weapon == %2c%
+Opcode.register(0x02d7, ViceCityOpcodePlayer.isCurrentWeapon, 2, 'is_current_player_weapon ${1} ${2}', {true, false})
+-- INI: 02de=1,  player %1d% in_taxi
+Opcode.register(0x02de, ViceCityOpcodePlayer.isInTaxi, 1, 'is_player_in_taxi ${1}', {false})
+-- INI: 02df=1,  player %1d% aggressive
+Opcode.register(0x02df, ViceCityOpcodePlayer.isShooting, 1, 'is_player_shooting ${1}', {false})
+-- INI: 0322=1,kill_player %1d%
+Opcode.register(0x0322, ViceCityOpcodePlayer.explodeHead, 1, 'explode_player_head ${1}', {false})
+-- INI: 0336=2,set_player %1d% visible %2d%
+Opcode.register(0x0336, ViceCityOpcodePlayer.setVisible, 2, 'set_player_visible ${1} ${2}', {false, false})
+-- INI: 035e=2,set_player %1d% armour_to %2d%
+Opcode.register(0x035e, ViceCityOpcodePlayer.addArmour, 2, 'add_armour_to_player ${1} ${2}', {false, true})
+-- INI: 0369=2,put_player %1d% in_car %2d%
+Opcode.register(0x0369, ViceCityOpcodePlayer.warpIntoCar, 2, 'warp_player_into_car ${1} ${2}', {false, false})
+-- INI: 03b8=1,clear_weapons_from_player %1d%
+Opcode.register(0x03b8, ViceCityOpcodePlayer.removeAllWeapons, 1, 'remove_all_player_weapons ${1}', {false})
+-- INI: 03c1=2,%2d% = player %1d% car_no_save
+Opcode.register(0x03c1, ViceCityOpcodePlayer.storeCarIsInNoSave, 2, '${2} = store_car_player_is_in_no_save ${1}', {false, true})
+-- INI: 0419=3,%3d% = player %1d% weapon %2c% ammo
+Opcode.register(0x0419, ViceCityOpcodePlayer.getAmmoInWeapon, 3, '${3} = get_ammo_in_player_weapon ${1} ${2}', {false, false, true})
+-- INI: 043e=2,set_player_hooker %1d% char %2d%
+Opcode.register(0x043e, ViceCityOpcodePlayer.setHooker, 2, 'set_player_hooker ${1} ${2}', {false, false})
+-- INI: 0442=2,  player %1d% sitting_in_car %2d%
+Opcode.register(0x0442, ViceCityOpcodePlayer.isSittingInCar, 2, 'is_player_sitting_in_car ${1} ${2}', {false, false})
+-- INI: 0443=1,  player %1d% sitting_in_any_car
+Opcode.register(0x0443, ViceCityOpcodePlayer.isSittingInAnyCar, 1, 'is_player_sitting_in_any_car ${1}', {false})
+-- INI: 044a=1,  player %1d% on_foot
+Opcode.register(0x044a, ViceCityOpcodePlayer.isOnFoot, 1, 'is_player_on_foot ${1}', {false})
+-- INI: 046f=2,store_player %1d% currently_armed_weapon_to %2d%
+Opcode.register(0x046f, ViceCityOpcodePlayer.getCurrentWeapon, 2, '${2} = get_current_player_weapon ${1}', {false, true})
+-- INI: 047e=1,  player %1d% on_any_bike
+Opcode.register(0x047e, ViceCityOpcodePlayer.isOnAnyBike, 1, 'is_player_on_any_bike ${1}', {false})
+-- INI: 0490=2,  player %1d% has_weapon %2h%
+Opcode.register(0x0490, ViceCityOpcodePlayer.hasGotWeapon, 2, 'has_player_got_weapon ${1} ${2}', {false, false})
+-- INI: 04a8=1,  player %1d% in_any_boat
+Opcode.register(0x04a8, ViceCityOpcodePlayer.isInAnyBoat, 1, 'is_player_in_any_boat ${1}', {false})
+-- INI: 04aa=1,  player %1d% in_any_heli
+Opcode.register(0x04aa, ViceCityOpcodePlayer.isInAnyHeli, 1, 'is_player_in_any_heli ${1}', {false})
+-- INI: 04ac=1,  player %1d% in_any_plane
+Opcode.register(0x04ac, ViceCityOpcodePlayer.isInAnyPlane, 1, 'is_player_in_any_plane ${1}', {false})
+-- INI: 04be=1,reset_player %1d% chaos_level
+Opcode.register(0x04be, ViceCityOpcodePlayer.resetHavoc, 1, 'reset_havoc_caused_by_player ${1}', {false})
+-- INI: 04bf=2,%2d% = player %1d% chaos_level
+Opcode.register(0x04bf, ViceCityOpcodePlayer.getHavoc, 2, '${2} = get_havoc_caused_by_player ${1}', {false, true})
+-- INI: 04c9=1,  player %1d% in_flying_vehicle
+Opcode.register(0x04c9, ViceCityOpcodePlayer.isInFlyingVehicle, 1, 'is_player_in_flying_vehicle ${1}', {false})
+-- INI: 04e2=2,set_player %1d% suspend_heavy_police_reinforcements %2h%
+Opcode.register(0x04e2, ViceCityOpcodePlayer.shutUp, 2, 'shut_player_up ${1} ${2}', {false, false})
+-- INI: 0540=2,set_player %1d% auto_aim %2h%
+Opcode.register(0x0540, ViceCityOpcodePlayer.setAutoAim, 2, 'set_player_auto_aim ${1} ${2}', {false, false})
+-- INI: 0546=2,  player %1d% touching_car %2d%
+Opcode.register(0x0546, ViceCityOpcodePlayer.isTouchingVehicle, 2, 'is_player_touching_vehicle ${1} ${2}', {false, false})
+-- INI: 0551=1,set_kaufman_radio %1h%
+Opcode.register(0x0551, ViceCityOpcodePlayer.setHasMetDebbieHarry, 1, 'set_player_has_met_debbie_harry ${1}', {false})
+-- INI: 057f=2,get_player %1d% store_coach_passengers_dropped_off_to %2d%
+Opcode.register(0x057f, ViceCityOpcodePlayer.getBusFaresCollected, 2, '${2} = get_bus_fares_collected_by_player ${1}', {false, true})
+-- INI: 0596=1,  player %1d% riding_mission_restart_taxi
+Opcode.register(0x0596, ViceCityOpcodePlayer.isInShortcutTaxi, 1, 'is_player_in_shortcut_taxi ${1}', {false})

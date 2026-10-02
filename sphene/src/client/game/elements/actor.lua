@@ -665,6 +665,14 @@ function ActorElement:isInGroup()
     return true
 end
 
+function ActorElement:distanceTo(x, y, z)
+    local elX, elY, elZ = self:getPosition()
+
+    elZ = elZ - (getElementDistanceFromCentreOfMassToBaseOfModel(self.element) or 0)
+
+    return getDistanceBetweenPoints3D(x, y, z, elX, elY, elZ)
+end
+
 function ActorElement.loadSpecialActor(actorName, slot)
     if slot < 1 or slot > 10 then
         return false
@@ -727,6 +735,80 @@ function ActorElement:getTaskStatus(taskId)
     end
 
     return Task.FINISHED
+end
+
+function ActorElement:getDebugParameters()
+    local primaryTasks = ""
+    local secondaryTasks = ""
+
+    local priority1Tasks = self:getTasks(1)
+
+    for slotName, task in pairs(priority1Tasks) do
+        if task then
+            primaryTasks = "\n    "..primaryTasks..task:getName().." "
+
+            local debugParams = task:getDebugParameters()
+
+            if debugParams then
+                for property, param in pairs(debugParams) do
+                    if type(param) == 'table' then
+                        param = Debug.prettifyTable(param)
+                    end
+
+                    primaryTasks = primaryTasks.."\n".."        "..property..": "..param
+                end
+            end
+
+            local subTask = task.getSubTask and task:getSubTask()
+
+            while (subTask) do
+                primaryTasks = primaryTasks.."\n    - "..subTask:getName()
+
+                debugParams = subTask:getDebugParameters()
+
+                if debugParams then
+                    for property, param in pairs(debugParams) do
+                        if type(param) == 'table' then
+                            param = Debug.prettifyTable(param)
+                        end
+
+                        primaryTasks = primaryTasks.."\n            "..property..": "..param
+                    end
+                end
+
+                subTask = subTask.getSubTask and subTask:getSubTask()
+            end
+        end
+    end
+
+    local priority2Tasks = self:getTasks(2)
+
+    for slotName, task in pairs(priority2Tasks) do
+        if task then
+            secondaryTasks = "\n    "..secondaryTasks..task:getName().." "
+
+            local debugParams = task:getDebugParameters()
+
+            if debugParams then
+                for property, param in pairs(debugParams) do
+                    if type(param) == 'table' then
+                        param = Debug.prettifyTable(param)
+                    end
+
+                    secondaryTasks = secondaryTasks.."\n".."        "..property..": "..param
+                end
+            end
+        end
+    end
+
+    return {
+        Color = tocolor(95, 247, 92, 255),
+        Title = self:getType().." ("..self:getId()..")",
+        PrimaryTasks = primaryTasks ~= "" and primaryTasks or nil,
+        SecondaryTasks = secondaryTasks ~= "" and secondaryTasks or nil,
+        Position = string.format("x: %.2f, y: %.2f, z: %.2f", self:getPosition()),
+        Rotation = string.format("rx: %.2f, ry: %.2f, rz: %.2f", self:getRotation()),
+    }
 end
 
 function ActorElement:getType()

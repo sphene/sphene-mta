@@ -5,7 +5,7 @@ SharedOpcodeMission.__index = SharedOpcodeMission
 -- Instruction: mission_has_finished
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/00D8
 function SharedOpcodeMission.finish(_)
-    Game.setMissionFlag(0)
+    Game.setIsOnMission(false)
 
     for _,element in pairs(Thread.currentThread:getCleanupList()) do
         element:destroy()
@@ -20,7 +20,7 @@ end
 -- Instruction: load_and_launch_mission_internal {index} [int]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0417
 function SharedOpcodeMission.loadAndLaunchInternal(mission)
-    Game.setMissionFlag(1)
+    Game.setIsOnMission(true)
 
     Thread:create(Script.missionOffsets[mission + 1], true, Thread.currentThread)
     return true
@@ -34,6 +34,9 @@ function SharedOpcodeMission.fail()
 end
 
 
-Opcode.register(0x00d8, SharedOpcodeMission.finish, 'mission_has_finished')
-Opcode.register(0x0417, SharedOpcodeMission.loadAndLaunchInternal, 'load_and_launch_mission_internal {index} [int]')
-Opcode.register(0x045c, SharedOpcodeMission.fail, 'fail_current_mission')
+-- INI: 00d8=0,mission_cleanup
+Opcode.register(0x00d8, SharedOpcodeMission.finish, 0, 'mission_has_finished', {})
+-- INI: 0417=1,start_mission %1d%
+Opcode.register(0x0417, SharedOpcodeMission.loadAndLaunchInternal, 1, 'load_and_launch_mission_internal ${1}', {false})
+-- INI: 045c=0,fail_current_mission
+Opcode.register(0x045c, SharedOpcodeMission.fail, 0, 'fail_current_mission', {})

@@ -140,7 +140,7 @@ function ActorClass:driveTo(_, vehicle, x, y, z, speed, speed2, model, drivingSt
     if (self:__instanceof(vehicle, VehicleClass)) then
         self.actor:clearTasks()
 
-        local task = TaskComplexCarDriveToPoint:create(self.actor, vehicle, x, y, z, speed, speed2, model, drivingStyle)
+        local task = TaskComplexCarDriveToPoint:create(self.actor, vehicle.vehicle, x, y, z, speed, speed2, model, drivingStyle)
 
         self.actor:addScriptedTask(task, 1, "TASK_PRIORITY_PRIMARY")
     end

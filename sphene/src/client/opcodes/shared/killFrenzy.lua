@@ -16,5 +16,7 @@ function SharedOpcodeKillFrenzy.readStatus(_)
 end
 
 
-Opcode.register(0x01f9, SharedOpcodeKillFrenzy.start, 'start_kill_frenzy {text} [gxt_key] {weaponType} [WeaponType] {timeInMs} [int] {targetsNum} [int] {targetModel1} [model_any] {targetModel2} [model_any] {targetModel3} [model_any] {targetModel4} [model_any] {betaSoundsAndMessages} [bool]')
-Opcode.register(0x01fa, SharedOpcodeKillFrenzy.readStatus, '[var status: int] = read_kill_frenzy_status')
+-- INI: 01f9=9,init_rampage %1g% %2d% %3d% %4d% %5m% %6m% %7m% %8m% %9d%
+Opcode.register(0x01f9, SharedOpcodeKillFrenzy.start, 9, 'start_kill_frenzy ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 01fa=1,%1d% = rampage_status
+Opcode.register(0x01fa, SharedOpcodeKillFrenzy.readStatus, 1, '${1} = read_kill_frenzy_status', {true})

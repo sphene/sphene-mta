@@ -23,6 +23,6 @@ function SanAndreasOpcodeFile.writeBlock()
 end
 
 
-Opcode.register(0x2300, SanAndreasOpcodeFile.getPosition, '[var position: int] = get_file_position [File]')
-Opcode.register(0x2301, SanAndreasOpcodeFile.readBlock, 'read_block_from_file [File] {size} [int] {address} [int]')
-Opcode.register(0x2302, SanAndreasOpcodeFile.writeBlock, 'write_block_to_file [File] {size} [int] {address} [int]')
+Opcode.register(0x2300, SanAndreasOpcodeFile.getPosition, 2, '${1} = get_file_position [File]')
+Opcode.register(0x2301, SanAndreasOpcodeFile.readBlock, 3, 'read_block_from_file [File] ${1} ${2}')
+Opcode.register(0x2302, SanAndreasOpcodeFile.writeBlock, 3, 'write_block_to_file [File] ${1} ${2}')

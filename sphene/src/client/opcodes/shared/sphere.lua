@@ -35,6 +35,9 @@ function SharedOpcodeSphere.remove(marker)
 end
 
 
-Opcode.register(0x03a1, SharedOpcodeSphere.draw, 'draw_sphere {x} [float] {y} [float] {z} [float] {diameter} [float]')
-Opcode.register(0x03bc, SharedOpcodeSphere.create, '[var handle: Sphere] = add_sphere {x} [float] {y} [float] {z} [float] {radius} [float]')
-Opcode.register(0x03bd, SharedOpcodeSphere.remove, 'remove_sphere [Sphere]')
+-- INI: 03a1=4,draw_sphere %1d% %2d% %3d% radius %4d%
+Opcode.register(0x03a1, SharedOpcodeSphere.draw, 4, 'draw_sphere ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 03bc=5,%5d% = create_sphere %1d% %2d% %3d% %4d%
+Opcode.register(0x03bc, SharedOpcodeSphere.create, 5, '${5} = add_sphere ${1} ${2} ${3} ${4}', {false, false, false, false, true})
+-- INI: 03bd=1,destroy_sphere %1d%
+Opcode.register(0x03bd, SharedOpcodeSphere.remove, 1, 'remove_sphere ${1}', {false})

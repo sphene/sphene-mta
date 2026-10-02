@@ -35,9 +35,11 @@ function TaskSimpleGoToPoint:process()
     end
 
     local ped = self:getPed()
-    local distance = ped:distanceTo(self.x, self.y, self.z)
+    local x, y, z = ped:getPosition()
 
-    if distance <= 1.05 then
+    local distance = getDistanceBetweenPoints3D(x, y, z, self.x, self.y, z)
+
+    if distance <= 0.15 then
         ped:setAnalogControlState("forwards", 0)
         ped:setControlState("walk", false)
 
@@ -45,7 +47,7 @@ function TaskSimpleGoToPoint:process()
         return
     end
 
-    local node = self.path:findNextWaypoint(1)
+    local node = self.path:findNextWaypoint(0.1)
 
     if node == nil then
         ped:setAnalogControlState("forwards", 0)
@@ -55,7 +57,7 @@ function TaskSimpleGoToPoint:process()
         return
     end
 
-    local x, y, _ = ped:getPosition()
+    x, y, _ = ped:getPosition()
     local rotX, rotY, _ = getElementRotation(ped.element)
 
     local angle = findRotation(x, y, node.x, node.y)
@@ -71,11 +73,16 @@ end
 
 function TaskSimpleGoToPoint:getDebugParameters()
     local ped = self:getPed()
+    local node = self.path and self.path:findNextWaypoint(0.1) or false
+
+    local x, y, z = ped:getPosition()
 
     return {
         Ped = tostring(ped:getId() or 'UNKNOWN'),
         Position = string.format("x: %.2f, y: %.2f, z: %.2f", self.x, self.y, self.z),
-        Distance = string.format("%.2f", ped:distanceTo(self.x, self.y, self.z))
+        Distance = string.format("%.2f", getDistanceBetweenPoints3D(x, y, z, self.x, self.y, z)),
+        NextNode = string.format("x: %.2f, y: %.2f, z: %.2f", node and node.x or -1, node and node.y or -1, node and node.z or -1),
+        AngleToNode = string.format("%.2f", node and findRotation(x, y, node.x, node.y) or -1)
     }
 end
 

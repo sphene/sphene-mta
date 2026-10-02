@@ -114,19 +114,34 @@ function SanAndreasOpcodePad.getTimeNotTouching()
 end
 
 
-Opcode.register(0x00e2, SanAndreasOpcodePad.getState, '[var state: int] = get_pad_state {pad} [PadId] {buttonId} [Button]')
-Opcode.register(0x015b, SanAndreasOpcodePad.shake, 'shake_pad {pad} [PadId] {time} [int] {intensity} [int]')
-Opcode.register(0x07cc, SanAndreasOpcodePad.setPlayerEnterCarButton, 'set_player_enter_car_button {playerId} [Player] {state} [bool]')
-Opcode.register(0x082a, SanAndreasOpcodePad.setPlayerDuckButton, 'set_player_duck_button {playerId} [Player] {state} [bool]')
-Opcode.register(0x0881, SanAndreasOpcodePad.setPlayerFireButton, 'set_player_fire_button {playerId} [Player] {state} [bool]')
-Opcode.register(0x08d0, SanAndreasOpcodePad.isSkipCutsceneButtonPressed, 'is_skip_cutscene_button_pressed')
-Opcode.register(0x0901, SanAndreasOpcodePad.setPlayerJumpButton, 'set_player_jump_button {playerId} [Player] {state} [bool]')
-Opcode.register(0x0960, SanAndreasOpcodePad.setPlayerDisplayVitalStatsButton, 'set_player_display_vital_stats_button {playerId} [Player] {state} [bool]')
-Opcode.register(0x0992, SanAndreasOpcodePad.setPlayerCycleWeaponButton, 'set_player_cycle_weapon_button {playerId} [Player] {state} [bool]')
-Opcode.register(0x0e3d, SanAndreasOpcodePad.isKeyJustPressed, 'is_key_just_pressed {keyCode} [KeyCode]')
-Opcode.register(0x0e3e, SanAndreasOpcodePad.isButtonJustPressed, 'is_button_just_pressed {pad} [PadId] {buttonId} [Button]')
-Opcode.register(0x0e67, SanAndreasOpcodePad.isAimButtonPressed, 'is_aim_button_pressed {pad} [PadId]')
-Opcode.register(0x0e68, SanAndreasOpcodePad.setControl, 'set_player_control_pad {pad} [PadId] {enabled} [bool]')
-Opcode.register(0x0e69, SanAndreasOpcodePad.setMovement, 'set_player_control_pad_movement {pad} [PadId] {movement} [bool]')
-Opcode.register(0x0e8d, SanAndreasOpcodePad.isAnyFireButtonPressed, 'is_any_fire_button_pressed {pad} [PadId]')
-Opcode.register(0x0f13, SanAndreasOpcodePad.getTimeNotTouching, '[var timeInMs: int] = get_time_not_touching_pad {pad} [PadId]')
+-- INI: 00e2=3,get_player %1d% key %2d% state_to %3d%
+Opcode.register(0x00e2, SanAndreasOpcodePad.getState, 3, '${3} = get_pad_state ${1} ${2}', {false, false, true})
+-- INI: 015b=3,shake_player_controller %1h% time %2d% intensity %3d%
+Opcode.register(0x015b, SanAndreasOpcodePad.shake, 3, 'shake_pad ${1} ${2} ${3}', {false, false, false})
+-- INI: 07CC=2,set_player %1d% can_enter_exit_vehicles %2h%
+Opcode.register(0x07cc, SanAndreasOpcodePad.setPlayerEnterCarButton, 2, 'set_player_enter_car_button ${1} ${2}', {false, false})
+-- INI: 082A=2,set_player %1d% able_to_use_crouch_button %2h%
+Opcode.register(0x082a, SanAndreasOpcodePad.setPlayerDuckButton, 2, 'set_player_duck_button ${1} ${2}', {false, false})
+-- INI: 0881=2,set_player %1d% able_to_shoot_weapons %2h%
+Opcode.register(0x0881, SanAndreasOpcodePad.setPlayerFireButton, 2, 'set_player_fire_button ${1} ${2}', {false, true})
+-- INI: 08D0=0,  should_skip_cutscene
+Opcode.register(0x08d0, SanAndreasOpcodePad.isSkipCutsceneButtonPressed, 0, 'is_skip_cutscene_button_pressed', {})
+-- INI: 0901=2,enable_player %1d% jump_key %2h%
+Opcode.register(0x0901, SanAndreasOpcodePad.setPlayerJumpButton, 2, 'set_player_jump_button ${1} ${2}', {false, false})
+-- INI: 0960=2,enable_player %1d% stats_box %2h%
+Opcode.register(0x0960, SanAndreasOpcodePad.setPlayerDisplayVitalStatsButton, 2, 'set_player_display_vital_stats_button ${1} ${2}', {false, false})
+-- INI: 0992=2,set_player %1d% weapons_scrollable %2h%
+Opcode.register(0x0992, SanAndreasOpcodePad.setPlayerCycleWeaponButton, 2, 'set_player_cycle_weapon_button ${1} ${2}', {false, false})
+-- INI: 0E3D=1,is_key_just_pressed %1d%
+Opcode.register(0x0e3d, SanAndreasOpcodePad.isKeyJustPressed, 1, 'is_key_just_pressed ${1}', {false})
+-- INI: 0E3E=2,is_button_just_pressed %1d% button %2d%
+Opcode.register(0x0e3e, SanAndreasOpcodePad.isButtonJustPressed, 2, 'is_button_just_pressed ${1} ${2}', {false, false})
+-- INI: 0E67=1,is_aim_button_pressed %1d%
+Opcode.register(0x0e67, SanAndreasOpcodePad.isAimButtonPressed, 1, 'is_aim_button_pressed ${1}', {false})
+-- INI: 0E68=2,set_player_control_pad %1d% %2d%
+Opcode.register(0x0e68, SanAndreasOpcodePad.setControl, 2, 'set_player_control_pad ${1} ${2}', {false, false})
+-- INI: 0E69=2,set_player_control_pad_movement %1d% %2d%
+Opcode.register(0x0e69, SanAndreasOpcodePad.setMovement, 2, 'set_player_control_pad_movement ${1} ${2}', {false, false})
+-- INI: 0E8D=1,is_any_fire_button_pressed %1d%
+Opcode.register(0x0e8d, SanAndreasOpcodePad.isAnyFireButtonPressed, 1, 'is_any_fire_button_pressed ${1}', {false})
+Opcode.register(0x0f13, SanAndreasOpcodePad.getTimeNotTouching, 2, '${1} = get_time_not_touching_pad ${2}')

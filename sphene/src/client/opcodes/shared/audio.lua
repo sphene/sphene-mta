@@ -81,12 +81,21 @@ function SharedOpcodeAudio.setMusicDoesFade(_)
 end
 
 
-Opcode.register(0x0394, SharedOpcodeAudio.playMissionPassedTune, 'play_mission_passed_tune {soundId} [int]')
-Opcode.register(0x03cf, SharedOpcodeAudio.loadMissionAudio, 'load_mission_audio {slotId} [MissionAudioSlot] {audioId} [int]')
-Opcode.register(0x03d0, SharedOpcodeAudio.hasMissionAudioLoaded, 'has_mission_audio_loaded {slotId} [MissionAudioSlot]')
-Opcode.register(0x03d1, SharedOpcodeAudio.playMissionAudio, 'play_mission_audio {slotId} [MissionAudioSlot]')
-Opcode.register(0x03d2, SharedOpcodeAudio.hasMissionAudioFinished, 'has_mission_audio_finished {slotId} [MissionAudioSlot]')
-Opcode.register(0x03d7, SharedOpcodeAudio.setMissionAudioPosition, 'set_mission_audio_position {slotId} [MissionAudioSlot] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x040d, SharedOpcodeAudio.clearMissionAudio, 'clear_mission_audio {slotId} [MissionAudioSlot]')
-Opcode.register(0x041e, SharedOpcodeAudio.setRadioChannel, 'set_radio_channel {channel} [RadioChannel]')
-Opcode.register(0x043c, SharedOpcodeAudio.setMusicDoesFade, 'set_music_does_fade {state} [bool]')
+-- INI: 0394=1,play_music %1d%
+Opcode.register(0x0394, SharedOpcodeAudio.playMissionPassedTune, 1, 'play_mission_passed_tune ${1}', {false})
+-- INI: 03cf=2,load_wav %2s% as %1d%
+Opcode.register(0x03cf, SharedOpcodeAudio.loadMissionAudio, 2, 'load_mission_audio ${1} ${2}', {false, false})
+-- INI: 03d0=1,  wav %1d% loaded
+Opcode.register(0x03d0, SharedOpcodeAudio.hasMissionAudioLoaded, 1, 'has_mission_audio_loaded ${1}', {false})
+-- INI: 03d1=1,play_wav %1d%
+Opcode.register(0x03d1, SharedOpcodeAudio.playMissionAudio, 1, 'play_mission_audio ${1}', {false})
+-- INI: 03d2=1,  wav %1d% ended
+Opcode.register(0x03d2, SharedOpcodeAudio.hasMissionAudioFinished, 1, 'has_mission_audio_finished ${1}', {false})
+-- INI: 03d7=4,set_wav %1h% location %2d% %3d% %4d%
+Opcode.register(0x03d7, SharedOpcodeAudio.setMissionAudioPosition, 4, 'set_mission_audio_position ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 040d=1,unload_wav %1d%
+Opcode.register(0x040d, SharedOpcodeAudio.clearMissionAudio, 1, 'clear_mission_audio ${1}', {false})
+-- INI: 041e=2,set_radio_station %1d% %2d%
+Opcode.register(0x041e, SharedOpcodeAudio.setRadioChannel, 1, 'set_radio_channel ${1}', {false})
+-- INI: 043c=1,set_game_sounds_disable_on_fade %1d%
+Opcode.register(0x043c, SharedOpcodeAudio.setMusicDoesFade, 1, 'set_music_does_fade ${1}', {false})

@@ -9,4 +9,5 @@ function ViceCityOpcodeStreaming.loadSpecialModel(_, _)
 end
 
 
-Opcode.register(0x02f3, ViceCityOpcodeStreaming.loadSpecialModel, 'load_special_model {cutsceneModelId} [model_any] {modelName} [string]')
+-- INI: 02f3=2,load_object %1o% %2s%
+Opcode.register(0x02f3, ViceCityOpcodeStreaming.loadSpecialModel, 2, 'load_special_model ${1} ${2}', {false, false})

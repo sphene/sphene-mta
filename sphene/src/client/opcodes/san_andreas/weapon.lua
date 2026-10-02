@@ -30,7 +30,11 @@ function SanAndreasOpcodeWeapon.getWeaponInfo(_, _, _)
 end
 
 
-Opcode.register(0x0781, SanAndreasOpcodeWeapon.getModel, '[var modelId: model_object] = get_weapontype_model {weaponType} [WeaponType]')
-Opcode.register(0x0782, SanAndreasOpcodeWeapon.getSlot, '[var slot: int] = get_weapontype_slot {weaponType} [WeaponType]')
-Opcode.register(0x0e26, SanAndreasOpcodeWeapon.isFireType, 'is_weapon_fire_type {weaponType} [WeaponType] {weaponFire} [WeaponFire]')
-Opcode.register(0x0e84, SanAndreasOpcodeWeapon.getWeaponInfo, '[var handle: WeaponInfo] = get_weaponinfo {weaponType} [WeaponType] {weaponSkill} [WeaponSkill]')
+-- INI: 0781=2,get_weapon_with_ID %1d% model_to %2d%
+Opcode.register(0x0781, SanAndreasOpcodeWeapon.getModel, 2, '${2} = get_weapontype_model ${1}', {false, true})
+-- INI: 0782=2,get_weapon_with_ID %1d% weapon_group_to %2d%
+Opcode.register(0x0782, SanAndreasOpcodeWeapon.getSlot, 2, '${2} = get_weapontype_slot ${1}', {false, true})
+-- INI: 0E26=2,is_weapon %1d% fire_type %2d%
+Opcode.register(0x0e26, SanAndreasOpcodeWeapon.isFireType, 2, 'is_weapon_fire_type ${1} ${2}', {false, false})
+-- INI: 0E84=3,get_weaponinfo %1d% skill %2d% store_to %3d%
+Opcode.register(0x0e84, SanAndreasOpcodeWeapon.getWeaponInfo, 3, '${3} = get_weaponinfo ${1} ${2}', {false, false, true})

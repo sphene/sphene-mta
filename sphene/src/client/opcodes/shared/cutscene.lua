@@ -51,10 +51,17 @@ function SharedOpcodeCutscene.wasSkipped()
 end
 
 
-Opcode.register(0x0244, SharedOpcodeCutscene.setOffset, 'set_cutscene_offset {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x02e4, SharedOpcodeCutscene.load, 'load_cutscene {name} [string]')
-Opcode.register(0x02e7, SharedOpcodeCutscene.start, 'start_cutscene')
-Opcode.register(0x02e8, SharedOpcodeCutscene.getTime, '[var time: int] = get_cutscene_time')
-Opcode.register(0x02e9, SharedOpcodeCutscene.hasFinished, 'has_cutscene_finished')
-Opcode.register(0x02ea, SharedOpcodeCutscene.clear, 'clear_cutscene')
-Opcode.register(0x056a, SharedOpcodeCutscene.wasSkipped, 'was_cutscene_skipped')
+-- INI: 0244=3,set_cutscene_pos %1d% %2d% %3d%
+Opcode.register(0x0244, SharedOpcodeCutscene.setOffset, 3, 'set_cutscene_offset ${1} ${2} ${3}', {false, false, false})
+-- INI: 02e4=1,load_cutscene_data %1s%
+Opcode.register(0x02e4, SharedOpcodeCutscene.load, 1, 'load_cutscene ${1}', {false})
+-- INI: 02e7=0,start_cutscene
+Opcode.register(0x02e7, SharedOpcodeCutscene.start, 0, 'start_cutscene', {})
+-- INI: 02e8=1,%1d% = cutscenetime
+Opcode.register(0x02e8, SharedOpcodeCutscene.getTime, 1, '${1} = get_cutscene_time', {true})
+-- INI: 02e9=0,cutscene_reached_end
+Opcode.register(0x02e9, SharedOpcodeCutscene.hasFinished, 0, 'has_cutscene_finished', {})
+-- INI: 02ea=0,end_cutscene
+Opcode.register(0x02ea, SharedOpcodeCutscene.clear, 0, 'clear_cutscene', {})
+-- INI: 056a=0,  has_cutscene_been_interrupted
+Opcode.register(0x056a, SharedOpcodeCutscene.wasSkipped, 0, 'was_cutscene_skipped', {})

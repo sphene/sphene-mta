@@ -93,16 +93,29 @@ function ViceCityOpcodeWorld.unlockAllCarDoorsInArea(_, _, _, _)
 end
 
 
-Opcode.register(0x0503, ViceCityOpcodeWorld.createSwatRope, '[var handle: Char] = create_swat_rope {pedType} [PedType] {modelId} [model_char] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x037e, ViceCityOpcodeWorld.isSniperBulletInArea, 'is_sniper_bullet_in_area {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float]')
-Opcode.register(0x03ad, ViceCityOpcodeWorld.switchRubbish, 'switch_rubbish {state} [bool]')
-Opcode.register(0x03ae, ViceCityOpcodeWorld.removeParticleEffectsInArea, 'remove_particle_effects_in_area {leftBottomX} [float] {leftBottomY} [float] {leftBottomZ} [float] {rightTopX} [float] {rightTopY} [float] {rightTopZ} [float]')
-Opcode.register(0x03df, ViceCityOpcodeWorld.forceRandomPedType, 'force_random_ped_type {pedType} [PedType]')
-Opcode.register(0x0469, ViceCityOpcodeWorld.getRandomCopInArea, '[var handle: Char] = get_random_cop_in_area {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {cop} [bool] {swat} [bool] {fbi} [bool] {army} [bool] {vice} [bool]')
-Opcode.register(0x0523, ViceCityOpcodeWorld.hasGlassBeenShatteredNearby, 'has_glass_been_shattered_nearby {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0545, ViceCityOpcodeWorld.removeEverythingForHugeCutscene, 'remove_everything_for_huge_cutscene')
-Opcode.register(0x0548, ViceCityOpcodeWorld.checkForPedModelAroundPlayer, 'check_for_ped_model_around_player {player} [Player] {offsetX} [float] {offsetY} [float] {offsetZ} [float] {modelId1} [model_char] {modelId2} [model_char]')
-Opcode.register(0x054d, ViceCityOpcodeWorld.setTonightsEvent, 'set_tonights_event {scrollbarMessage} [ScrollbarMessage]')
-Opcode.register(0x055a, ViceCityOpcodeWorld.addPornLeafletToRubbish, 'add_porn_leaflet_to_rubbish {state} [bool]')
-Opcode.register(0x058f, ViceCityOpcodeWorld.getRandomIceCreamCustomerInArea, '[var handle: Char] = get_random_ice_cream_customer_in_area {leftBottomX} [float] {leftBottomY} [float] {rightTopX} [float] {rightTopY} [float] {allowCivilian} [int] {allowGangMember} [int] {allowCriminal} [int]')
-Opcode.register(0x0591, ViceCityOpcodeWorld.unlockAllCarDoorsInArea, 'unlock_all_car_doors_in_area {leftBottomX} [float] {leftBottomY} [float] {topRightX} [float] {topRightY} [float]')
+-- INI: 0503=3,create_rappel_at %1d% %2d% %3d%
+Opcode.register(0x0503, ViceCityOpcodeWorld.createSwatRope, 3, '${4} = create_swat_rope ${1} ${2} ${3}', {false, false, false, true})
+-- INI: 037e=6,  sniper_bullet_in_area %1d% %2d% %3d% %4d% %5d% %6d%
+Opcode.register(0x037e, ViceCityOpcodeWorld.isSniperBulletInArea, 6, 'is_sniper_bullet_in_area ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 03ad=1,set_rubbish %1b:visible/invisible%
+Opcode.register(0x03ad, ViceCityOpcodeWorld.switchRubbish, 1, 'switch_rubbish ${1}', {false})
+-- INI: 03ae=6,remove_objects_from_cube %1d% %2d% %3d% %4d% %5d% %6d%
+Opcode.register(0x03ae, ViceCityOpcodeWorld.removeParticleEffectsInArea, 6, 'remove_particle_effects_in_area ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 03df=1,all_random_peds %1m%
+Opcode.register(0x03df, ViceCityOpcodeWorld.forceRandomPedType, 1, 'force_random_ped_type ${1}', {false})
+-- INI: 0469=10,create_actor %10d% in area %1d% %2d% %3d% %4d% unknown %5h% %6h% %7h% %8h% %9h%
+Opcode.register(0x0469, ViceCityOpcodeWorld.getRandomCopInArea, 10, '${10} = get_random_cop_in_area ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false, true})
+-- INI: 0523=3,  glass_been_shattered_near %1d% %2d% %3d%
+Opcode.register(0x0523, ViceCityOpcodeWorld.hasGlassBeenShatteredNearby, 3, 'has_glass_been_shattered_nearby ${1} ${2} ${3}', {false, false, false})
+-- INI: 0545=0,clear_world
+Opcode.register(0x0545, ViceCityOpcodeWorld.removeEverythingForHugeCutscene, 0, 'remove_everything_for_huge_cutscene', {})
+-- INI: 0548=6,  player %1d% check_for_ped_model %5m% %6m% radius %2d% %3d% %4d%
+Opcode.register(0x0548, ViceCityOpcodeWorld.checkForPedModelAroundPlayer, 6, 'check_for_ped_model_around_player ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 054d=1,display_message_at_stadium %1h%
+Opcode.register(0x054d, ViceCityOpcodeWorld.setTonightsEvent, 1, 'set_tonights_event ${1}', {false})
+-- INI: 055a=1,set_secondary_rubbish %1h%
+Opcode.register(0x055a, ViceCityOpcodeWorld.addPornLeafletToRubbish, 1, 'add_porn_leaflet_to_rubbish ${1}', {false})
+-- INI: 058f=8,%8d% = random_ice_cream_customer_in_area %1d% %2d% %3d% %4d% flag %5h% %6h% %7h%
+Opcode.register(0x058f, ViceCityOpcodeWorld.getRandomIceCreamCustomerInArea, 8, '${8} = get_random_ice_cream_customer_in_area ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false, true})
+-- INI: 0591=4,unlock_all_car_doors_in_area %1d% %2d% %3d% %4d%
+Opcode.register(0x0591, ViceCityOpcodeWorld.unlockAllCarDoorsInArea, 4, 'unlock_all_car_doors_in_area ${1} ${2} ${3} ${4}', {false, false, false, false})

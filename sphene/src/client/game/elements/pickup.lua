@@ -165,7 +165,7 @@ end
 
 function PickupElement:onPreFrame()
     if (self.element) then
-        if (self.hideInMission and Game.getMissionFlag() == 1) then
+        if self.hideInMission and Game.isOnMission() then
             if (getElementDimension(self.element) ~= 65534) then
                 Logger.debug('PICKUP', 'Hiding pickup with ID {} in mission', self.id)
                 setElementDimension(self.element, 65534)
@@ -191,6 +191,16 @@ function PickupElement:onPreFrame()
         self.disabled = true
         self:setAlpha(0)
     end
+end
+
+function PickupElement:getDebugParameters()
+    return {
+        Color = tocolor(202, 3, 252, 255),
+        Title = self:getType()..":"..self:getId(),
+        Position = string.format("x: %.2f, y: %.2f, z: %.2f", self:getPosition()),
+        Type = self.type,
+        HiddenInMission = tostring(self:isHiddenInMission())
+    }
 end
 
 function PickupElement:getType()

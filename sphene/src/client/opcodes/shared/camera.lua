@@ -132,21 +132,39 @@ function SharedOpcodeCamera.getDebugPointAt(_, _, _)
 end
 
 
-Opcode.register(0x0003, SharedOpcodeCamera.shake, 'shake_cam {intensity} [int]')
-Opcode.register(0x00c2, SharedOpcodeCamera.isPointOnScreen, 'is_point_on_screen {x} [float] {y} [float] {z} [float] {radius} [float]')
-Opcode.register(0x0158, SharedOpcodeCamera.pointAtCar, 'point_camera_at_car {vehicle} [Car] {mode} [CameraMode] {switchStyle} [SwitchType]')
-Opcode.register(0x0159, SharedOpcodeCamera.pointAtChar, 'point_camera_at_char {char} [Char] {mode} [CameraMode] {switchStyle} [SwitchType]')
-Opcode.register(0x015a, SharedOpcodeCamera.restore, 'restore_camera')
-Opcode.register(0x015f, SharedOpcodeCamera.setFixedPosition, 'set_fixed_camera_position {x} [float] {y} [float] {z} [float] {upVecOffsetX} [float] {upVecOffsetY} [float] {upVecOffsetZ} [float]')
-Opcode.register(0x0160, SharedOpcodeCamera.pointAtPoint, 'point_camera_at_point {x} [float] {y} [float] {z} [float] {switchStyle} [SwitchType]')
-Opcode.register(0x0169, SharedOpcodeCamera.setFadingColor, 'set_fading_colour {r} [int] {g} [int] {b} [int]')
-Opcode.register(0x016a, SharedOpcodeCamera.doFade, 'do_fade {time} [int] {direction} [Fade]')
-Opcode.register(0x016b, SharedOpcodeCamera.getFadingStatus, 'get_fading_status')
-Opcode.register(0x02eb, SharedOpcodeCamera.restoreJumpcut, 'restore_camera_jumpcut')
-Opcode.register(0x032a, SharedOpcodeCamera.setZoom, 'set_camera_zoom {zoom} [int]')
-Opcode.register(0x0373, SharedOpcodeCamera.setBehindPlayer, 'set_camera_behind_player')
-Opcode.register(0x03c8, SharedOpcodeCamera.setInFrontOfPlayer, 'set_camera_in_front_of_player')
-Opcode.register(0x041d, SharedOpcodeCamera.setNearClip, 'set_near_clip {distance} [float]')
-Opcode.register(0x0454, SharedOpcodeCamera.getDebugCoordinates, '[var x: float], [var y: float], [var z: float] = get_debug_camera_coordinates')
-Opcode.register(0x0460, SharedOpcodeCamera.setInterpolationParameters, 'set_interpolation_parameters {_p1} [float] {time} [int]')
-Opcode.register(0x0463, SharedOpcodeCamera.getDebugPointAt, '[var x: float], [var y: float], [var z: float] = get_debug_camera_point_at')
+-- INI: 0003=1,shake_camera %1d%
+Opcode.register(0x0003, SharedOpcodeCamera.shake, 1, 'shake_cam ${1}', {false})
+-- INI: 00c2=4,  sphere_onscreen %1d% %2d% %3d% %4d%
+Opcode.register(0x00c2, SharedOpcodeCamera.isPointOnScreen, 4, 'is_point_on_screen ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0158=3,camera_on_vehicle %1d% mode %2d% switchstyle %3d%
+Opcode.register(0x0158, SharedOpcodeCamera.pointAtCar, 3, 'point_camera_at_car ${1} ${2} ${3}', {false, false, false})
+-- INI: 0159=3,camera_on_ped %1d% mode %2d% switchstyle %3d%
+Opcode.register(0x0159, SharedOpcodeCamera.pointAtChar, 3, 'point_camera_at_char ${1} ${2} ${3}', {false, false, false})
+-- INI: 015a=0,restore_camera
+Opcode.register(0x015a, SharedOpcodeCamera.restore, 0, 'restore_camera', {})
+-- INI: 015f=6,set_camera_position %1d% %2d% %3d% rotation %4d% %5d% %6d%
+Opcode.register(0x015f, SharedOpcodeCamera.setFixedPosition, 6, 'set_fixed_camera_position ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0160=4,point_camera %1d% %2d% %3d% switchstyle %4d%
+Opcode.register(0x0160, SharedOpcodeCamera.pointAtPoint, 4, 'point_camera_at_point ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0169=3,set_fade_color %1d% %2d% %3d%
+Opcode.register(0x0169, SharedOpcodeCamera.setFadingColor, 3, 'set_fading_colour ${1} ${2} ${3}', {false, false, false})
+-- INI: 016a=2,fade %2b:back/% %1d% ms
+Opcode.register(0x016a, SharedOpcodeCamera.doFade, 2, 'do_fade ${1} ${2}', {false, false})
+-- INI: 016b=0,  fading
+Opcode.register(0x016b, SharedOpcodeCamera.getFadingStatus, 0, 'get_fading_status', {})
+-- INI: 02eb=0,restore_camera_with_jumpcut
+Opcode.register(0x02eb, SharedOpcodeCamera.restoreJumpcut, 0, 'restore_camera_jumpcut', {})
+-- INI: 032a=1,set_behind_camera_mode_to %1h%
+Opcode.register(0x032a, SharedOpcodeCamera.setZoom, 1, 'set_camera_zoom ${1}', {true})
+-- INI: 0373=0,set_camera_directly_behind_player
+Opcode.register(0x0373, SharedOpcodeCamera.setBehindPlayer, 0, 'set_camera_behind_player', {})
+-- INI: 03c8=0,set_camera_directly_before_player
+Opcode.register(0x03c8, SharedOpcodeCamera.setInFrontOfPlayer, 0, 'set_camera_in_front_of_player', {})
+-- INI: 041d=1,set_camera_near_clip %1d%
+Opcode.register(0x041d, SharedOpcodeCamera.setNearClip, 1, 'set_near_clip ${1}', {false})
+-- INI: 0454=3,useless_store_debug_camera_position_to %1d% %2d% %3d%
+Opcode.register(0x0454, SharedOpcodeCamera.getDebugCoordinates, 3, '${1}, ${2}, ${3} = get_debug_camera_coordinates', {true, true, true})
+-- INI: 0460=2,set_camera_pointing_time %1d% %2d%
+Opcode.register(0x0460, SharedOpcodeCamera.setInterpolationParameters, 2, 'set_interpolation_parameters ${1} ${2}', {false, false})
+-- INI: 0463=3,useless_store_debug_camera_target_point_to %1d% %2d% %3d%
+Opcode.register(0x0463, SharedOpcodeCamera.getDebugPointAt, 3, '${1}, ${2}, ${3} = get_debug_camera_point_at', {true, true, true})

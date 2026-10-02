@@ -53,7 +53,6 @@ function Benchmark.start()
             message = "Preparing benchmark"
         })
 
-        loadOpcodeTable("assets/opcodes/SASCM.ini")
         Text.loadGXT("data/game/san_andreas/text/american.gxt")
         VehicleElement.loadData("data/game/san_andreas")
 

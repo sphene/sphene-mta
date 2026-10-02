@@ -44,9 +44,15 @@ function SanAndreasOpcodeWeaponInfo.getSlot(_, _)
 end
 
 
-Opcode.register(0x0e85, SanAndreasOpcodeWeaponInfo.getModels, '[var model1: model_any], [var model2: model_any] = get_weaponinfo_models [WeaponInfo]')
-Opcode.register(0x0e86, SanAndreasOpcodeWeaponInfo.getFlags, '[var flags: int] = get_weaponinfo_flags [WeaponInfo]')
-Opcode.register(0x0e87, SanAndreasOpcodeWeaponInfo.getAnimgroup, '[var animGroup: AnimGrp] = get_weaponinfo_animgroup [WeaponInfo]')
-Opcode.register(0x0e88, SanAndreasOpcodeWeaponInfo.getTotalClip, '[var totalClip: int] = get_weaponinfo_total_clip [WeaponInfo]')
-Opcode.register(0x0e89, SanAndreasOpcodeWeaponInfo.getFireType, '[var fireType: WeaponFire] = get_weaponinfo_fire_type [WeaponInfo]')
-Opcode.register(0x0e8a, SanAndreasOpcodeWeaponInfo.getSlot, '[var weaponSlot: WeaponSlot] = get_weaponinfo_slot [WeaponInfo]')
+-- INI: 0E85=3,get_weaponinfo_models %1d% store_to %2d% %3d%
+Opcode.register(0x0e85, SanAndreasOpcodeWeaponInfo.getModels, 3, '${1}, ${2} = get_weaponinfo_models ${3}', {false, true, true})
+-- INI: 0E86=2,get_weaponinfo_flags %1d% store_to %2d%
+Opcode.register(0x0e86, SanAndreasOpcodeWeaponInfo.getFlags, 2, '${1} = get_weaponinfo_flags ${2}', {true, false})
+-- INI: 0E87=2,get_weaponinfo_animgroup %1d% store_to %2d%
+Opcode.register(0x0e87, SanAndreasOpcodeWeaponInfo.getAnimgroup, 2, '${1} = get_weaponinfo_animgroup ${2}', {true, false})
+-- INI: 0E88=2,get_weaponinfo_total_clip %1d% store_to %2d%
+Opcode.register(0x0e88, SanAndreasOpcodeWeaponInfo.getTotalClip, 2, '${1} = get_weaponinfo_total_clip ${2}', {true, false})
+-- INI: 0E89=2,get_weaponinfo_fire_type %1d% store_to %2d%
+Opcode.register(0x0e89, SanAndreasOpcodeWeaponInfo.getFireType, 2, '${1} = get_weaponinfo_fire_type ${2}', {true, false})
+-- INI: 0E8A=2,get_weaponinfo_slot %1d% store_to %2d%
+Opcode.register(0x0e8a, SanAndreasOpcodeWeaponInfo.getSlot, 2, '${1} = get_weaponinfo_slot ${2}', {true, false})

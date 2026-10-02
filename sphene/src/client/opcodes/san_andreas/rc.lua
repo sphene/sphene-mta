@@ -9,4 +9,5 @@ function SanAndreasOpcodeRc.takeCar(_, _)
 end
 
 
-Opcode.register(0x0715, SanAndreasOpcodeRc.takeCar, 'take_remote_control_of_car {player} [Player] {vehicle} [Car]')
+-- INI: 0715=2,put_player %1d% in_RC_mode_in_car %2d%  ; on foot version
+Opcode.register(0x0715, SanAndreasOpcodeRc.takeCar, 2, 'take_remote_control_of_car ${1} ${2}', {false, false})

@@ -118,19 +118,35 @@ function SharedOpcodeStreaming.getNameOfVehicleModel(_, _)
 end
 
 
-Opcode.register(0x023c, SharedOpcodeStreaming.loadSpecialCharacter, 'load_special_character {slotId} [int] {modelName} [string]')
-Opcode.register(0x023d, SharedOpcodeStreaming.hasSpecialCharacterLoaded, 'has_special_character_loaded {slotId} [int]')
-Opcode.register(0x0247, SharedOpcodeStreaming.requestModel, 'request_model {modelId} [model_any]')
-Opcode.register(0x0248, SharedOpcodeStreaming.hasModelLoaded, 'has_model_loaded {modelId} [model_any]')
-Opcode.register(0x0249, SharedOpcodeStreaming.markModelAsNoLongerNeeded, 'mark_model_as_no_longer_needed {modelId} [model_any]')
-Opcode.register(0x0296, SharedOpcodeStreaming.unloadSpecialCharacter, 'unload_special_character {slotId} [int]')
-Opcode.register(0x038b, SharedOpcodeStreaming.loadAllModelsNow, 'load_all_models_now')
-Opcode.register(0x03af, SharedOpcodeStreaming.switch, 'switch_streaming {state} [bool]')
-Opcode.register(0x03cb, SharedOpcodeStreaming.loadScene, 'load_scene {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0488, SharedOpcodeStreaming.isModelAvailable, 'is_model_available {modelId} [model_any]')
-Opcode.register(0x04bb, SharedOpcodeStreaming.setAreaVisible, 'set_area_visible {areaId} [int]')
-Opcode.register(0x04e4, SharedOpcodeStreaming.requestCollision, 'request_collision {x} [float] {y} [float]')
-Opcode.register(0x04ed, SharedOpcodeStreaming.requestAnimation, 'request_animation {animationFile} [string]')
-Opcode.register(0x04ee, SharedOpcodeStreaming.hasAnimationLoaded, 'has_animation_loaded {animationFile} [string]')
-Opcode.register(0x04ef, SharedOpcodeStreaming.removeAnimation, 'remove_animation {animationFile} [string]')
-Opcode.register(0x0adb, SharedOpcodeStreaming.getNameOfVehicleModel, '[var carName: string] = get_name_of_vehicle_model {modelId} [model_vehicle]')
+-- INI: 023c=2,load_special_actor %1d% %2s%
+Opcode.register(0x023c, SharedOpcodeStreaming.loadSpecialCharacter, 2, 'load_special_character ${1} ${2}', {false, false})
+-- INI: 023d=1,  special_actor %1d% loaded
+Opcode.register(0x023d, SharedOpcodeStreaming.hasSpecialCharacterLoaded, 1, 'has_special_character_loaded ${1}', {false})
+-- INI: 0247=1,request_model %1o%
+Opcode.register(0x0247, SharedOpcodeStreaming.requestModel, 1, 'request_model ${object.1}', {false})
+-- INI: 0248=1,  model %1o% available
+Opcode.register(0x0248, SharedOpcodeStreaming.hasModelLoaded, 1, 'has_model_loaded ${object.1}', {false})
+-- INI: 0249=1,release_model %1o%
+Opcode.register(0x0249, SharedOpcodeStreaming.markModelAsNoLongerNeeded, 1, 'mark_model_as_no_longer_needed ${object.1}', {false})
+-- INI: 0296=1,unload_special_actor %1d%
+Opcode.register(0x0296, SharedOpcodeStreaming.unloadSpecialCharacter, 1, 'unload_special_character ${1}', {false})
+-- INI: 038b=0,load_requested_models
+Opcode.register(0x038b, SharedOpcodeStreaming.loadAllModelsNow, 0, 'load_all_models_now', {})
+-- INI: 03af=1,set_streaming %1b:enabled/disabled%
+Opcode.register(0x03af, SharedOpcodeStreaming.switch, 1, 'switch_streaming ${1}', {false})
+-- INI: 03cb=3,load_scene %1d% %2d% %3d%
+Opcode.register(0x03cb, SharedOpcodeStreaming.loadScene, 3, 'load_scene ${1} ${2} ${3}', {false, false, false})
+-- INI: 0488=1,  model %1o% exists
+Opcode.register(0x0488, SharedOpcodeStreaming.isModelAvailable, 1, 'is_model_available ${object.1}', {false})
+-- INI: 04bb=1,select_interiour %1h%  ;; select render area
+Opcode.register(0x04bb, SharedOpcodeStreaming.setAreaVisible, 1, 'set_area_visible ${1}', {false})
+-- INI: 04e4=2,request_collision_at %1d% %2d%
+Opcode.register(0x04e4, SharedOpcodeStreaming.requestCollision, 2, 'request_collision ${1} ${2}', {false, false})
+-- INI: 04ed=1,load_animation %1s%
+Opcode.register(0x04ed, SharedOpcodeStreaming.requestAnimation, 1, 'request_animation ${1}', {false})
+-- INI: 04ee=1,  animation %1s% loaded
+Opcode.register(0x04ee, SharedOpcodeStreaming.hasAnimationLoaded, 1, 'has_animation_loaded ${1}', {false})
+-- INI: 04ef=1,release_animation %1s%
+Opcode.register(0x04ef, SharedOpcodeStreaming.removeAnimation, 1, 'remove_animation ${1}', {false})
+-- INI: 0ADB=2,%2d% = vehicle_model %1o% name
+Opcode.register(0x0adb, SharedOpcodeStreaming.getNameOfVehicleModel, 2, '${1} = get_name_of_vehicle_model ${vehicle.2}', {true, false})

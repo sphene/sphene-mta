@@ -129,21 +129,38 @@ function SharedOpcodeGame.getFramerate()
 end
 
 
-Opcode.register(0x01f0, SharedOpcodeGame.setMaxWantedLevel, 'set_max_wanted_level {wantedLevel} [int]')
-Opcode.register(0x01f7, SharedOpcodeGame.setPoliceIgnorePlayer, 'set_police_ignore_player {player} [Player] {state} [bool]')
-Opcode.register(0x02ed, SharedOpcodeGame.setCollectableTotal, 'set_collectable1_total {amount} [int]')
-Opcode.register(0x0335, SharedOpcodeGame.setFreeResprays, 'set_free_resprays {state} [bool]')
-Opcode.register(0x03bf, SharedOpcodeGame.setEveryoneIgnorePlayer, 'set_everyone_ignore_player {player} [Player] {state} [bool]')
-Opcode.register(0x03c7, SharedOpcodeGame.setWantedMultiplier, 'set_wanted_multiplier {multiplier} [float]')
-Opcode.register(0x03d8, SharedOpcodeGame.activateSaveMenu, 'activate_save_menu')
-Opcode.register(0x03d9, SharedOpcodeGame.hasSaveGameFinished, 'has_save_game_finished')
-Opcode.register(0x03f4, SharedOpcodeGame.setAllCarsCanBeDamaged, 'set_all_cars_can_be_damaged {state} [bool]')
-Opcode.register(0x040c, SharedOpcodeGame.isGerman, 'is_german_game')
-Opcode.register(0x0424, SharedOpcodeGame.areMeasurementsInMeters, 'are_measurements_in_metres')
-Opcode.register(0x0445, SharedOpcodeGame.areAnyCarCheatsActivated, 'are_any_car_cheats_activated')
-Opcode.register(0x0485, SharedOpcodeGame.isPcVersion, 'is_pc_version')
-Opcode.register(0x0572, SharedOpcodeGame.setAllTaxisHaveNitro, 'set_all_taxis_have_nitro {state} [bool]')
-Opcode.register(0x057e, SharedOpcodeGame.setIsInStadium, 'set_player_is_in_stadium {state} [bool]')
-Opcode.register(0x059a, SharedOpcodeGame.isAustralian, 'is_australian_game')
-Opcode.register(0x0aa9, SharedOpcodeGame.isVersionOriginal, 'is_game_version_original')
-Opcode.register(0x2244, SharedOpcodeGame.getFramerate, '[var fps: int] = get_framerate')
+-- INI: 01f0=1,set_max_wanted_level_to %1d%
+Opcode.register(0x01f0, SharedOpcodeGame.setMaxWantedLevel, 1, 'set_max_wanted_level ${1}', {true})
+-- INI: 01f7=2,set_player %1d% ignored_by_cops_state_to %2b:true/false%
+Opcode.register(0x01f7, SharedOpcodeGame.setPoliceIgnorePlayer, 2, 'set_police_ignore_player ${1} ${2}', {false, false})
+-- INI: 02ed=1,set_total_hidden_packages_to %1d%
+Opcode.register(0x02ed, SharedOpcodeGame.setCollectableTotal, 1, 'set_collectable1_total ${1}', {true})
+-- INI: 0335=1,set_free_paynspray_to %1b:true/false%
+Opcode.register(0x0335, SharedOpcodeGame.setFreeResprays, 1, 'set_free_resprays ${1}', {false})
+-- INI: 03bf=2,set_player %1d% ignored_by_everyone_to %2b:true/false%
+Opcode.register(0x03bf, SharedOpcodeGame.setEveryoneIgnorePlayer, 2, 'set_everyone_ignore_player ${1} ${2}', {false, false})
+-- INI: 03c7=1,set_sensitivity_to_crime_to %1d%
+Opcode.register(0x03c7, SharedOpcodeGame.setWantedMultiplier, 1, 'set_wanted_multiplier ${1}', {true})
+-- INI: 03d8=0,show_save_screen
+Opcode.register(0x03d8, SharedOpcodeGame.activateSaveMenu, 0, 'activate_save_menu', {})
+-- INI: 03d9=0,  save_done
+Opcode.register(0x03d9, SharedOpcodeGame.hasSaveGameFinished, 0, 'has_save_game_finished', {})
+-- INI: 03f4=1,set_all_vehicles_apply_damage_rules %1d%
+Opcode.register(0x03f4, SharedOpcodeGame.setAllCarsCanBeDamaged, 1, 'set_all_cars_can_be_damaged ${1}', {false})
+-- INI: 040c=0,  german_game
+Opcode.register(0x040c, SharedOpcodeGame.isGerman, 0, 'is_german_game', {})
+-- INI: 0424=0,  metric
+Opcode.register(0x0424, SharedOpcodeGame.areMeasurementsInMeters, 0, 'are_measurements_in_metres', {})
+-- INI: 0445=0,  are_car_cheats_used
+Opcode.register(0x0445, SharedOpcodeGame.areAnyCarCheatsActivated, 0, 'are_any_car_cheats_activated', {})
+-- INI: 0485=0,  pc_version  ;; never used in VC
+Opcode.register(0x0485, SharedOpcodeGame.isPcVersion, 0, 'is_pc_version', {})
+-- INI: 0572=1,set_taxi_boost_jump %1h%
+Opcode.register(0x0572, SharedOpcodeGame.setAllTaxisHaveNitro, 1, 'set_all_taxis_have_nitro ${1}', {false})
+-- INI: 057e=1,make_radar_grey %1h%
+Opcode.register(0x057e, SharedOpcodeGame.setIsInStadium, 1, 'set_player_is_in_stadium ${1}', {false})
+-- INI: 059a=0,  australian_game
+Opcode.register(0x059a, SharedOpcodeGame.isAustralian, 0, 'is_australian_game', {})
+-- INI: 0AA9=0,  is_game_version_original
+Opcode.register(0x0aa9, SharedOpcodeGame.isVersionOriginal, 0, 'is_game_version_original', {})
+Opcode.register(0x2244, SharedOpcodeGame.getFramerate, 1, '${1} = get_framerate')

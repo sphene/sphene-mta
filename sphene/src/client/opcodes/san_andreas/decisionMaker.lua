@@ -17,5 +17,7 @@ function SanAndreasOpcodeDecisionMaker.doesExist(_)
 end
 
 
-Opcode.register(0x065c, SanAndreasOpcodeDecisionMaker.remove, 'remove_decision_maker [DecisionMaker]')
-Opcode.register(0x09f2, SanAndreasOpcodeDecisionMaker.doesExist, 'does_decision_maker_exist {handle} [any]')
+-- INI: 065C=1,release_decision_maker %1d%
+Opcode.register(0x065c, SanAndreasOpcodeDecisionMaker.remove, 1, 'remove_decision_maker ${1}', {false})
+-- INI: 09F2=1,  decision_maker %1d% exists
+Opcode.register(0x09f2, SanAndreasOpcodeDecisionMaker.doesExist, 1, 'does_decision_maker_exist ${1}', {false})

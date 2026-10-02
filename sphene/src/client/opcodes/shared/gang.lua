@@ -9,4 +9,5 @@ function SharedOpcodeGang.setWeapons(_, _, _)
 end
 
 
-Opcode.register(0x0237, SharedOpcodeGang.setWeapons, 'set_gang_weapons {gangId} [GangType] {weaponType1} [WeaponType] {weaponType2} [WeaponType] {weaponType3} [WeaponType]')
+-- INI: 0237=3,set_gang %1d% primary_weapon_to %2c% secondary_weapon_to %3c%
+Opcode.register(0x0237, SharedOpcodeGang.setWeapons, 4, 'set_gang_weapons ${1} ${2} ${3} ${4}', {false, true, false, false})

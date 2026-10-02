@@ -311,45 +311,78 @@ function SanAndreasOpcodeText.getLength()
 end
 
 
-Opcode.register(0x0303, SanAndreasOpcodeText.printWith4NumbersNow, 'print_with_4_numbers_now {key} [gxt_key] {num1} [int] {num2} [int] {num3} [int] {num4} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x0344, SanAndreasOpcodeText.setCenterSize, 'set_text_centre_size {width} [float]')
-Opcode.register(0x03e0, SanAndreasOpcodeText.setDrawBeforeFade, 'set_text_draw_before_fade {state} [bool]')
-Opcode.register(0x0513, SanAndreasOpcodeText.printHelpForeverWithNumber, 'print_help_forever_with_number {gxt} [gxt_key] {number} [int]')
-Opcode.register(0x060d, SanAndreasOpcodeText.setDropshadow, 'set_text_dropshadow {intensity} [int] {red} [int] {green} [int] {blue} [int] {alpha} [int]')
-Opcode.register(0x076f, SanAndreasOpcodeText.isMessageBeingDisplayed, 'is_message_being_displayed')
-Opcode.register(0x07fc, SanAndreasOpcodeText.displayWithFloat, 'display_text_with_float {leftTopX} [float] {leftTopY} [float] {key} [gxt_key] {value} [float] {precision} [int]')
-Opcode.register(0x081c, SanAndreasOpcodeText.setEdge, 'set_text_edge {size} [int] {red} [int] {green} [int] {blue} [int] {alpha} [int]')
-Opcode.register(0x08fe, SanAndreasOpcodeText.isHelpMessageBeingDisplayed, 'is_help_message_being_displayed')
-Opcode.register(0x0912, SanAndreasOpcodeText.setMessageFormatting, 'set_message_formatting {_p1} [bool] {margin} [int] {width} [int]')
-Opcode.register(0x0989, SanAndreasOpcodeText.setHelpMessageBoxSize, 'set_help_message_box_size {size} [int]')
-Opcode.register(0x09a9, SanAndreasOpcodeText.getHashKey, '[var hash: int] = get_hash_key {text} [string]')
-Opcode.register(0x09c1, SanAndreasOpcodeText.addNextMessageToPreviousBriefs, 'add_next_message_to_previous_briefs {state} [bool]')
-Opcode.register(0x09fd, SanAndreasOpcodeText.getStringWidth, '[var width: int] = get_string_width {entry} [gxt_key]')
-Opcode.register(0x0a08, SanAndreasOpcodeText.getStringWidthWithNumber, '[var width: int] = get_string_width_with_number {gxtEntry} [gxt_key] {number} [any]')
-Opcode.register(0x0a0e, SanAndreasOpcodeText.clearThisPrintBigNow, 'clear_this_print_big_now {textStyle} [TextStyle]')
-Opcode.register(0x0a19, SanAndreasOpcodeText.setAreaName, 'set_area_name {name} [string]')
-Opcode.register(0x0a2a, SanAndreasOpcodeText.isThisHelpMessageBeingDisplayed, 'is_this_help_message_being_displayed {gxt} [gxt_key]')
-Opcode.register(0x0a2c, SanAndreasOpcodeText.drawSubtitlesBeforeFade, 'draw_subtitles_before_fade {state} [bool]')
-Opcode.register(0x0a2d, SanAndreasOpcodeText.drawOddjobTitleBeforeFade, 'draw_oddjob_title_before_fade {state} [bool]')
-Opcode.register(0x0a44, SanAndreasOpcodeText.displayNonMinigameHelpMessages, 'display_non_minigame_help_messages {state} [bool]')
-Opcode.register(0x0aed, SanAndreasOpcodeText.stringFloatFormat, '[var text: string] = string_float_format {number} [float] {format} [string]')
-Opcode.register(0x0d4c, SanAndreasOpcodeText.getStringLength, '[var length: int] = get_string_length {text} [string]')
-Opcode.register(0x0d4d, SanAndreasOpcodeText.copyString, 'copy_string {string} [string] {address} [int]')
-Opcode.register(0x0e62, SanAndreasOpcodeText.drawString, 'draw_string {string} [string] {drawEvent} [DrawEvent] {posX} [float] {posY} [float] {sizeX} [float] {sizeY} [float] {fixAr} [bool] {font} [Font]')
-Opcode.register(0x0e63, SanAndreasOpcodeText.drawStringExt, 'draw_string_ext {string} [string] {drawEvent} [DrawEvent] {posX} [float] {posY} [float] {sizeX} [float] {sizeY} [float] {fixAr} [bool] {font} [Font] {prop} [bool] {align} [Align] {wrap} [float] {justify} [bool] {red} [int] {green} [int] {blue} [int] {alpha} [int] {edge} [int] {shadow} [int] {dropRed} [int] {dropGreen} [int] {dropBlue} [int] {dropAlpha} [int] {background} [bool] {backRed} [int] {backGreen} [int] {backBlue} [int] {backAlpha} [int]')
-Opcode.register(0x0e80, SanAndreasOpcodeText.isStringEqual, 'is_string_equal {string1} [string] {string2} [string] {maxSize} [int] {caseSensitive} [bool] {ignoreCharacter} [string]')
-Opcode.register(0x0e81, SanAndreasOpcodeText.isStringComment, 'is_string_comment {string} [string]')
-Opcode.register(0x0ec2, SanAndreasOpcodeText.setStringUpper, 'set_string_upper {stringAddress} [int]')
-Opcode.register(0x0ec3, SanAndreasOpcodeText.setStringLower, 'set_string_lower {stringAddress} [int]')
-Opcode.register(0x0ec4, SanAndreasOpcodeText.stringFind, '[var index: int] = string_find {stringFind} [StringFind] {stringOrigin} [string] {strFind} [string]')
-Opcode.register(0x0ec5, SanAndreasOpcodeText.cutStringAt, 'cut_string_at {stringAddress} [int] {index} [int]')
-Opcode.register(0x0ec6, SanAndreasOpcodeText.isStringCharacterAt, 'is_string_character_at {string} [string] {characters} [string] {index} [int]')
-Opcode.register(0x2600, SanAndreasOpcodeText.isEmpty, 'is_text_empty {string} [string]')
-Opcode.register(0x2601, SanAndreasOpcodeText.isEqual, 'is_text_equal {text} [string] {another} [string] {ignoreCase} [bool]')
-Opcode.register(0x2602, SanAndreasOpcodeText.contains, 'is_text_in_text {text} [string] {subText} [string] {ignoreCase} [bool]')
-Opcode.register(0x2603, SanAndreasOpcodeText.startsWith, 'is_text_prefix {text} [string] {prefix} [string] {ignoreCase} [bool]')
-Opcode.register(0x2604, SanAndreasOpcodeText.endsWith, 'is_text_suffix {text} [string] {suffix} [string] {ignoreCase} [bool]')
-Opcode.register(0x2605, SanAndreasOpcodeText.displayFormatted, 'display_text_formatted {offsetLeft} [float] {offsetTop} [float] {format} [string] {args} [arguments]')
-Opcode.register(0x2606, SanAndreasOpcodeText.loadFxt, 'load_fxt {filepath} [string]')
-Opcode.register(0x2607, SanAndreasOpcodeText.unloadFxt, 'unload_fxt {filepath} [string]')
-Opcode.register(0x2608, SanAndreasOpcodeText.getLength, '[var length: int] = get_text_length {text} [string]')
+-- INI: 0303=7,text_4numbers_highpriority %1g% %2d% %3d% %4d% %5d% time %6d% %7d%
+Opcode.register(0x0303, SanAndreasOpcodeText.printWith4NumbersNow, 7, 'print_with_4_numbers_now ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 0344=1,set_text_draw_linewidth %1d% for_centered_text
+Opcode.register(0x0344, SanAndreasOpcodeText.setCenterSize, 1, 'set_text_centre_size ${1}', {false})
+-- INI: 03E0=1,draw_text_behind_textures %1h%
+Opcode.register(0x03e0, SanAndreasOpcodeText.setDrawBeforeFade, 1, 'set_text_draw_before_fade ${1}', {false})
+-- INI: 0513=2,show_permanent_text_box_1number %1s% number %2d%
+Opcode.register(0x0513, SanAndreasOpcodeText.printHelpForeverWithNumber, 2, 'print_help_forever_with_number ${1} ${2}', {false, false})
+-- INI: 060D=5,draw_text_shadow %1h% rgba %2h% %3h% %4h% %5d%
+Opcode.register(0x060d, SanAndreasOpcodeText.setDropshadow, 5, 'set_text_dropshadow ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 076F=0,  text_priority_displayed
+Opcode.register(0x076f, SanAndreasOpcodeText.isMessageBeingDisplayed, 0, 'is_message_being_displayed', {})
+-- INI: 07FC=5,text_draw_box_position_XY %1d% %2d% GXT_reference %3g% value %4d% flag %5h%
+Opcode.register(0x07fc, SanAndreasOpcodeText.displayWithFloat, 5, 'display_text_with_float ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 081C=5,draw_text_outline %1h% RGBA %2h% %3h% %4h% %5d%
+Opcode.register(0x081c, SanAndreasOpcodeText.setEdge, 5, 'set_text_edge ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 08FE=0,  text_box_displayed
+Opcode.register(0x08fe, SanAndreasOpcodeText.isHelpMessageBeingDisplayed, 0, 'is_help_message_being_displayed', {})
+-- INI: 0912=3,set_text_priority %1h% leftmargin %2d% maxwidth %3d%
+Opcode.register(0x0912, SanAndreasOpcodeText.setMessageFormatting, 3, 'set_message_formatting ${1} ${2} ${3}', {false, false, false})
+-- INI: 0989=1,set_text_boxes_width %1d%
+Opcode.register(0x0989, SanAndreasOpcodeText.setHelpMessageBoxSize, 1, 'set_help_message_box_size ${1}', {false})
+-- INI: 09A9=2,get_string %1h% CRC32_to %2d% ; 16-byte strings
+Opcode.register(0x09a9, SanAndreasOpcodeText.getHashKey, 2, '${1} = get_hash_key ${2}', {false, false})
+-- INI: 09C1=1,add_next_text_to_brief_history %1h%
+Opcode.register(0x09c1, SanAndreasOpcodeText.addNextMessageToPreviousBriefs, 1, 'add_next_message_to_previous_briefs ${1}', {false})
+-- INI: 09FD=2,get_gxt_string %1g% width_to %2d%
+Opcode.register(0x09fd, SanAndreasOpcodeText.getStringWidth, 2, '${1} = get_string_width ${2}', {false, false})
+-- INI: 0A08=3,get_gxt_string_1number %1g% number %2d% width_to %3d%
+Opcode.register(0x0a08, SanAndreasOpcodeText.getStringWidthWithNumber, 3, '${3} = get_string_width_with_number ${1} ${2}', {false, false, true})
+-- INI: 0A0E=1,disable_text_with_style %1h%
+Opcode.register(0x0a0e, SanAndreasOpcodeText.clearThisPrintBigNow, 1, 'clear_this_print_big_now ${1}', {false})
+-- INI: 0A19=1,display_zone_text %1g%
+Opcode.register(0x0a19, SanAndreasOpcodeText.setAreaName, 1, 'set_area_name ${1}', {false})
+-- INI: 0A2A=1,  text_box %1g% displayed
+Opcode.register(0x0a2a, SanAndreasOpcodeText.isThisHelpMessageBeingDisplayed, 1, 'is_this_help_message_being_displayed ${1}', {false})
+-- INI: 0A2C=1,hide_priority_text_while_fading %1h%
+Opcode.register(0x0a2c, SanAndreasOpcodeText.drawSubtitlesBeforeFade, 1, 'draw_subtitles_before_fade ${1}', {false})
+-- INI: 0A2D=1,hide_styled_text_while_fading %1h% ; works with 00BA
+Opcode.register(0x0a2d, SanAndreasOpcodeText.drawOddjobTitleBeforeFade, 1, 'draw_oddjob_title_before_fade ${1}', {false})
+-- INI: 0A44=1,override_text_block %1h%
+Opcode.register(0x0a44, SanAndreasOpcodeText.displayNonMinigameHelpMessages, 1, 'display_non_minigame_help_messages ${1}', {false})
+-- INI: 0AED=3,%3d% = float %1d% to_string_format %2d%
+Opcode.register(0x0aed, SanAndreasOpcodeText.stringFloatFormat, 3, '${3} = string_float_format ${1} ${2}', {false, false, true})
+-- INI: 0D4C=2,%2d% = string %1s% length
+Opcode.register(0x0d4c, SanAndreasOpcodeText.getStringLength, 2, '${1} = get_string_length ${2}', {true, false})
+-- INI: 0D4D=2,copy_string %1s% to %2s%
+Opcode.register(0x0d4d, SanAndreasOpcodeText.copyString, 2, 'copy_string ${1} ${2}', {false, false})
+-- INI: 0E62=8,print %1s% event %2d% at %3d% %4d% scale %5d% %6d% fixAR %7d% style %8d%
+Opcode.register(0x0e62, SanAndreasOpcodeText.drawString, 8, 'draw_string ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 0E63=27,print %1s% event %2d% at %3d% %4d% scale %5d% %6d% fixAR %7d% style %8d% prop %9d% align %10d% wrap %11d% justify %12d% color %13d% %14d% %15d% %16d% outline %17d% shadow %18d% dropColor %19d% %20d% %21d% %22d% background %23d% backColor %24d% %25d% %26d% %27d%
+Opcode.register(0x0e63, SanAndreasOpcodeText.drawStringExt, 27, 'draw_string_ext ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17} ${18} ${19} ${20} ${21} ${22} ${23} ${24} ${25} ${26} ${27}', {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false})
+-- INI: 0E80=5,is_string_equal %1s% %2s% max_size %3d% case_sensitive %4d% ignore_charactere %5s%
+Opcode.register(0x0e80, SanAndreasOpcodeText.isStringEqual, 5, 'is_string_equal ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 0E81=1,is_string_comment %1s%
+Opcode.register(0x0e81, SanAndreasOpcodeText.isStringComment, 1, 'is_string_comment ${1}', {false})
+-- INI: 0EC2=1,set_string_upper %1s%
+Opcode.register(0x0ec2, SanAndreasOpcodeText.setStringUpper, 1, 'set_string_upper ${1}', {false})
+-- INI: 0EC3=1,set_string_lower %1s%
+Opcode.register(0x0ec3, SanAndreasOpcodeText.setStringLower, 1, 'set_string_lower ${1}', {false})
+-- INI: 0EC4=4,string_find %1d% %2s% %3s% store_to %4d%
+Opcode.register(0x0ec4, SanAndreasOpcodeText.stringFind, 4, '${4} = string_find ${1} ${2} ${3}', {false, false, false, true})
+-- INI: 0EC5=2,cut_string_at %1d% %2d%
+Opcode.register(0x0ec5, SanAndreasOpcodeText.cutStringAt, 2, 'cut_string_at ${1} ${2}', {false, false})
+-- INI: 0EC6=3,is_string_character_at %1d% character %2d% index %3d%
+Opcode.register(0x0ec6, SanAndreasOpcodeText.isStringCharacterAt, 3, 'is_string_character_at ${1} ${2} ${3}', {false, false, false})
+Opcode.register(0x2600, SanAndreasOpcodeText.isEmpty, 1, 'is_text_empty ${1}')
+Opcode.register(0x2601, SanAndreasOpcodeText.isEqual, 3, 'is_text_equal ${1} ${2} ${3}')
+Opcode.register(0x2602, SanAndreasOpcodeText.contains, 3, 'is_text_in_text ${1} ${2} ${3}')
+Opcode.register(0x2603, SanAndreasOpcodeText.startsWith, 3, 'is_text_prefix ${1} ${2} ${3}')
+Opcode.register(0x2604, SanAndreasOpcodeText.endsWith, 3, 'is_text_suffix ${1} ${2} ${3}')
+Opcode.register(0x2605, SanAndreasOpcodeText.displayFormatted, -1, 'display_text_formatted ${1} ${2} ${3}')
+Opcode.register(0x2606, SanAndreasOpcodeText.loadFxt, 1, 'load_fxt ${1}')
+Opcode.register(0x2607, SanAndreasOpcodeText.unloadFxt, 1, 'unload_fxt ${1}')
+Opcode.register(0x2608, SanAndreasOpcodeText.getLength, 2, '${1} = get_text_length ${2}')

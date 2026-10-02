@@ -135,22 +135,37 @@ function SharedOpcodeMemory.getObjectRef(_, _)
 end
 
 
-Opcode.register(0x0a8c, SharedOpcodeMemory.write, 'write_memory {address} [int] {size} [int] {value} [any] {vp} [bool]')
-Opcode.register(0x0a8d, SharedOpcodeMemory.read, '[var result: any] = read_memory {address} [int] {size} [int] {vp} [bool]')
-Opcode.register(0x0a96, SharedOpcodeMemory.getPedPointer, '[var address: int] = get_ped_pointer {char} [Char]')
-Opcode.register(0x0a97, SharedOpcodeMemory.getVehiclePointer, '[var address: int] = get_vehicle_pointer {handle} [Car]')
-Opcode.register(0x0a98, SharedOpcodeMemory.getObjectPointer, '[var address: int] = get_object_pointer {object} [Object]')
-Opcode.register(0x0a9f, SharedOpcodeMemory.getThisScriptStruct, '[var address: int] = get_this_script_struct')
-Opcode.register(0x0aa5, SharedOpcodeMemory.callFunction, 'call_function {address} [int] {numParams} [int] {pop} [int] {funcParams} [arguments]')
-Opcode.register(0x0aa6, SharedOpcodeMemory.callMethod, 'call_method {address} [int] {struct} [int] {numParams} [int] {pop} [int] {funcParams} [arguments]')
-Opcode.register(0x0aa7, SharedOpcodeMemory.callFunctionReturn, '[var funcRet: any] = call_function_return {address} [int] {numParams} [int] {pop} [int] {funcParams} [arguments]')
-Opcode.register(0x0aa8, SharedOpcodeMemory.callMethodReturn, '[var funcRet: any] = call_method_return {address} [int] {struct} [int] {numParams} [int] {pop} [int] {funcParams} [arguments]')
-Opcode.register(0x0aaa, SharedOpcodeMemory.getScriptStructNamed, '[var address: int] = get_script_struct_named {scriptName} [string]')
-Opcode.register(0x0ac6, SharedOpcodeMemory.getLabelPointer, '[var address: int] = get_label_pointer @label')
-Opcode.register(0x0ac7, SharedOpcodeMemory.getVarPointer, '[var address: int] = get_var_pointer [var any]')
-Opcode.register(0x0ac8, SharedOpcodeMemory.allocate, '[var address: int] = allocate_memory {size} [int]')
-Opcode.register(0x0ac9, SharedOpcodeMemory.free, 'free_memory {address} [int]')
-Opcode.register(0x0ae9, SharedOpcodeMemory.popFloat, '[var number: float] = pop_float')
-Opcode.register(0x0aea, SharedOpcodeMemory.getPedRef, '[var handle: Char] = get_ped_ref {address} [int]')
-Opcode.register(0x0aeb, SharedOpcodeMemory.getVehicleRef, '[var handle: Car] = get_vehicle_ref {address} [int]')
-Opcode.register(0x0aec, SharedOpcodeMemory.getObjectRef, '[var handle: Object] = get_object_ref {address} [int]')
+-- INI: 0A8C=4,write_memory %1d% size %2d% value %3d% virtual_protect %4d%
+Opcode.register(0x0a8c, SharedOpcodeMemory.write, 4, 'write_memory ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0A8D=4,%4d% = read_memory %1d% size %2d% virtual_protect %3d%
+Opcode.register(0x0a8d, SharedOpcodeMemory.read, 4, '${4} = read_memory ${1} ${2} ${3}', {false, false, false, true})
+-- INI: 0A96=2,%2d% = ped %1d% struct
+Opcode.register(0x0a96, SharedOpcodeMemory.getPedPointer, 2, '${2} = get_ped_pointer ${1}', {false, true})
+-- INI: 0A97=2,%2d% = vehicle %1d% struct
+Opcode.register(0x0a97, SharedOpcodeMemory.getVehiclePointer, 2, '${2} = get_vehicle_pointer ${1}', {false, true})
+-- INI: 0A98=2,%2d% = object %1d% struct
+Opcode.register(0x0a98, SharedOpcodeMemory.getObjectPointer, 2, '${2} = get_object_pointer ${1}', {false, true})
+-- INI: 0A9F=1,%1d% = get_this_script_struct
+Opcode.register(0x0a9f, SharedOpcodeMemory.getThisScriptStruct, 1, '${1} = get_this_script_struct', {true})
+Opcode.register(0x0aa5, SharedOpcodeMemory.callFunction, -1, 'call_function ${1} ${2} ${3}', {})
+Opcode.register(0x0aa6, SharedOpcodeMemory.callMethod, -1, 'call_method ${1} ${2} ${3} ${4}', {})
+Opcode.register(0x0aa7, SharedOpcodeMemory.callFunctionReturn, -1, '${1} = call_function_return ${2} ${3} ${4}', {})
+Opcode.register(0x0aa8, SharedOpcodeMemory.callMethodReturn, -1, '${1} = call_method_return ${2} ${3} ${4} ${5}', {})
+-- INI: 0AAA=2,%2d% = get_script_struct_named %1s%
+Opcode.register(0x0aaa, SharedOpcodeMemory.getScriptStructNamed, 2, '${2} = get_script_struct_named ${1}', {false, true})
+-- INI: 0AC6=2,%2d% = label %1d% pointer
+Opcode.register(0x0ac6, SharedOpcodeMemory.getLabelPointer, 2, '${2} = get_label_pointer ${pointer.1}', {false, true})
+-- INI: 0AC7=2,%2d% = var %1d% pointer
+Opcode.register(0x0ac7, SharedOpcodeMemory.getVarPointer, 2, '${2} = get_var_pointer ${1}', {false, true})
+-- INI: 0AC8=2,%2d% = allocate_memory_size %1d%
+Opcode.register(0x0ac8, SharedOpcodeMemory.allocate, 2, '${2} = allocate_memory ${1}', {false, true})
+-- INI: 0AC9=1,free_allocated_memory %1d%
+Opcode.register(0x0ac9, SharedOpcodeMemory.free, 1, 'free_memory ${1}', {false})
+-- INI: 0AE9=1,pop_float %1d%
+Opcode.register(0x0ae9, SharedOpcodeMemory.popFloat, 1, '${1} = pop_float', {false})
+-- INI: 0AEA=2,%2d% = actor_struct %1d% handle
+Opcode.register(0x0aea, SharedOpcodeMemory.getPedRef, 2, '${2} = get_ped_ref ${1}', {false, true})
+-- INI: 0AEB=2,%2d% = vehicle_struct %1d% handle
+Opcode.register(0x0aeb, SharedOpcodeMemory.getVehicleRef, 2, '${2} = get_vehicle_ref ${1}', {false, true})
+-- INI: 0AEC=2,%2d% = object_struct %1d% handle
+Opcode.register(0x0aec, SharedOpcodeMemory.getObjectRef, 2, '${2} = get_object_ref ${1}', {false, true})

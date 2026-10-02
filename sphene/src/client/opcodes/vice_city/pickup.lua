@@ -14,4 +14,5 @@ function ViceCityOpcodePickup.createClothes(posX, posY, posZ, type, _)
 end
 
 
-Opcode.register(0x055b, ViceCityOpcodePickup.createClothes, '[var handle: Pickup] = create_clothes_pickup {x} [float] {y} [float] {z} [float] {type} [Clothing]')
+-- INI: 055b=5,%5d% = create_clothes_pickup %4h% at %1d% %2d% %3d%
+Opcode.register(0x055b, ViceCityOpcodePickup.createClothes, 5, '${5} = create_clothes_pickup ${4} ${1} ${2} ${3}', {false, false, false, false, true})

@@ -177,28 +177,53 @@ function SanAndreasOpcodeHud.isVisible()
 end
 
 
-Opcode.register(0x059c, SanAndreasOpcodeHud.setCounterFlashWhenFirstDisplayed, 'set_onscreen_counter_flash_when_first_displayed {var_counter} [global var int] {state} [bool]')
-Opcode.register(0x074b, SanAndreasOpcodeHud.drawSpriteWithRotation, 'draw_sprite_with_rotation {memorySlot} [int] {offsetLeft} [float] {offsetTop} [float] {width} [float] {height} [float] {angle} [float] {red} [int] {green} [int] {blue} [int] {alpha} [int]')
-Opcode.register(0x075b, SanAndreasOpcodeHud.setRadarZoom, 'set_radar_zoom {zoom} [int]')
-Opcode.register(0x0826, SanAndreasOpcodeHud.display, 'display_hud {state} [bool]')
-Opcode.register(0x0890, SanAndreasOpcodeHud.setTimerBeepCountdownTime, 'set_timer_beep_countdown_time {var_timer} [global var int] {timeInSec} [int]')
-Opcode.register(0x0904, SanAndreasOpcodeHud.getColor, '[var red: int], [var green: int], [var blue: int], [var alpha: int] = get_hud_colour {hudObject} [HudObject]')
-Opcode.register(0x0937, SanAndreasOpcodeHud.drawWindow, 'draw_window {leftTopX} [float] {leftTopY} [float] {rightBottomX} [float] {rightBottomY} [float] {header} [gxt_key] {zIndex} [int]')
-Opcode.register(0x09a3, SanAndreasOpcodeHud.drawCrosshair, 'draw_crosshair {state} [bool]')
-Opcode.register(0x09b9, SanAndreasOpcodeHud.displayCarNames, 'display_car_names {state} [bool]')
-Opcode.register(0x09ba, SanAndreasOpcodeHud.displayZoneNames, 'display_zone_names {state} [bool]')
-Opcode.register(0x09ee, SanAndreasOpcodeHud.forceBigMessageAndCounter, 'force_big_message_and_counter {state} [bool]')
-Opcode.register(0x0e0f, SanAndreasOpcodeHud.getFixedXyAspectRatio, '[var x: float], [var y: float] = get_fixed_xy_aspect_ratio {x} [float] {y} [float]')
-Opcode.register(0x0e4e, SanAndreasOpcodeHud.displayTimerLocal, 'display_onscreen_timer_local {var_timer} [var int] {direction} [TimerDirection]')
-Opcode.register(0x0e4f, SanAndreasOpcodeHud.displayTimerWithStringLocal, 'display_onscreen_timer_with_string_local {var_timer} [var int] {direction} [TimerDirection] {text} [gxt_key]')
-Opcode.register(0x0e50, SanAndreasOpcodeHud.displayCounterLocal, 'display_onscreen_counter_local {var_timer} [var int] {display} [CounterDisplay]')
-Opcode.register(0x0e51, SanAndreasOpcodeHud.displayCounterWithStringLocal, 'display_onscreen_counter_with_string_local {var_counter} [var int] {display} [CounterDisplay] {text} [gxt_key]')
-Opcode.register(0x0e52, SanAndreasOpcodeHud.displayTwoCountersLocal, 'display_two_onscreen_counters_local {var_leftCounter} [var int] {var_rightCounter} [var int]')
-Opcode.register(0x0e53, SanAndreasOpcodeHud.displayTwoCountersWithStringLocal, 'display_two_onscreen_counters_with_string_local {var_leftCounter} [var int] {var_rightCounter} [var int] {text} [gxt_key]')
-Opcode.register(0x0e54, SanAndreasOpcodeHud.clearTimerLocal, 'clear_onscreen_timer_local {var_timer} [var int]')
-Opcode.register(0x0e55, SanAndreasOpcodeHud.clearCounterLocal, 'clear_onscreen_counter_local {var_counter} [var int]')
-Opcode.register(0x0e56, SanAndreasOpcodeHud.setCounterFlashWhenFirstDisplayedLocal, 'set_onscreen_counter_flash_when_first_displayed_local {var_counter} [var int] {state} [bool]')
-Opcode.register(0x0e57, SanAndreasOpcodeHud.setTimerBeepCountdownTimeLocal, 'set_timer_beep_countdown_time_local {var_timer} [var int] {timeInSec} [int]')
-Opcode.register(0x0e58, SanAndreasOpcodeHud.setCounterColorLocal, 'set_onscreen_counter_colour_local {var_counter} [var int] {color} [HudColors]')
-Opcode.register(0x0eb8, SanAndreasOpcodeHud.isRadarVisible, 'is_radar_visible')
-Opcode.register(0x0eb9, SanAndreasOpcodeHud.isVisible, 'is_hud_visible')
+-- INI: 059c=0,NOP
+Opcode.register(0x059c, SanAndreasOpcodeHud.setCounterFlashWhenFirstDisplayed, 2, 'set_onscreen_counter_flash_when_first_displayed ${1} ${2}', {false, false})
+-- INI: 074B=10,draw_texture %1h% position %2d% %3d% scale %4d% %5d% angle %6d% color_RGBA %7d% %8d% %9d% %10d%
+Opcode.register(0x074b, SanAndreasOpcodeHud.drawSpriteWithRotation, 10, 'draw_sprite_with_rotation ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10}', {false, false, false, false, false, false, false, false, false, false})
+-- INI: 075B=1,zoom_radar %1h%
+Opcode.register(0x075b, SanAndreasOpcodeHud.setRadarZoom, 1, 'set_radar_zoom ${1}', {false})
+-- INI: 0826=1,enable_hud %1h%
+Opcode.register(0x0826, SanAndreasOpcodeHud.display, 1, 'display_hud ${1}', {false})
+-- INI: 0890=2,enable_sound_when_timer %1d% reach %2h% seconds ; global_variable
+Opcode.register(0x0890, SanAndreasOpcodeHud.setTimerBeepCountdownTime, 2, 'set_timer_beep_countdown_time ${1} ${2}', {false, false})
+-- INI: 0904=5,get_interface %1h% color_RGBA_to %2d% %3d% %4d% %5d%
+Opcode.register(0x0904, SanAndreasOpcodeHud.getColor, 5, '${2}, ${3}, ${4}, ${5} = get_hud_colour ${1}', {false, true, true, true, true})
+-- INI: 0937=6,text_draw_box_cornerA %1d% %2d% cornerB %3d% %4d% GXT_reference %5g% style %6h%
+Opcode.register(0x0937, SanAndreasOpcodeHud.drawWindow, 6, 'draw_window ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 09A3=1,show_siterocket_on_bumper_camera %1h%
+Opcode.register(0x09a3, SanAndreasOpcodeHud.drawCrosshair, 1, 'draw_crosshair ${1}', {false})
+-- INI: 09B9=1,show_entered_car_name %1h%
+Opcode.register(0x09b9, SanAndreasOpcodeHud.displayCarNames, 1, 'display_car_names ${1}', {false})
+-- INI: 09BA=1,show_entered_zone_name %1h%
+Opcode.register(0x09ba, SanAndreasOpcodeHud.displayZoneNames, 1, 'display_zone_names ${1}', {false})
+-- INI: 09EE=1,set_status_text_stay_on_screen %1h%
+Opcode.register(0x09ee, SanAndreasOpcodeHud.forceBigMessageAndCounter, 1, 'force_big_message_and_counter ${1}', {false})
+-- INI: 0E0F=4,get_fixed_xy_aspect_ratio %1d% %2d% to %3d% %4d%
+Opcode.register(0x0e0f, SanAndreasOpcodeHud.getFixedXyAspectRatio, 4, '${3}, ${4} = get_fixed_xy_aspect_ratio ${1} ${2}', {false, false, true, true})
+-- INI: 0E4E=2,display_onscreen_timer_local %1d% direction %2d%
+Opcode.register(0x0e4e, SanAndreasOpcodeHud.displayTimerLocal, 2, 'display_onscreen_timer_local ${1} ${2}', {false, false})
+-- INI: 0E4F=3,display_onscreen_timer_with_string_local %1d% direction %2d% GXT %3d%
+Opcode.register(0x0e4f, SanAndreasOpcodeHud.displayTimerWithStringLocal, 3, 'display_onscreen_timer_with_string_local ${1} ${2} ${3}', {false, false, false})
+-- INI: 0E50=2,display_onscreen_counter_local %1d% direction %2d%
+Opcode.register(0x0e50, SanAndreasOpcodeHud.displayCounterLocal, 2, 'display_onscreen_counter_local ${1} ${2}', {false, false})
+-- INI: 0E51=3,display_onscreen_counter_with_string_local %1d% direction %2d% GXT %3d%
+Opcode.register(0x0e51, SanAndreasOpcodeHud.displayCounterWithStringLocal, 3, 'display_onscreen_counter_with_string_local ${1} ${2} ${3}', {false, false, false})
+-- INI: 0E52=2,display_two_onscreen_counters_local %1d% max_value %2d%
+Opcode.register(0x0e52, SanAndreasOpcodeHud.displayTwoCountersLocal, 2, 'display_two_onscreen_counters_local ${1} ${2}', {false, false})
+-- INI: 0E53=3,display_two_onscreen_counters_with_string_local %1d% max_value %2d% GXT %3d%
+Opcode.register(0x0e53, SanAndreasOpcodeHud.displayTwoCountersWithStringLocal, 3, 'display_two_onscreen_counters_with_string_local ${1} ${2} ${3}', {false, false, false})
+-- INI: 0E54=1,clear_onscreen_timer_local %1d%
+Opcode.register(0x0e54, SanAndreasOpcodeHud.clearTimerLocal, 1, 'clear_onscreen_timer_local ${1}', {false})
+-- INI: 0E55=1,clear_onscreen_counter_local %1d%
+Opcode.register(0x0e55, SanAndreasOpcodeHud.clearCounterLocal, 1, 'clear_onscreen_counter_local ${1}', {false})
+-- INI: 0E56=2,set_onscreen_counter_flash_when_first_displayed_local %1d% flash %2d%
+Opcode.register(0x0e56, SanAndreasOpcodeHud.setCounterFlashWhenFirstDisplayedLocal, 2, 'set_onscreen_counter_flash_when_first_displayed_local ${1} ${2}', {false, false})
+-- INI: 0E57=2,set_timer_beep_countdown_time_local %1d% secs %2d%
+Opcode.register(0x0e57, SanAndreasOpcodeHud.setTimerBeepCountdownTimeLocal, 2, 'set_timer_beep_countdown_time_local ${1} ${2}', {false, false})
+-- INI: 0E58=2,set_onscreen_counter_colour_local %1d% color %2d%
+Opcode.register(0x0e58, SanAndreasOpcodeHud.setCounterColorLocal, 2, 'set_onscreen_counter_colour_local ${1} ${2}', {false, false})
+-- INI: 0EB8=0,is_radar_visible
+Opcode.register(0x0eb8, SanAndreasOpcodeHud.isRadarVisible, 0, 'is_radar_visible', {})
+-- INI: 0EB9=0,is_hud_visible
+Opcode.register(0x0eb9, SanAndreasOpcodeHud.isVisible, 0, 'is_hud_visible', {})

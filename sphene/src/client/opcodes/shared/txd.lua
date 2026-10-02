@@ -23,6 +23,9 @@ function SharedOpcodeTxd.remove()
 end
 
 
-Opcode.register(0x038f, SharedOpcodeTxd.loadSprite, 'load_sprite {memorySlot} [int] {spriteName} [string]')
-Opcode.register(0x0390, SharedOpcodeTxd.loadDictionary, 'load_texture_dictionary {name} [string]')
-Opcode.register(0x0391, SharedOpcodeTxd.remove, 'remove_texture_dictionary')
+-- INI: 038f=2,load_texture %2h% as %1d%  ; Load dictionary with 0390 first
+Opcode.register(0x038f, SharedOpcodeTxd.loadSprite, 2, 'load_sprite ${1} ${2}', {false, false})
+-- INI: 0390=1,load_txd_dictionary %1h%  ;; never used in VC or GTA 3
+Opcode.register(0x0390, SharedOpcodeTxd.loadDictionary, 1, 'load_texture_dictionary ${1}', {false})
+-- INI: 0391=0,release_textures
+Opcode.register(0x0391, SharedOpcodeTxd.remove, 0, 'remove_texture_dictionary', {})

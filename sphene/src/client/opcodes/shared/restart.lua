@@ -30,7 +30,11 @@ function SharedOpcodeRestart.cancelOverride()
 end
 
 
-Opcode.register(0x016c, SharedOpcodeRestart.addHospital, 'add_hospital_restart {x} [float] {y} [float] {z} [float] {heading} [float] {townId} [Town]')
-Opcode.register(0x016d, SharedOpcodeRestart.addPolice, 'add_police_restart {x} [float] {y} [float] {z} [float] {heading} [float] {townId} [Town]')
-Opcode.register(0x016e, SharedOpcodeRestart.overrideNext, 'override_next_restart {x} [float] {y} [float] {z} [float] {heading} [float]')
-Opcode.register(0x01f6, SharedOpcodeRestart.cancelOverride, 'cancel_override_restart')
+-- INI: 016c=4,restart_if_wasted_at %1d% %2d% %3d% angle %4d%
+Opcode.register(0x016c, SharedOpcodeRestart.addHospital, 5, 'add_hospital_restart ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 016d=4,restart_if_busted_at %1d% %2d% %3d% angle %4d%
+Opcode.register(0x016d, SharedOpcodeRestart.addPolice, 5, 'add_police_restart ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 016e=4,override_next_restart at %1d% %2d% %3d% angle %4d%
+Opcode.register(0x016e, SharedOpcodeRestart.overrideNext, 4, 'override_next_restart ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 01f6=0,cancel_override_restart
+Opcode.register(0x01f6, SharedOpcodeRestart.cancelOverride, 0, 'cancel_override_restart', {})

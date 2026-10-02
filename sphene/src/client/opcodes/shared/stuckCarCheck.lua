@@ -24,6 +24,9 @@ function SharedOpcodeStuckCarCheck.isCarStuck()
 end
 
 
-Opcode.register(0x03cc, SharedOpcodeStuckCarCheck.add, 'add_stuck_car_check {vehicle} [Car] {distance} [float] {time} [int]')
-Opcode.register(0x03cd, SharedOpcodeStuckCarCheck.remove, 'remove_stuck_car_check {vehicle} [Car]')
-Opcode.register(0x03ce, SharedOpcodeStuckCarCheck.isCarStuck, 'is_car_stuck {vehicle} [Car]')
+-- INI: 03cc=3,add_stuck_car_check %1d% distance %2d% time %3d%
+Opcode.register(0x03cc, SharedOpcodeStuckCarCheck.add, 3, 'add_stuck_car_check ${1} ${2} ${3}', {false, false, false})
+-- INI: 03cd=1,car %1d% remove_from_stuck_car_check
+Opcode.register(0x03cd, SharedOpcodeStuckCarCheck.remove, 1, 'remove_stuck_car_check ${1}', {false})
+-- INI: 03ce=1,  car %1d% stuck
+Opcode.register(0x03ce, SharedOpcodeStuckCarCheck.isCarStuck, 1, 'is_car_stuck ${1}', {false})

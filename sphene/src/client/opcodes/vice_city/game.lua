@@ -58,11 +58,19 @@ function ViceCityOpcodeGame.getVersion(_)
 end
 
 
-Opcode.register(0x02ec, ViceCityOpcodeGame.createCollectable, 'create_collectable1 {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x03e1, ViceCityOpcodeGame.getCollectablesCollected, '[var num: int] = get_collectable1s_collected')
-Opcode.register(0x03f1, ViceCityOpcodeGame.setThreatForPedType, 'set_threat_for_ped_type {type} [PedType] {threatMask} [int]')
-Opcode.register(0x03f2, ViceCityOpcodeGame.clearThreatForPedType, 'clear_threat_for_ped_type {type} [PedType] {threatMask} [int]')
-Opcode.register(0x03f9, ViceCityOpcodeGame.setCharsChatting, 'set_chars_chatting {char1} [Char] {char2} [Char] {duration} [int]')
-Opcode.register(0x040b, ViceCityOpcodeGame.isFrench, 'is_french_game')
-Opcode.register(0x0552, ViceCityOpcodeGame.setRiotIntensity, 'set_riot_intensity {level} [int]')
-Opcode.register(0x05e5, ViceCityOpcodeGame.getVersion, '[var versionId: int] = get_game_version')
+-- INI: 02ec=3,put_hidden_package_at %1d% %2d% %3d%
+Opcode.register(0x02ec, ViceCityOpcodeGame.createCollectable, 3, 'create_collectable1 ${1} ${2} ${3}', {false, false, false})
+-- INI: 03e1=1,%1d% = packages_found
+Opcode.register(0x03e1, ViceCityOpcodeGame.getCollectablesCollected, 1, '${1} = get_collectable1s_collected', {true})
+-- INI: 03f1=2,pedtype %1e% add_threat %2e%
+Opcode.register(0x03f1, ViceCityOpcodeGame.setThreatForPedType, 2, 'set_threat_for_ped_type ${1} ${2}', {false, false})
+-- INI: 03f2=2,pedtype %1e% remove_threat %2e%
+Opcode.register(0x03f2, ViceCityOpcodeGame.clearThreatForPedType, 2, 'clear_threat_for_ped_type ${1} ${2}', {false, false})
+-- INI: 03f9=3,make_actors %1d% %2d% converse_in %3d% ms
+Opcode.register(0x03f9, ViceCityOpcodeGame.setCharsChatting, 3, 'set_chars_chatting ${1} ${2} ${3}', {false, false, false})
+-- INI: 040b=0,  french_game
+Opcode.register(0x040b, ViceCityOpcodeGame.isFrench, 0, 'is_french_game', {})
+-- INI: 0552=1,set_riot_noise %1d%
+Opcode.register(0x0552, ViceCityOpcodeGame.setRiotIntensity, 1, 'set_riot_intensity ${1}', {false})
+-- INI: 05e5=1,%1d% = game_version
+Opcode.register(0x05e5, ViceCityOpcodeGame.getVersion, 1, '${1} = get_game_version', {true})

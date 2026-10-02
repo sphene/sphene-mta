@@ -41,7 +41,11 @@ function SanAndreasOpcodeCheckpoint.setHeading(marker, zAngle)
 end
 
 
-Opcode.register(0x06d5, SanAndreasOpcodeCheckpoint.create, '[var handle: Checkpoint] = create_checkpoint {type} [CheckpointType] {x} [float] {y} [float] {z} [float] {pointX} [float] {pointY} [float] {pointZ} [float] {radius} [float]')
-Opcode.register(0x06d6, SanAndreasOpcodeCheckpoint.delete, 'delete_checkpoint [Checkpoint]')
-Opcode.register(0x07f3, SanAndreasOpcodeCheckpoint.setCoords, 'set_checkpoint_coords [Checkpoint] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0996, SanAndreasOpcodeCheckpoint.setHeading, 'set_checkpoint_heading [Checkpoint] {heading} [float]')
+-- INI: 06D5=9,%9d% = create_racing_checkpoint_at %2d% %3d% %4d% point_to %5d% %6d% %7d% type %1d% radius %8d%
+Opcode.register(0x06d5, SanAndreasOpcodeCheckpoint.create, 9, '${9} = create_checkpoint ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false, true})
+-- INI: 06D6=1,disable_racing_checkpoint %1d%
+Opcode.register(0x06d6, SanAndreasOpcodeCheckpoint.delete, 1, 'delete_checkpoint ${1}', {false})
+-- INI: 07F3=4,move_racing_checkpoint %1d% to %2d% %3d% %4d%
+Opcode.register(0x07f3, SanAndreasOpcodeCheckpoint.setCoords, 4, 'set_checkpoint_coords ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0996=2,set_racing_checkpoint %1d% Z_angle_to %2d%
+Opcode.register(0x0996, SanAndreasOpcodeCheckpoint.setHeading, 2, 'set_checkpoint_heading ${1} ${2}', {false, true})

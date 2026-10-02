@@ -23,6 +23,9 @@ function SanAndreasOpcodeAttractor.addPedTypeAsUser(_, _)
 end
 
 
-Opcode.register(0x061d, SanAndreasOpcodeAttractor.add, '[var handle: Attractor] = add_attractor {x} [float] {y} [float] {z} [float] {angle} [float] {_p5} [float] {sequence} [Sequence]')
-Opcode.register(0x061e, SanAndreasOpcodeAttractor.clear, 'clear_attractor [Attractor]')
-Opcode.register(0x0680, SanAndreasOpcodeAttractor.addPedTypeAsUser, 'add_pedtype_as_attractor_user [Attractor] {pedType} [PedType]')
+-- INI: 061D=7,create_AS_origin_at %1d% %2d% %3d% Z_angle %4d% unknown_angle %5d% AS_pack %6d% handle_as %7d%
+Opcode.register(0x061d, SanAndreasOpcodeAttractor.add, 7, '${7} = add_attractor ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false, true})
+-- INI: 061E=1,remove_references_to_AS_origin %1d%
+Opcode.register(0x061e, SanAndreasOpcodeAttractor.clear, 1, 'clear_attractor ${1}', {false})
+-- INI: 0680=2,unknown_assign_AS_origin %1d% to_actors_pedtype %2h%
+Opcode.register(0x0680, SanAndreasOpcodeAttractor.addPedTypeAsUser, 2, 'add_pedtype_as_attractor_user ${1} ${2}', {false, false})

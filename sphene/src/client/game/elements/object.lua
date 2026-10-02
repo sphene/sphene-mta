@@ -157,6 +157,17 @@ function ObjectElement:onPreFrame()
     end
 end
 
+function ObjectElement:getDebugParameters()
+    local objectName = engineGetModelNameFromID(self.model) or "Unknown"
+
+    return {
+        Color = tocolor(252, 248, 3, 255),
+        Title = objectName.." ("..self:getType()..":"..self:getId()..")",
+        Position = string.format("x: %.2f, y: %.2f, z: %.2f", self:getPosition()),
+        Rotation = string.format("rx: %.2f, ry: %.2f, rz: %.2f", self:getRotation()),
+    }
+end
+
 function ObjectElement:getType()
     return 'object'
 end

@@ -270,7 +270,10 @@ function VehicleElement:assignPath(pathId)
     Logger.debug('VEHICLE', 'Assigning path {} to vehicle with ID {}', pathId, self.id)
 
     self.assignedPath = {
-        pathId, 1, getTickCount(), false
+        pathId,           -- [1] path ID
+        1,                -- [2] current node
+        0,                -- [3] accumulated scaled time
+        getTickCount()    -- [4] last update tick
     }
 
     return true
@@ -490,11 +493,18 @@ function VehicleElement:onPreFrame()
                 currentNode = #carrecData
             end
 
-            local assignedPathStartTick = assignedPath[3]
+            -- Update accumulated scaled time based on actual frame delta and current speed
+            local currentTick = getTickCount()
+            local lastUpdateTick = assignedPath[4]
+            local deltaTime = currentTick - lastUpdateTick
+            local accumulatedScaledTime = assignedPath[3] + (deltaTime * self.assignedPathSpeed)
+
+            assignedPath[3] = accumulatedScaledTime
+            assignedPath[4] = currentTick
 
             for i=currentNode, #carrecData do
                 local nodeData = carrecData[i]
-                if nodeData.time > (getTickCount() - assignedPathStartTick) then
+                if nodeData.time > accumulatedScaledTime then
                     break
                 end
 
@@ -518,8 +528,7 @@ function VehicleElement:onPreFrame()
                         nodeData.posY ~= carrecData[i + 1].posY or
                         nodeData.posZ ~= carrecData[i + 1].posZ
                     ) then
-                        local correctedTick = (getTickCount() - assignedPathStartTick)
-                        local progress = 1 / ((carrecData[i + 1].time - nodeData.time) / (correctedTick - nodeData.time))
+                        local progress = 1 / ((carrecData[i + 1].time - nodeData.time) / (accumulatedScaledTime - nodeData.time))
 
                         local nextRight = Vector3(carrecData[i + 1].rightX * 0.0078740157,
                             carrecData[i + 1].rightY * 0.0078740157,  carrecData[i + 1].rightZ * 0.0078740157)
@@ -602,6 +611,17 @@ end
 
 function VehicleElement:getVehicleClass()
     return VehicleElement.getClassFromModel(self:getModel())
+end
+
+function VehicleElement:getDebugParameters()
+    local vehicleName = getVehicleNameFromModel(self.model) or "Unknown"
+
+    return {
+        Color = tocolor(247, 92, 92, 255),
+        Title = vehicleName.." ("..self:getType()..":"..self:getId()..")",
+        Position = string.format("x: %.2f, y: %.2f, z: %.2f", self:getPosition()),
+        Rotation = string.format("rx: %.2f, ry: %.2f, rz: %.2f", self:getRotation()),
+    }
 end
 
 function VehicleElement:getType()

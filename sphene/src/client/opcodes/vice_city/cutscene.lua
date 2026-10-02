@@ -30,7 +30,11 @@ function ViceCityOpcodeCutscene.createDustEffectForHeli(_, _, _)
 end
 
 
-Opcode.register(0x04bc, ViceCityOpcodeCutscene.setAnimToLoop, 'set_cutscene_anim_to_loop {animName} [string]')
-Opcode.register(0x0522, ViceCityOpcodeCutscene.disableShadows, 'disable_cutscene_shadows')
-Opcode.register(0x0569, ViceCityOpcodeCutscene.loadUncompressedAnim, 'load_uncompressed_anim {animation} [string]')
-Opcode.register(0x0598, ViceCityOpcodeCutscene.createDustEffectForHeli, 'create_dust_effect_for_cutscene_heli {heliObject} [CutsceneObject] {radius} [float] {density} [int]')
+-- INI: 04bc=1,set_cutscene_anim %1s% to_loop
+Opcode.register(0x04bc, ViceCityOpcodeCutscene.setAnimToLoop, 1, 'set_cutscene_anim_to_loop ${1}', {false})
+-- INI: 0522=0,disable_cutscene_shadows
+Opcode.register(0x0522, ViceCityOpcodeCutscene.disableShadows, 0, 'disable_cutscene_shadows', {})
+-- INI: 0569=1,load_uncompressed_animation %1s%
+Opcode.register(0x0569, ViceCityOpcodeCutscene.loadUncompressedAnim, 1, 'load_uncompressed_anim ${1}', {false})
+-- INI: 0598=3,stir_ground_around_object %1d% radius %2d% density %3h%
+Opcode.register(0x0598, ViceCityOpcodeCutscene.createDustEffectForHeli, 3, 'create_dust_effect_for_cutscene_heli ${1} ${2} ${3}', {false, false, false})

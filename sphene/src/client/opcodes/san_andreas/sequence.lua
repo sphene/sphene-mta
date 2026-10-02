@@ -5,7 +5,7 @@ SanAndreasOpcodeSequence.__index = SanAndreasOpcodeSequence
 -- Instruction: [var handle: Sequence] = open_sequence_task
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0615
 function SanAndreasOpcodeSequence.open(_)
-    Script.storeValueAtIndex(1, Sequence.createSequence())
+    return Sequence.createSequence()
 end
 
 -- Opcode: 0x0616
@@ -35,7 +35,11 @@ function SanAndreasOpcodeSequence.setToRepeat(sequence, shouldRepeat)
     end
 end
 
-Opcode.register(0x0615, SanAndreasOpcodeSequence.open, '[var handle: Sequence] = open_sequence_task')
-Opcode.register(0x0616, SanAndreasOpcodeSequence.close, 'close_sequence_task [Sequence]')
-Opcode.register(0x061b, SanAndreasOpcodeSequence.clear, 'clear_sequence_task [Sequence]')
-Opcode.register(0x0643, SanAndreasOpcodeSequence.setToRepeat, 'set_sequence_to_repeat [Sequence] {state} [bool]')
+-- INI: 0615=1,define_AS_pack_begin %1d%
+Opcode.register(0x0615, SanAndreasOpcodeSequence.open, 1, '${1} = open_sequence_task', {true})
+-- INI: 0616=1,define_AS_pack_end %1d%
+Opcode.register(0x0616, SanAndreasOpcodeSequence.close, 1, 'close_sequence_task ${1}', {false})
+-- INI: 061B=1,remove_references_to_AS_pack %1d%
+Opcode.register(0x061b, SanAndreasOpcodeSequence.clear, 1, 'clear_sequence_task ${1}', {false})
+-- INI: 0643=2,set_AS_pack %1d% loop %2h%
+Opcode.register(0x0643, SanAndreasOpcodeSequence.setToRepeat, 2, 'set_sequence_to_repeat ${1} ${2}', {false, false})

@@ -23,6 +23,9 @@ function ViceCityOpcodeMemoryLibrary.getProcedure()
 end
 
 
-Opcode.register(0x0ba2, ViceCityOpcodeMemoryLibrary.load, '[var handle: MemoryLibrary] = memory_load_dynamic_library {address} [int]')
-Opcode.register(0x0ba3, ViceCityOpcodeMemoryLibrary.free, 'memory_free_dynamic_library [MemoryLibrary]')
-Opcode.register(0x0ba4, ViceCityOpcodeMemoryLibrary.getProcedure, '[var address: int] = memory_get_dynamic_library_procedure {procName} [string] [MemoryLibrary]')
+-- INI: 0BA2=2,%2h% = memory_load_library %1s%
+Opcode.register(0x0ba2, ViceCityOpcodeMemoryLibrary.load, 2, '${1} = memory_load_dynamic_library ${2}', {true, false})
+-- INI: 0BA3=1,memory_free_library %1h%
+Opcode.register(0x0ba3, ViceCityOpcodeMemoryLibrary.free, 1, 'memory_free_dynamic_library ${1}', {false})
+-- INI: 0BA4=3,%3d% = memory_get_proc_address %1s% library %2d%
+Opcode.register(0x0ba4, ViceCityOpcodeMemoryLibrary.getProcedure, 3, '${3} = memory_get_dynamic_library_procedure ${1} ${2}', {false, false, true})

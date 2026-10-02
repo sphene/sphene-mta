@@ -16,5 +16,7 @@ function SanAndreasOpcodeMission.isOnScriptedCutscene()
 end
 
 
-Opcode.register(0x0e1d, SanAndreasOpcodeMission.isOn, 'is_on_mission')
-Opcode.register(0x0eb7, SanAndreasOpcodeMission.isOnScriptedCutscene, 'is_on_scripted_cutscene')
+-- INI: 0E1D=0,is_on_mission
+Opcode.register(0x0e1d, SanAndreasOpcodeMission.isOn, 0, 'is_on_mission', {})
+-- INI: 0EB7=0,is_on_scripted_cutscene
+Opcode.register(0x0eb7, SanAndreasOpcodeMission.isOnScriptedCutscene, 0, 'is_on_scripted_cutscene', {})

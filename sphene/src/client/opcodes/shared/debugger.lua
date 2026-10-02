@@ -16,5 +16,7 @@ function SharedOpcodeDebugger.disable()
 end
 
 
-Opcode.register(0x00c3, SharedOpcodeDebugger.enable, 'debug_on')
-Opcode.register(0x00c4, SharedOpcodeDebugger.disable, 'debug_off')
+-- INI: 00c3=0,enter_debugmode
+Opcode.register(0x00c3, SharedOpcodeDebugger.enable, 0, 'debug_on', {})
+-- INI: 00c4=0,exit_debugmode
+Opcode.register(0x00c4, SharedOpcodeDebugger.disable, 0, 'debug_off', {})

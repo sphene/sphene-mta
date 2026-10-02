@@ -44,9 +44,15 @@ function SharedOpcodeHeli.makeComeCrashingDown(_)
 end
 
 
-Opcode.register(0x04a2, SharedOpcodeHeli.gotoCoords, 'heli_goto_coords [Heli] {x} [float] {y} [float] {z} [float] {minAltitude} [float] {maxAltitude} [float]')
-Opcode.register(0x04d0, SharedOpcodeHeli.setOrientation, 'set_heli_orientation [Heli] {angle} [float]')
-Opcode.register(0x04d1, SharedOpcodeHeli.clearOrientation, 'clear_heli_orientation [Heli]')
-Opcode.register(0x04df, SharedOpcodeHeli.setStabiliser, 'set_heli_stabiliser [Heli] {state} [bool]')
-Opcode.register(0x0541, SharedOpcodeHeli.fireHunterGun, 'fire_hunter_gun [Heli]')
-Opcode.register(0x0564, SharedOpcodeHeli.makeComeCrashingDown, 'make_heli_come_crashing_down [Heli]')
+-- INI: 04a2=5,heli %1d% fly_to %2d% %3d% %4d% speed %5h%
+Opcode.register(0x04a2, SharedOpcodeHeli.gotoCoords, 6, 'heli_goto_coords ${1} ${2} ${3} ${4} ${5} ${6}', {false, true, false, false, false, false})
+-- INI: 04d0=2,force_heli %1d% looking_angle_to %2d%
+Opcode.register(0x04d0, SharedOpcodeHeli.setOrientation, 2, 'set_heli_orientation ${1} ${2}', {false, true})
+-- INI: 04d1=1,reset_heli %1d% looking_angle
+Opcode.register(0x04d1, SharedOpcodeHeli.clearOrientation, 1, 'clear_heli_orientation ${1}', {false})
+-- INI: 04df=2,set_heli %1d% lean_and_thrust_limiter %2h%
+Opcode.register(0x04df, SharedOpcodeHeli.setStabiliser, 2, 'set_heli_stabiliser ${1} ${2}', {false, false})
+-- INI: 0541=1,fire_guns_on_vehicle %1d%
+Opcode.register(0x0541, SharedOpcodeHeli.fireHunterGun, 1, 'fire_hunter_gun ${1}', {false})
+-- INI: 0564=1,set_vehicle %1d% helicopter_simulate_crash_landing
+Opcode.register(0x0564, SharedOpcodeHeli.makeComeCrashingDown, 1, 'make_heli_come_crashing_down ${1}', {false})

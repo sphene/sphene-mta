@@ -51,10 +51,17 @@ function SanAndreasOpcodeComponent.getNumObjects(_, _)
 end
 
 
-Opcode.register(0x0d1f, SanAndreasOpcodeComponent.getChildComponent, '[var child: Component] = get_component_child_component [Component]')
-Opcode.register(0x0d20, SanAndreasOpcodeComponent.getNextComponent, '[var nextComponent: Component] = get_component_next_component [Component]')
-Opcode.register(0x0d21, SanAndreasOpcodeComponent.getName, '[var name: string] = get_component_name [Component]')
-Opcode.register(0x0d22, SanAndreasOpcodeComponent.getWorldMatrix, '[var worldMatrix: any] = get_component_world_matrix [Component]')
-Opcode.register(0x0d23, SanAndreasOpcodeComponent.getModellingMatrix, '[var modellingMatrix: any] = get_component_modelling_matrix [Component]')
-Opcode.register(0x0d74, SanAndreasOpcodeComponent.getParentComponent, '[var parentComponent: Component] = get_component_parent_component [Component]')
-Opcode.register(0x0d75, SanAndreasOpcodeComponent.getNumObjects, '[var numObjects: int] = get_component_num_objects [Component]')
+-- INI: 0D1F=2,%2d% = component %1d% child
+Opcode.register(0x0d1f, SanAndreasOpcodeComponent.getChildComponent, 2, '${1} = get_component_child_component ${2}', {true, false})
+-- INI: 0D20=2,%2d% = component %1d% next_component
+Opcode.register(0x0d20, SanAndreasOpcodeComponent.getNextComponent, 2, '${1} = get_component_next_component ${2}', {true, false})
+-- INI: 0D21=2,%2s% = component %1d% name
+Opcode.register(0x0d21, SanAndreasOpcodeComponent.getName, 2, '${1} = get_component_name ${2}', {true, false})
+-- INI: 0D22=2,%2d% = component %1d% ltm
+Opcode.register(0x0d22, SanAndreasOpcodeComponent.getWorldMatrix, 2, '${1} = get_component_world_matrix ${2}', {true, false})
+-- INI: 0D23=2,%2d% = component %1d% modelling_matrix
+Opcode.register(0x0d23, SanAndreasOpcodeComponent.getModellingMatrix, 2, '${1} = get_component_modelling_matrix ${2}', {true, false})
+-- INI: 0D74=2,%2d% = component %1d% parent_component
+Opcode.register(0x0d74, SanAndreasOpcodeComponent.getParentComponent, 2, '${1} = get_component_parent_component ${2}', {true, false})
+-- INI: 0D75=2,%2d% = component %1d% num_objects
+Opcode.register(0x0d75, SanAndreasOpcodeComponent.getNumObjects, 2, '${1} = get_component_num_objects ${2}', {true, false})

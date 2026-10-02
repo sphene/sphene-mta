@@ -23,6 +23,9 @@ function SharedOpcodeDynamicLibrary.getProcedure(_, _, _)
 end
 
 
-Opcode.register(0x0aa2, SharedOpcodeDynamicLibrary.load, '[var handle: DynamicLibrary] = load_dynamic_library {fileName} [string]')
-Opcode.register(0x0aa3, SharedOpcodeDynamicLibrary.free, 'free_dynamic_library [DynamicLibrary]')
-Opcode.register(0x0aa4, SharedOpcodeDynamicLibrary.getProcedure, '[var address: int] = get_dynamic_library_procedure {procName} [string] [DynamicLibrary]')
+-- INI: 0AA2=2,%2d% = load_dynamic_library %1d% ; IF and SET
+Opcode.register(0x0aa2, SharedOpcodeDynamicLibrary.load, 2, '${1} = load_dynamic_library ${2}', {true, false})
+-- INI: 0AA3=1,free_dynamic_library %1h%
+Opcode.register(0x0aa3, SharedOpcodeDynamicLibrary.free, 1, 'free_dynamic_library ${1}', {false})
+-- INI: 0AA4=3,%3d% = get_dynamic_library_procedure %1s% library %2d% ; IF and SET
+Opcode.register(0x0aa4, SharedOpcodeDynamicLibrary.getProcedure, 3, '${3} = get_dynamic_library_procedure ${1} ${2}', {false, false, true})

@@ -30,7 +30,11 @@ function SanAndreasOpcodeDecisionMakerGroup.copy(_, _)
 end
 
 
-Opcode.register(0x06ae, SanAndreasOpcodeDecisionMakerGroup.load, '[var handle: DecisionMakerGroup] = load_group_decision_maker {type} [int]')
-Opcode.register(0x0749, SanAndreasOpcodeDecisionMakerGroup.clearEventResponse, 'clear_group_decision_maker_event_response [DecisionMakerGroup] {event} [Event]')
-Opcode.register(0x074a, SanAndreasOpcodeDecisionMakerGroup.addEventResponse, 'add_group_decision_maker_event_response [DecisionMakerGroup] {event} [Event] {taskId} [TaskId] {respect} [float] {hate} [float] {like} [float] {dislike} [float] {inCar} [bool] {onFoot} [bool]')
-Opcode.register(0x07e6, SanAndreasOpcodeDecisionMakerGroup.copy, '[var handle: DecisionMakerGroup] = copy_group_decision_maker {handleOrTemplate} [DecisionMakerGroupTemplate]')
+-- INI: 06AE=2,create_group_decision_maker_type %1h% store_to %2d% ; decision\allowed\mission.grp
+Opcode.register(0x06ae, SanAndreasOpcodeDecisionMakerGroup.load, 2, '${1} = load_group_decision_maker ${2}', {true, false})
+-- INI: 0749=2,reset_group_decision_maker %1d% event %2h%
+Opcode.register(0x0749, SanAndreasOpcodeDecisionMakerGroup.clearEventResponse, 2, 'clear_group_decision_maker_event_response ${1} ${2}', {false, false})
+-- INI: 074A=9,set_group_decision_maker %1d% on_event %2h% taskID %3d% respect %4d% hate %5d% like %6d% dislike %7d% in_car %8h% on_foot %9h% ; see *.ped files
+Opcode.register(0x074a, SanAndreasOpcodeDecisionMakerGroup.addEventResponse, 9, 'add_group_decision_maker_event_response ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 07E6=2,copy_group_decision_maker %1h% to %2d%
+Opcode.register(0x07e6, SanAndreasOpcodeDecisionMakerGroup.copy, 2, '${1} = copy_group_decision_maker ${2}', {false, false})

@@ -59,7 +59,9 @@ function BitStream:create(path, preload)
             mt.data[#mt.data + 1] = read(file, 1)
         end
 
-        fileClose(file)
+        if type(file) == 'userdata' then
+            fileClose(file)
+        end
     else
         if (not file) then
             Logger.error('BITSTREAM', 'Unable to open file: {}.', path)

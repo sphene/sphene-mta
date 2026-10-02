@@ -66,12 +66,21 @@ function SharedOpcodeStat.registerOddjobMissionPassed()
 end
 
 
-Opcode.register(0x030c, SharedOpcodeStat.playerMadeProgress, 'player_made_progress {progress} [int]')
-Opcode.register(0x030d, SharedOpcodeStat.setProgressTotal, 'set_progress_total {maxProgress} [int]')
-Opcode.register(0x0317, SharedOpcodeStat.registerMissionGiven, 'register_mission_given')
-Opcode.register(0x0318, SharedOpcodeStat.registerMissionPassed, 'register_mission_passed {key} [gxt_key]')
-Opcode.register(0x042c, SharedOpcodeStat.setTotalNumberOfMissions, 'set_total_number_of_missions {numMissions} [int]')
-Opcode.register(0x042e, SharedOpcodeStat.registerFastestTime, 'register_fastest_time {id} [StatId] {value} [int]')
-Opcode.register(0x0582, SharedOpcodeStat.registerBestPosition, 'register_best_position {id} [StatId] {position} [int]')
-Opcode.register(0x058c, SharedOpcodeStat.getProgressPercentage, '[var percentage: float] = get_progress_percentage')
-Opcode.register(0x0595, SharedOpcodeStat.registerOddjobMissionPassed, 'register_oddjob_mission_passed')
+-- INI: 030c=1,progress_made += %1d%
+Opcode.register(0x030c, SharedOpcodeStat.playerMadeProgress, 1, 'player_made_progress ${1}', {false})
+-- INI: 030d=1,set_total_mission_points_to %1d%
+Opcode.register(0x030d, SharedOpcodeStat.setProgressTotal, 1, 'set_progress_total ${1}', {true})
+-- INI: 0317=0,increment_mission_attempts
+Opcode.register(0x0317, SharedOpcodeStat.registerMissionGiven, 0, 'register_mission_given', {})
+-- INI: 0318=1,set_latest_mission_passed %1g%
+Opcode.register(0x0318, SharedOpcodeStat.registerMissionPassed, 1, 'register_mission_passed ${1}', {false})
+-- INI: 042c=1,set_total_missions_to %1d%
+Opcode.register(0x042c, SharedOpcodeStat.setTotalNumberOfMissions, 1, 'set_total_number_of_missions ${1}', {true})
+-- INI: 042e=2,register_lowest_int_stat %1h% to %2d%
+Opcode.register(0x042e, SharedOpcodeStat.registerFastestTime, 2, 'register_fastest_time ${1} ${2}', {false, false})
+-- INI: 0582=2,register_hotring_best_result %1h% %2d%
+Opcode.register(0x0582, SharedOpcodeStat.registerBestPosition, 2, 'register_best_position ${1} ${2}', {false, false})
+-- INI: 058c=1,%1d% = percentage_completed
+Opcode.register(0x058c, SharedOpcodeStat.getProgressPercentage, 1, '${1} = get_progress_percentage', {true})
+-- INI: 0595=0,mission_complete
+Opcode.register(0x0595, SharedOpcodeStat.registerOddjobMissionPassed, 0, 'register_oddjob_mission_passed', {})

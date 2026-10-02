@@ -16,5 +16,7 @@ function SharedOpcodeCardDecks.fetchNextCard(_)
 end
 
 
-Opcode.register(0x059d, SharedOpcodeCardDecks.shuffle, 'shuffle_card_decks {type} [int]')
-Opcode.register(0x059e, SharedOpcodeCardDecks.fetchNextCard, '[var number: int] = fetch_next_card')
+-- INI: 059d=1,shuffle_card_decks %1d%
+Opcode.register(0x059d, SharedOpcodeCardDecks.shuffle, 1, 'shuffle_card_decks ${1}', {false})
+-- INI: 059e=1,fetch_next_card %1d%
+Opcode.register(0x059e, SharedOpcodeCardDecks.fetchNextCard, 1, '${1} = fetch_next_card', {true})

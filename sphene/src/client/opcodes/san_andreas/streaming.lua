@@ -148,12 +148,9 @@ function SanAndreasOpcodeStreaming.getRandomCarModelInMemory(_)
         model = math.random(400, 600)
     end
 
-    Script.storeValueAtIndex(2, model)
-    Script.storeValueAtIndex(3, 0)
-
     ElementManager.loadModel(model)
 
-    return true
+    return model, 0
 end
 
 -- Opcode: 0x0A01
@@ -262,38 +259,70 @@ function SanAndreasOpcodeStreaming.getSpecialModelData()
 end
 
 
-Opcode.register(0x06da, SanAndreasOpcodeStreaming.markMissionTrainsAsNoLongerNeeded, 'mark_mission_trains_as_no_longer_needed')
-Opcode.register(0x06e6, SanAndreasOpcodeStreaming.getVehicleModType, '[var slotId: ModSlot] = get_vehicle_mod_type {modelId} [model_object]')
-Opcode.register(0x06e9, SanAndreasOpcodeStreaming.requestVehicleMod, 'request_vehicle_mod {modelId} [model_object]')
-Opcode.register(0x06ea, SanAndreasOpcodeStreaming.hasVehicleModLoaded, 'has_vehicle_mod_loaded {modelId} [model_object]')
-Opcode.register(0x06eb, SanAndreasOpcodeStreaming.markVehicleModAsNoLongerNeeded, 'mark_vehicle_mod_as_no_longer_needed {modelId} [model_object]')
-Opcode.register(0x0771, SanAndreasOpcodeStreaming.customPlateDesignForNextCar, 'custom_plate_design_for_next_car {modelId} [model_vehicle] {townId} [Town]')
-Opcode.register(0x0776, SanAndreasOpcodeStreaming.requestIpl, 'request_ipl {iplName} [string]')
-Opcode.register(0x0777, SanAndreasOpcodeStreaming.removeIpl, 'remove_ipl {iplName} [string]')
-Opcode.register(0x0778, SanAndreasOpcodeStreaming.removeIplDiscreetly, 'remove_ipl_discreetly {iplName} [string]')
-Opcode.register(0x077e, SanAndreasOpcodeStreaming.getAreaVisible, '[var areaId: int] = get_area_visible')
-Opcode.register(0x07c0, SanAndreasOpcodeStreaming.requestCarRecording, 'request_car_recording {pathId} [int]')
-Opcode.register(0x07c1, SanAndreasOpcodeStreaming.hasCarRecordingBeenLoaded, 'has_car_recording_been_loaded {pathId} [int]')
-Opcode.register(0x07de, SanAndreasOpcodeStreaming.isModelInCdimage, 'is_model_in_cdimage {modelId} [model_any]')
-Opcode.register(0x07e4, SanAndreasOpcodeStreaming.getModelDimensions, '[var leftBottomBackX: float], [var leftBottomBackY: float], [var leftBottomBackZ: float], [var rightTopFrontX: float], [var rightTopFrontY: float], [var rightTopFrontZ: float] = get_model_dimensions {modelId} [model_any]')
-Opcode.register(0x081e, SanAndreasOpcodeStreaming.isThisModelABoat, 'is_this_model_a_boat {modelId} [model_any]')
-Opcode.register(0x081f, SanAndreasOpcodeStreaming.isThisModelAPlane, 'is_this_model_a_plane {modelId} [model_any]')
-Opcode.register(0x0820, SanAndreasOpcodeStreaming.isThisModelAHeli, 'is_this_model_a_heli {modelId} [model_any]')
-Opcode.register(0x0873, SanAndreasOpcodeStreaming.removeCarRecording, 'remove_car_recording {pathId} [int]')
-Opcode.register(0x08e8, SanAndreasOpcodeStreaming.attachAnimsToModel, 'attach_anims_to_model {pedModelId} [int] {animationFile} [string]')
-Opcode.register(0x09b2, SanAndreasOpcodeStreaming.getRandomCarModelInMemory, '[var modelId: model_vehicle], [var class: int] = get_random_car_model_in_memory {_p1} [bool]')
-Opcode.register(0x0a01, SanAndreasOpcodeStreaming.isThisModelACar, 'is_this_model_a_car {modelId} [model_any]')
-Opcode.register(0x0a0b, SanAndreasOpcodeStreaming.loadSceneInDirection, 'load_scene_in_direction {x} [float] {y} [float] {z} [float] {heading} [float]')
-Opcode.register(0x0e7f, SanAndreasOpcodeStreaming.getModelType, '[var type: ModelInfoType] = get_model_type {model} [model_any]')
-Opcode.register(0x0e98, SanAndreasOpcodeStreaming.requestPriorityModel, 'request_priority_model {modelId} [model_any]')
-Opcode.register(0x0e99, SanAndreasOpcodeStreaming.loadAllPriorityModelsNow, 'load_all_priority_models_now')
-Opcode.register(0x0e9a, SanAndreasOpcodeStreaming.loadSpecialCharacterForId, 'load_special_character_for_id {id} [int] {name} [string]')
-Opcode.register(0x0e9b, SanAndreasOpcodeStreaming.unloadSpecialCharacterFromId, 'unload_special_character_from_id {id} [int]')
-Opcode.register(0x0e9c, SanAndreasOpcodeStreaming.getModelByName, '[var modelId: model_any] = get_model_by_name {name} [string]')
-Opcode.register(0x0e9d, SanAndreasOpcodeStreaming.isModelAvailableByName, 'is_model_available_by_name {name} [string]')
-Opcode.register(0x0e9f, SanAndreasOpcodeStreaming.removeAllUnusedModels, 'remove_all_unused_models')
-Opcode.register(0x0ea3, SanAndreasOpcodeStreaming.removeModelIfUnused, 'remove_model_if_unused {modelId} [model_any]')
-Opcode.register(0x0ef8, SanAndreasOpcodeStreaming.getModelInfo, '[var modelInfo: int] = get_model_info {modelId} [model_any]')
-Opcode.register(0x0f00, SanAndreasOpcodeStreaming.loadSpecialModel, '[var specialModel: int] = load_special_model {dff} [string] {txd} [string]')
-Opcode.register(0x0f01, SanAndreasOpcodeStreaming.removeSpecialModel, 'remove_special_model {specialModel} [int]')
-Opcode.register(0x0f05, SanAndreasOpcodeStreaming.getSpecialModelData, '[var clump: int], [var atomic: int], [var txdIndex: int] = get_special_model_data {specialModel} [int]')
+-- INI: 06DA=0,reset_train_directions
+Opcode.register(0x06da, SanAndreasOpcodeStreaming.markMissionTrainsAsNoLongerNeeded, 0, 'mark_mission_trains_as_no_longer_needed', {})
+-- INI: 06E6=2,get_itemID %1d% destinated_component_slot_to %2d%
+Opcode.register(0x06e6, SanAndreasOpcodeStreaming.getVehicleModType, 2, '${1} = get_vehicle_mod_type ${2}', {false, false})
+-- INI: 06E9=1,load_car_component %1o%
+Opcode.register(0x06e9, SanAndreasOpcodeStreaming.requestVehicleMod, 1, 'request_vehicle_mod ${object.1}', {false})
+-- INI: 06EA=1,  car_component %1o% available
+Opcode.register(0x06ea, SanAndreasOpcodeStreaming.hasVehicleModLoaded, 1, 'has_vehicle_mod_loaded ${object.1}', {false})
+-- INI: 06EB=1,release_car_component %1o%
+Opcode.register(0x06eb, SanAndreasOpcodeStreaming.markVehicleModAsNoLongerNeeded, 1, 'mark_vehicle_mod_as_no_longer_needed ${object.1}', {false})
+-- INI: 0771=2,set_model_numplate %1m% town_texture %2h%
+Opcode.register(0x0771, SanAndreasOpcodeStreaming.customPlateDesignForNextCar, 2, 'custom_plate_design_for_next_car ${vehicle.1} ${2}', {false, false})
+-- INI: 0776=1,create_objects_in_object_group %1h%
+Opcode.register(0x0776, SanAndreasOpcodeStreaming.requestIpl, 1, 'request_ipl ${1}', {false})
+-- INI: 0777=1,delete_objects_in_object_group %1h%
+Opcode.register(0x0777, SanAndreasOpcodeStreaming.removeIpl, 1, 'remove_ipl ${1}', {false})
+-- INI: 0778=1,recreate_objects_in_object_group %1h%
+Opcode.register(0x0778, SanAndreasOpcodeStreaming.removeIplDiscreetly, 1, 'remove_ipl_discreetly ${1}', {false})
+-- INI: 077E=1,get_active_interior_to %1d%
+Opcode.register(0x077e, SanAndreasOpcodeStreaming.getAreaVisible, 1, '${1} = get_area_visible', {false})
+-- INI: 07C0=1,load_path %1d%
+Opcode.register(0x07c0, SanAndreasOpcodeStreaming.requestCarRecording, 1, 'request_car_recording ${1}', {false})
+-- INI: 07C1=1,  path %1d% available
+Opcode.register(0x07c1, SanAndreasOpcodeStreaming.hasCarRecordingBeenLoaded, 1, 'has_car_recording_been_loaded ${1}', {false})
+-- INI: 07DE=1,  model %1o% exists ; versionB
+Opcode.register(0x07de, SanAndreasOpcodeStreaming.isModelInCdimage, 1, 'is_model_in_cdimage ${object.1}', {false})
+-- INI: 07E4=7,get_model %1o% dimensions_cornerA_to %2d% %3d% %4d% dimensions_cornerB_to %5d% %6d% %7d%
+Opcode.register(0x07e4, SanAndreasOpcodeStreaming.getModelDimensions, 7, '${2}, ${3}, ${4}, ${5}, ${6}, ${7} = get_model_dimensions ${object.1}', {false, true, true, true, true, true, true})
+-- INI: 081E=1,  model %1o% boat
+Opcode.register(0x081e, SanAndreasOpcodeStreaming.isThisModelABoat, 1, 'is_this_model_a_boat ${object.1}', {false})
+-- INI: 081F=1,  model %1o% plane
+Opcode.register(0x081f, SanAndreasOpcodeStreaming.isThisModelAPlane, 1, 'is_this_model_a_plane ${object.1}', {false})
+-- INI: 0820=1,  model %1o% heli
+Opcode.register(0x0820, SanAndreasOpcodeStreaming.isThisModelAHeli, 1, 'is_this_model_a_heli ${object.1}', {false})
+-- INI: 0873=1,release_path %1d%
+Opcode.register(0x0873, SanAndreasOpcodeStreaming.removeCarRecording, 1, 'remove_car_recording ${1}', {false})
+-- INI: 08E8=2,assign_external_script_handle %2g% to_model %1m%
+Opcode.register(0x08e8, SanAndreasOpcodeStreaming.attachAnimsToModel, 2, 'attach_anims_to_model ${1} ${2}', {false, false})
+-- INI: 09B2=3,get_random_available_car_unk %1h% model_to %2d% class_to %3d%
+Opcode.register(0x09b2, SanAndreasOpcodeStreaming.getRandomCarModelInMemory, 3, '${2}, ${3} = get_random_car_model_in_memory ${1}', {false, true, true})
+-- INI: 0A01=1,  model %1o% car
+Opcode.register(0x0a01, SanAndreasOpcodeStreaming.isThisModelACar, 1, 'is_this_model_a_car ${object.1}', {false})
+-- INI: 0A0B=4,set_rendering_origin_at_3D_coord %1d% %2d% %3d% angle %4d%
+Opcode.register(0x0a0b, SanAndreasOpcodeStreaming.loadSceneInDirection, 4, 'load_scene_in_direction ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0E7F=2,get_model_type %1d% store_to %2d%
+Opcode.register(0x0e7f, SanAndreasOpcodeStreaming.getModelType, 2, '${1} = get_model_type ${2}', {true, false})
+-- INI: 0E98=1,request_priority_model %1d%
+Opcode.register(0x0e98, SanAndreasOpcodeStreaming.requestPriorityModel, 1, 'request_priority_model ${1}', {false})
+-- INI: 0E99=0,load_all_priority_models_now
+Opcode.register(0x0e99, SanAndreasOpcodeStreaming.loadAllPriorityModelsNow, 0, 'load_all_priority_models_now', {})
+-- INI: 0E9A=2,load_special_character_for_id %1d% name %2d%
+Opcode.register(0x0e9a, SanAndreasOpcodeStreaming.loadSpecialCharacterForId, 2, 'load_special_character_for_id ${1} ${2}', {false, false})
+-- INI: 0E9B=1,unload_special_character_from_id %1d%
+Opcode.register(0x0e9b, SanAndreasOpcodeStreaming.unloadSpecialCharacterFromId, 1, 'unload_special_character_from_id ${1}', {false})
+-- INI: 0E9C=2,get_model_by_name %1d% store_id %2d%
+Opcode.register(0x0e9c, SanAndreasOpcodeStreaming.getModelByName, 2, '${1} = get_model_by_name ${2}', {false, false})
+-- INI: 0E9D=1,get_model_available_by_name %1d%
+Opcode.register(0x0e9d, SanAndreasOpcodeStreaming.isModelAvailableByName, 1, 'is_model_available_by_name ${1}', {false})
+-- INI: 0E9F=0,remove_all_unused_models
+Opcode.register(0x0e9f, SanAndreasOpcodeStreaming.removeAllUnusedModels, 0, 'remove_all_unused_models', {})
+-- INI: 0EA3=1,remove_model_if_unused %1d%
+Opcode.register(0x0ea3, SanAndreasOpcodeStreaming.removeModelIfUnused, 1, 'remove_model_if_unused ${1}', {false})
+-- INI: 0EF8=2,get_model_info %1d% store_to %2d%
+Opcode.register(0x0ef8, SanAndreasOpcodeStreaming.getModelInfo, 2, '${1} = get_model_info ${2}', {true, false})
+Opcode.register(0x0f00, SanAndreasOpcodeStreaming.loadSpecialModel, 3, '${1} = load_special_model ${2} ${3}')
+Opcode.register(0x0f01, SanAndreasOpcodeStreaming.removeSpecialModel, 1, 'remove_special_model ${1}')
+Opcode.register(0x0f05, SanAndreasOpcodeStreaming.getSpecialModelData, 4, '${1}, ${2}, ${3} = get_special_model_data ${4}')

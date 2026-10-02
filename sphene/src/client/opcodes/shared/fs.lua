@@ -58,11 +58,19 @@ function SharedOpcodeFs.copyDirectory(_, _)
 end
 
 
-Opcode.register(0x0a99, SharedOpcodeFs.setCurrentDirectory, 'set_current_directory {path} [any]')
-Opcode.register(0x0aab, SharedOpcodeFs.doesFileExist, 'does_file_exist {path} [string]')
-Opcode.register(0x0b00, SharedOpcodeFs.deleteFile, 'delete_file {path} [string]')
-Opcode.register(0x0b01, SharedOpcodeFs.deleteDirectory, 'delete_directory {path} [string] {recursive} [bool]')
-Opcode.register(0x0b02, SharedOpcodeFs.moveFile, 'move_file {fileName} [string] {newFileName} [string]')
-Opcode.register(0x0b03, SharedOpcodeFs.moveDirectory, 'move_directory {dirPath} [string] {newDirPath} [string]')
-Opcode.register(0x0b04, SharedOpcodeFs.copyFile, 'copy_file {fileName} [string] {newFileName} [string]')
-Opcode.register(0x0b05, SharedOpcodeFs.copyDirectory, 'copy_directory {dirPath} [string] {newDirPath} [string]')
+-- INI: 0A99=1,set_current_directory %1buserdir/rootdir%
+Opcode.register(0x0a99, SharedOpcodeFs.setCurrentDirectory, 1, 'set_current_directory ${1}', {false})
+-- INI: 0AAB=1,  does_file_exist %1s%
+Opcode.register(0x0aab, SharedOpcodeFs.doesFileExist, 1, 'does_file_exist ${1}', {false})
+-- INI: 0B00=1,delete_file %1d% ;; IF and SET
+Opcode.register(0x0b00, SharedOpcodeFs.deleteFile, 1, 'delete_file ${1}', {false})
+-- INI: 0B01=2,delete_directory %1d% with_all_files_and_subdirectories %2d% ;; IF and SET
+Opcode.register(0x0b01, SharedOpcodeFs.deleteDirectory, 2, 'delete_directory ${1} ${2}', {false, false})
+-- INI: 0B02=2,move_file %1d% to %2d% ;; IF and SET
+Opcode.register(0x0b02, SharedOpcodeFs.moveFile, 2, 'move_file ${1} ${2}', {false, false})
+-- INI: 0B03=2,move_directory %1d% to %2d% ;; IF and SET
+Opcode.register(0x0b03, SharedOpcodeFs.moveDirectory, 2, 'move_directory ${1} ${2}', {false, false})
+-- INI: 0B04=2,copy_file %1d% to %2d% ;; IF and SET
+Opcode.register(0x0b04, SharedOpcodeFs.copyFile, 2, 'copy_file ${1} ${2}', {false, false})
+-- INI: 0B05=2,copy_directory %1d% to %2d% ;; IF and SET
+Opcode.register(0x0b05, SharedOpcodeFs.copyDirectory, 2, 'copy_directory ${1} ${2}', {false, false})

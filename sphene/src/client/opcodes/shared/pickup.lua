@@ -80,11 +80,19 @@ function SharedOpcodePickup.createForSaleProperty(posX, posY, posZ, price, asset
 end
 
 
-Opcode.register(0x0213, SharedOpcodePickup.create, '[var handle: Pickup] = create_pickup {modelId} [model_object] {pickupType} [PickupType] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x0214, SharedOpcodePickup.hasBeenCollected, 'has_pickup_been_collected [Pickup]')
-Opcode.register(0x0215, SharedOpcodePickup.remove, 'remove_pickup [Pickup]')
-Opcode.register(0x02e1, SharedOpcodePickup.createMoney, '[var handle: Pickup] = create_money_pickup {x} [float] {y} [float] {z} [float] {cashAmount} [int] {permanent} [bool]')
-Opcode.register(0x032b, SharedOpcodePickup.createWithAmmo, '[var handle: Pickup] = create_pickup_with_ammo {modelId} [model_object] {pickupType} [PickupType] {ammo} [int] {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x04a6, SharedOpcodePickup.createProtection, '[var handle: Pickup] = create_protection_pickup {x} [float] {y} [float] {z} [float] {revenueLimit} [int] {revenueRate} [int]')
-Opcode.register(0x0517, SharedOpcodePickup.createLockedProperty, '[var handle: Pickup] = create_locked_property_pickup {x} [float] {y} [float] {z} [float] {message} [gxt_key]')
-Opcode.register(0x0518, SharedOpcodePickup.createForSaleProperty, '[var handle: Pickup] = create_forsale_property_pickup {x} [float] {y} [float] {z} [float] {price} [int] {message} [gxt_key]')
+-- INI: 0213=6,%6d% = create_pickup %1o% type %2d% at %3d% %4d% %5d%
+Opcode.register(0x0213, SharedOpcodePickup.create, 6, '${6} = create_pickup ${pickup.1} ${2} ${3} ${4} ${5}', {false, false, false, false, false, true})
+-- INI: 0214=1,  pickup %1d% picked_up
+Opcode.register(0x0214, SharedOpcodePickup.hasBeenCollected, 1, 'has_pickup_been_collected ${1}', {false})
+-- INI: 0215=1,destroy_pickup %1d%
+Opcode.register(0x0215, SharedOpcodePickup.remove, 1, 'remove_pickup ${1}', {false})
+-- INI: 02e1=5,%5d% = create_cash_pickup %4d% at %1d% %2d% %3d%
+Opcode.register(0x02e1, SharedOpcodePickup.createMoney, 6, '${5} = create_money_pickup ${4} ${1} ${2} ${3}', {false, false, false, false, true})
+-- INI: 032b=7,%7d% = create_weapon_pickup %1o% %2d% ammo %3d% at %4d% %5d% %6d%
+Opcode.register(0x032b, SharedOpcodePickup.createWithAmmo, 7, '${7} = create_pickup_with_ammo ${pickup.1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false, true})
+-- INI: 04a6=6,%6d% = create_asset_money_pickup_at %1d% %2d% %3d% money %4d% rate %5d%
+Opcode.register(0x04a6, SharedOpcodePickup.createProtection, 6, '${6} = create_protection_pickup ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false, true})
+-- INI: 0517=5,%5d% = create_unavailable_asset_pickup %4g% at %1d% %2d% %3d%
+Opcode.register(0x0517, SharedOpcodePickup.createLockedProperty, 5, '${5} = create_locked_property_pickup ${4} ${1} ${2} ${3}', {false, false, false, false, true})
+-- INI: 0518=6,%6d% = create_available_asset_pickup %5g% at %1d% %2d% %3d% price %4d%
+Opcode.register(0x0518, SharedOpcodePickup.createForSaleProperty, 6, '${6} = create_forsale_property_pickup ${5} ${1} ${2} ${3} ${4}', {false, false, false, false, false, true})

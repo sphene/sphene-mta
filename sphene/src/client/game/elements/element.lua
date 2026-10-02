@@ -408,6 +408,13 @@ function ElementWrapper:getType()
     return "unknown"
 end
 
+function ElementWrapper:getDebugParameters()
+    return {
+        Color = tocolor(255, 255, 255, 255),
+        Title = self:getId().." ("..self:getType()..")"
+    }
+end
+
 function ElementWrapper:onPreFrame()
     if self.element then
         ElementManager.runExternalScriptsForElement(self)

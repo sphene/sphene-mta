@@ -98,16 +98,29 @@ function SanAndreasOpcodeSearchlight.switchOnGround(_)
 end
 
 
-Opcode.register(0x06b1, SanAndreasOpcodeSearchlight.create, '[var handle: Searchlight] = create_searchlight {x} [float] {y} [float] {z} [float] {xPoint} [float] {yPoint} [float] {zPoint} [float] {radius} [float] {radiusPoint} [float]')
-Opcode.register(0x06b2, SanAndreasOpcodeSearchlight.delete, 'delete_searchlight [Searchlight]')
-Opcode.register(0x06b3, SanAndreasOpcodeSearchlight.doesExist, 'does_searchlight_exist {handle} [any]')
-Opcode.register(0x06b4, SanAndreasOpcodeSearchlight.moveBetweenCoords, 'move_searchlight_between_coords [Searchlight] {fromX} [float] {fromY} [float] {fromZ} [float] {toX} [float] {toY} [float] {toZ} [float] {speed} [float]')
-Opcode.register(0x06b5, SanAndreasOpcodeSearchlight.pointAtCoord, 'point_searchlight_at_coord [Searchlight] {x} [float] {y} [float] {z} [float] {speed} [float]')
-Opcode.register(0x06b6, SanAndreasOpcodeSearchlight.pointAtChar, 'point_searchlight_at_char [Searchlight] {handle} [Char] {speed} [float]')
-Opcode.register(0x06b7, SanAndreasOpcodeSearchlight.isCharIn, 'is_char_in_searchlight [Searchlight] {handle} [Char]')
-Opcode.register(0x06bf, SanAndreasOpcodeSearchlight.pointAtVehicle, 'point_searchlight_at_vehicle [Searchlight] {handle} [Car] {speed} [float]')
-Opcode.register(0x06c0, SanAndreasOpcodeSearchlight.isVehicleIn, 'is_vehicle_in_searchlight [Searchlight] {handle} [Car]')
-Opcode.register(0x06c1, SanAndreasOpcodeSearchlight.createOnVehicle, '[var handle: Searchlight] = create_searchlight_on_vehicle {vehicle} [Car] {xOffset} [float] {yOffset} [float] {zOffset} [float] {xPoint} [float] {yPoint} [float] {zPoint} [float] {pointRadius} [float] {radius} [float]')
-Opcode.register(0x06ca, SanAndreasOpcodeSearchlight.attachToObject, 'attach_searchlight_to_searchlight_object [Searchlight] {spotTower} [Object] {spotHousing} [Object] {spotBulb} [Object] {xOffset} [float] {yOffset} [float] {zOffset} [float]')
-Opcode.register(0x0941, SanAndreasOpcodeSearchlight.setClipIfColliding, 'set_searchlight_clip_if_colliding [Searchlight] {state} [bool]')
-Opcode.register(0x0a02, SanAndreasOpcodeSearchlight.switchOnGround, 'switch_on_ground_searchlight [Searchlight] {state} [bool]')
+-- INI: 06B1=9,%9d% = create_searchlight_at %1d% %2d% %3d% radius %8d% target %4d% %5d% %6d% radius %7d%
+Opcode.register(0x06b1, SanAndreasOpcodeSearchlight.create, 9, '${9} = create_searchlight ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false, true})
+-- INI: 06B2=1,destroy_searchlight %1d%
+Opcode.register(0x06b2, SanAndreasOpcodeSearchlight.delete, 1, 'delete_searchlight ${1}', {false})
+-- INI: 06B3=1,  searchlight %1d% active
+Opcode.register(0x06b3, SanAndreasOpcodeSearchlight.doesExist, 1, 'does_searchlight_exist ${1}', {false})
+-- INI: 06B4=8,set_searchlight %1d% path_between %2d% %3d% %4d% and %5d% %6d% %7d% speed %8d%
+Opcode.register(0x06b4, SanAndreasOpcodeSearchlight.moveBetweenCoords, 8, 'move_searchlight_between_coords ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}', {false, false, false, false, false, false, false, false})
+-- INI: 06B5=5,set_searchlight %1d% travel_to %2d% %3d% %4d% speed %5d%
+Opcode.register(0x06b5, SanAndreasOpcodeSearchlight.pointAtCoord, 5, 'point_searchlight_at_coord ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 06B6=3,set_searchlight %1d% follow_actor %2d% speed %3d%
+Opcode.register(0x06b6, SanAndreasOpcodeSearchlight.pointAtChar, 3, 'point_searchlight_at_char ${1} ${2} ${3}', {false, false, false})
+-- INI: 06B7=2,  searchlight %1d% spotted_actor %2d%
+Opcode.register(0x06b7, SanAndreasOpcodeSearchlight.isCharIn, 2, 'is_char_in_searchlight ${1} ${2}', {false, false})
+-- INI: 06BF=3,set_searchlight %1d% follow_car %2d% speed %3d%
+Opcode.register(0x06bf, SanAndreasOpcodeSearchlight.pointAtVehicle, 3, 'point_searchlight_at_vehicle ${1} ${2} ${3}', {false, false, false})
+-- INI: 06C0=2,  searchlight %1d% spotted_car %2d%
+Opcode.register(0x06c0, SanAndreasOpcodeSearchlight.isVehicleIn, 2, 'is_vehicle_in_searchlight ${1} ${2}', {false, false})
+-- INI: 06C1=10,create_searchlight %10d% on_car %1d% with_offset %2d% %3d% %4d% radius %9d% target %5d% %6d% %7d% radius %8d%
+Opcode.register(0x06c1, SanAndreasOpcodeSearchlight.createOnVehicle, 10, '${10} = create_searchlight_on_vehicle ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false, true})
+-- INI: 06CA=7,attach_searchlight %1d% to_tower %2d% to_housing %3d% to_bulb %4d% with_offset %5d% %6d% %7d%
+Opcode.register(0x06ca, SanAndreasOpcodeSearchlight.attachToObject, 7, 'attach_searchlight_to_searchlight_object ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 0941=2,unknown_searchlight %1d% flag %2h%
+Opcode.register(0x0941, SanAndreasOpcodeSearchlight.setClipIfColliding, 2, 'set_searchlight_clip_if_colliding ${1} ${2}', {false, false})
+-- INI: 0A02=2,set_searchlight %1d% lights_through_obstacles %2h%
+Opcode.register(0x0a02, SanAndreasOpcodeSearchlight.switchOnGround, 2, 'switch_on_ground_searchlight ${1} ${2}', {false, false})

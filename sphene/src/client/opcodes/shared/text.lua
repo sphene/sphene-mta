@@ -369,50 +369,91 @@ function SharedOpcodeText.removeLabel(_)
 end
 
 
-Opcode.register(0x00ba, SharedOpcodeText.printBig, 'print_big {key} [gxt_key] {time} [int] {style} [TextStyle]')
-Opcode.register(0x00bb, SharedOpcodeText.print, 'print {key} [gxt_key] {time} [int] {flag} [int]')
-Opcode.register(0x00bc, SharedOpcodeText.printNow, 'print_now {key} [gxt_key] {time} [int] {flag} [int]')
-Opcode.register(0x00be, SharedOpcodeText.clearPrints, 'clear_prints')
-Opcode.register(0x01e3, SharedOpcodeText.printWithNumberBig, 'print_with_number_big {key} [gxt_key] {num} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x01e4, SharedOpcodeText.printWithNumber, 'print_with_number {key} [gxt_key] {num} [int] {duration} [int] {flag} [int]')
-Opcode.register(0x01e5, SharedOpcodeText.printWithNumberNow, 'print_with_number_now {key} [gxt_key] {num} [int] {duration} [int] {flag} [int]')
-Opcode.register(0x0217, SharedOpcodeText.printBigQ, 'print_big_q {key} [gxt_key] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x02fd, SharedOpcodeText.printWith2NumbersNow, 'print_with_2_numbers_now {key} [gxt_key] {num1} [int] {num2} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x02ff, SharedOpcodeText.printWith3Numbers, 'print_with_3_numbers {key} [gxt_key] {num1} [int] {num2} [int] {num3} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x0302, SharedOpcodeText.printWith4Numbers, 'print_with_4_numbers {key} [gxt_key] {num1} [int] {num2} [int] {num3} [int] {num4} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x0308, SharedOpcodeText.printWith6Numbers, 'print_with_6_numbers {key} [gxt_key] {num1} [int] {num2} [int] {num3} [int] {num4} [int] {num5} [int] {num6} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x033e, SharedOpcodeText.display, 'display_text {offsetLeft} [float] {offsetTop} [float] {key} [gxt_key]')
-Opcode.register(0x033f, SharedOpcodeText.setScale, 'set_text_scale {widthScale} [float] {heightScale} [float]')
-Opcode.register(0x0340, SharedOpcodeText.setColor, 'set_text_colour {red} [int] {green} [int] {blue} [int] {alpha} [int]')
-Opcode.register(0x0341, SharedOpcodeText.setJustify, 'set_text_justify {state} [bool]')
-Opcode.register(0x0342, SharedOpcodeText.setCenter, 'set_text_centre {state} [bool]')
-Opcode.register(0x0343, SharedOpcodeText.setWrapX, 'set_text_wrapx {width} [float]')
-Opcode.register(0x0345, SharedOpcodeText.setBackground, 'set_text_background {state} [bool]')
-Opcode.register(0x0348, SharedOpcodeText.setProportional, 'set_text_proportional {state} [bool]')
-Opcode.register(0x0349, SharedOpcodeText.setFont, 'set_text_font {font} [Font]')
-Opcode.register(0x036d, SharedOpcodeText.printWith2NumbersBig, 'print_with_2_numbers_big {key} [gxt_key] {num1} [int] {num2} [int] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x0384, SharedOpcodeText.printStringInStringNow, 'print_string_in_string_now {templateKey} [gxt_key] {replacementKey} [gxt_key] {duration} [int] {style} [TextStyle]')
-Opcode.register(0x03d5, SharedOpcodeText.clearThisPrint, 'clear_this_print {key} [gxt_key]')
-Opcode.register(0x03d6, SharedOpcodeText.clearThisBigPrint, 'clear_this_big_print {key} [gxt_key]')
-Opcode.register(0x03e4, SharedOpcodeText.setRightJustify, 'set_text_right_justify {state} [bool]')
-Opcode.register(0x03e5, SharedOpcodeText.printHelp, 'print_help {key} [gxt_key]')
-Opcode.register(0x03e6, SharedOpcodeText.clearHelp, 'clear_help')
-Opcode.register(0x03eb, SharedOpcodeText.clearSmallPrints, 'clear_small_prints')
-Opcode.register(0x03f0, SharedOpcodeText.useCommands, 'use_text_commands {state} [bool]')
-Opcode.register(0x045a, SharedOpcodeText.displayWithNumber, 'display_text_with_number {offsetLeft} [float] {offsetTop} [float] {key} [gxt_key] {num} [int]')
-Opcode.register(0x045b, SharedOpcodeText.displayWith2Numbers, 'display_text_with_2_numbers {offsetLeft} [float] {offsetTop} [float] {key} [gxt_key] {num1} [int] {num2} [int]')
-Opcode.register(0x0512, SharedOpcodeText.printHelpForever, 'print_help_forever {key} [gxt_key]')
-Opcode.register(0x054c, SharedOpcodeText.loadMissionText, 'load_mission_text {tableName} [string]')
-Opcode.register(0x0aca, SharedOpcodeText.printHelpString, 'print_help_string {text} [string]')
-Opcode.register(0x0acb, SharedOpcodeText.printBigString, 'print_big_string {text} [string] {time} [int] {style} [TextStyle]')
-Opcode.register(0x0acc, SharedOpcodeText.printString, 'print_string {text} [string] {time} [int]')
-Opcode.register(0x0acd, SharedOpcodeText.printStringNow, 'print_string_now {text} [string] {time} [int]')
-Opcode.register(0x0ace, SharedOpcodeText.printHelpFormatted, 'print_help_formatted {text} [string] {args} [arguments]')
-Opcode.register(0x0acf, SharedOpcodeText.printBigFormatted, 'print_big_formatted {format} [string] {time} [int] {style} [TextStyle] {args} [arguments]')
-Opcode.register(0x0ad0, SharedOpcodeText.printFormatted, 'print_formatted {format} [string] {time} [int] {args} [arguments]')
-Opcode.register(0x0ad1, SharedOpcodeText.printFormattedNow, 'print_formatted_now {format} [string] {time} [int] {args} [arguments]')
-Opcode.register(0x0ad3, SharedOpcodeText.stringFormat, 'string_format {buffer} [int] {format} [string] {args} [arguments]')
-Opcode.register(0x0ad4, SharedOpcodeText.scanString, '[var nValues: int], [var values: arguments] = scan_string {string} [string] {format} [string]')
-Opcode.register(0x0ade, SharedOpcodeText.getLabelString, '[var text: string] = get_text_label_string {key} [gxt_key]')
-Opcode.register(0x0adf, SharedOpcodeText.addLabel, 'add_text_label {dynamicKey} [gxt_key] {text} [string]')
-Opcode.register(0x0ae0, SharedOpcodeText.removeLabel, 'remove_text_label {key} [gxt_key]')
+-- INI: 00ba=3,text_styled %1g% %2d% ms %3d%
+Opcode.register(0x00ba, SharedOpcodeText.printBig, 3, 'print_big ${1} ${2} ${3}', {false, false, false})
+-- INI: 00bb=3,text_lowpriority %1g% time %2d% %3d%
+Opcode.register(0x00bb, SharedOpcodeText.print, 3, 'print ${1} ${2} ${3}', {false, false, false})
+-- INI: 00bc=3,text_highpriority %1g% time %2d% %3d%
+Opcode.register(0x00bc, SharedOpcodeText.printNow, 3, 'print_now ${1} ${2} ${3}', {false, false, false})
+-- INI: 00be=0,text_clear_all
+Opcode.register(0x00be, SharedOpcodeText.clearPrints, 0, 'clear_prints', {})
+-- INI: 01e3=4,text_1number_styled %1g% number %2d% time %3d% style %4d%
+Opcode.register(0x01e3, SharedOpcodeText.printWithNumberBig, 4, 'print_with_number_big ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 01e4=4,text_1number_lowpriority %1g% %2d% time %3d% %4d%
+Opcode.register(0x01e4, SharedOpcodeText.printWithNumber, 4, 'print_with_number ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 01e5=4,text_1number_highpriority %1g% %2d% time %3d% %4d%
+Opcode.register(0x01e5, SharedOpcodeText.printWithNumberNow, 4, 'print_with_number_now ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0217=3,text_styled %1g% time %2d% style %3d%
+Opcode.register(0x0217, SharedOpcodeText.printBigQ, 3, 'print_big_q ${1} ${2} ${3}', {false, false, false})
+-- INI: 02fd=5,text_2numbers_highpriority %1g% %2d% %3d% time %4d% %5d%
+Opcode.register(0x02fd, SharedOpcodeText.printWith2NumbersNow, 5, 'print_with_2_numbers_now ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 02ff=6,text_3numbers_lowpriority %1g% %2d% %3d% %4d% time time %5d% %6h%
+Opcode.register(0x02ff, SharedOpcodeText.printWith3Numbers, 6, 'print_with_3_numbers ${1} ${2} ${3} ${4} ${5} ${6}', {false, false, false, false, false, false})
+-- INI: 0302=7,text_4numbers_lowpriority %1g% %2d% %3d% %4d% %5d% time %6d% %7d%
+Opcode.register(0x0302, SharedOpcodeText.printWith4Numbers, 7, 'print_with_4_numbers ${1} ${2} ${3} ${4} ${5} ${6} ${7}', {false, false, false, false, false, false, false})
+-- INI: 0308=9,text_6numbers_lowpriority %1g% %2d% %3d% %4d% %5d% %6d% %7d% time %8d% %9d%
+Opcode.register(0x0308, SharedOpcodeText.printWith6Numbers, 9, 'print_with_6_numbers ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9}', {false, false, false, false, false, false, false, false, false})
+-- INI: 033e=3,text_draw %1d% %2d% %3g%
+Opcode.register(0x033e, SharedOpcodeText.display, 3, 'display_text ${1} ${2} ${3}', {false, false, false})
+-- INI: 033f=2,set_text_draw_letter_width_height %1d% %2d%
+Opcode.register(0x033f, SharedOpcodeText.setScale, 2, 'set_text_scale ${1} ${2}', {false, false})
+-- INI: 0340=4,set_text_draw_color %1d% %2d% %3d% %4d%
+Opcode.register(0x0340, SharedOpcodeText.setColor, 4, 'set_text_colour ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 0341=1,set_text_draw_align_justify %1d%
+Opcode.register(0x0341, SharedOpcodeText.setJustify, 1, 'set_text_justify ${1}', {false})
+-- INI: 0342=1,set_text_draw_centered %1d%
+Opcode.register(0x0342, SharedOpcodeText.setCenter, 1, 'set_text_centre ${1}', {false})
+-- INI: 0343=1,set_text_linewidth %1d%
+Opcode.register(0x0343, SharedOpcodeText.setWrapX, 1, 'set_text_wrapx ${1}', {false})
+-- INI: 0345=1,set_text_draw_in_box %1d%
+Opcode.register(0x0345, SharedOpcodeText.setBackground, 1, 'set_text_background ${1}', {false})
+-- INI: 0348=1,set_text_draw_proportional %1d%
+Opcode.register(0x0348, SharedOpcodeText.setProportional, 1, 'set_text_proportional ${1}', {false})
+-- INI: 0349=1,text_draw_style = %1d%
+Opcode.register(0x0349, SharedOpcodeText.setFont, 1, 'set_text_font ${1}', {false})
+-- INI: 036d=5,text_2numbers_styled %1g% numbers %2d% %3d% time %4d% style %5d%
+Opcode.register(0x036d, SharedOpcodeText.printWith2NumbersBig, 5, 'print_with_2_numbers_big ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 0384=4,text_1string_highpriority %1g% %2g% time %3d% %4d%
+Opcode.register(0x0384, SharedOpcodeText.printStringInStringNow, 4, 'print_string_in_string_now ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 03d5=1,remove_text %1g%
+Opcode.register(0x03d5, SharedOpcodeText.clearThisPrint, 1, 'clear_this_print ${1}', {false})
+-- INI: 03d6=1,remove_styled_text %1g%
+Opcode.register(0x03d6, SharedOpcodeText.clearThisBigPrint, 1, 'clear_this_big_print ${1}', {false})
+-- INI: 03e4=1,set_text_draw_align_right %1h%
+Opcode.register(0x03e4, SharedOpcodeText.setRightJustify, 1, 'set_text_right_justify ${1}', {false})
+-- INI: 03e5=1,text_box %1g%
+Opcode.register(0x03e5, SharedOpcodeText.printHelp, 1, 'print_help ${1}', {false})
+-- INI: 03e6=0,remove_text_box
+Opcode.register(0x03e6, SharedOpcodeText.clearHelp, 0, 'clear_help', {})
+-- INI: 03eb=0,clear_small_messages_only
+Opcode.register(0x03eb, SharedOpcodeText.clearSmallPrints, 0, 'clear_small_prints', {})
+-- INI: 03f0=1,enable_text_draw %1d%
+Opcode.register(0x03f0, SharedOpcodeText.useCommands, 1, 'use_text_commands ${1}', {false})
+-- INI: 045a=4,text_draw_1number %1d% %2d% %3g% %4d%
+Opcode.register(0x045a, SharedOpcodeText.displayWithNumber, 4, 'display_text_with_number ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 045b=5,text_draw_2numbers %1d% %2d% %3g% %4d% %5d%
+Opcode.register(0x045b, SharedOpcodeText.displayWith2Numbers, 5, 'display_text_with_2_numbers ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false})
+-- INI: 0512=1,show_permanent_text_box %1s%
+Opcode.register(0x0512, SharedOpcodeText.printHelpForever, 1, 'print_help_forever ${1}', {false})
+-- INI: 054c=1,use_GXT_table %1s%
+Opcode.register(0x054c, SharedOpcodeText.loadMissionText, 1, 'load_mission_text ${1}', {false})
+-- INI: 0ACA=1,show_text_box %1s%
+Opcode.register(0x0aca, SharedOpcodeText.printHelpString, 1, 'print_help_string ${1}', {false})
+-- INI: 0ACB=3,show_styled_text %1s% time %2d% style %3d%
+Opcode.register(0x0acb, SharedOpcodeText.printBigString, 3, 'print_big_string ${1} ${2} ${3}', {false, false, false})
+-- INI: 0ACC=2,show_text_lowpriority %1s% time %2d%
+Opcode.register(0x0acc, SharedOpcodeText.printString, 2, 'print_string ${1} ${2}', {false, false})
+-- INI: 0ACD=2,show_text_highpriority %1s% time %2d%
+Opcode.register(0x0acd, SharedOpcodeText.printStringNow, 2, 'print_string_now ${1} ${2}', {false, false})
+Opcode.register(0x0ace, SharedOpcodeText.printHelpFormatted, -1, 'print_help_formatted ${1}', {})
+Opcode.register(0x0acf, SharedOpcodeText.printBigFormatted, -1, 'print_big_formatted ${1} ${2} ${3}', {})
+Opcode.register(0x0ad0, SharedOpcodeText.printFormatted, -1, 'print_formatted ${1} ${2}', {})
+Opcode.register(0x0ad1, SharedOpcodeText.printFormattedNow, -1, 'print_formatted_now ${1} ${2}', {})
+Opcode.register(0x0ad3, SharedOpcodeText.stringFormat, -1, 'string_format ${1} ${2}', {1})
+Opcode.register(0x0ad4, SharedOpcodeText.scanString, -1, '${1}, ${2} = scan_string ${3} ${4}', {3})
+-- INI: 0ADE=2,%2d% = text_label_string %1d%
+Opcode.register(0x0ade, SharedOpcodeText.getLabelString, 2, '${1} = get_text_label_string ${2}', {true, false})
+-- INI: 0ADF=2,add_text_label %1d% text %2d%
+Opcode.register(0x0adf, SharedOpcodeText.addLabel, 2, 'add_text_label ${1} ${2}', {false, false})
+-- INI: 0AE0=1,remove_text_label %1d%
+Opcode.register(0x0ae0, SharedOpcodeText.removeLabel, 1, 'remove_text_label ${1}', {false})

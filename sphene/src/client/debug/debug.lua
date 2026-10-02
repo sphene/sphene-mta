@@ -17,7 +17,6 @@ local pauseData = {}
 local frameCount = 1
 
 local frames = {}
-local opcodes = {}
 local elements = {}
 
 local previewElements = {}
@@ -96,17 +95,30 @@ function Debug.record()
 
     frames = {}
     frameCount = 1
-    opcodes = {}
 
     Debug.setupFrameData(frameCount)
 
     Overlay.triggerEvent('onDebugStatusUpdate', { recording = _recording })
 
-    if (fileExists('threads.txt')) then
-        fileDelete('threads.txt')
+    local dateTime = getRealTime()
+    local filePath = string.format('%04d-%02d-%02d_%02d-%02d-%02d',
+        dateTime.year + 1900,
+        dateTime.month + 1,
+        dateTime.monthday,
+        dateTime.hour,
+        dateTime.minute,
+        dateTime.second
+    )
+
+    local realFilePath = filePath
+    local index = 1
+
+    while (fileExists(realFilePath..'.spt')) do
+        index = index + 1
+        realFilePath = filePath..'_'..index
     end
 
-    threadsFile = fileCreate('threads.txt')
+    threadsFile = fileCreate(realFilePath..'.spt')
 end
 
 function Debug.stopRecord()
@@ -184,6 +196,10 @@ function Debug.prettifyTable(tbl)
 end
 
 function Debug.nextOpcode()
+    if not _nextOpcode then
+        return
+    end
+
     if (not _recording) then
         return _nextOpcode()
     end
@@ -203,7 +219,7 @@ function Debug.nextOpcode()
 
     local opcode = Script.getOptimizedScript()[(position - Script.getMainOffset()) + 1]
 
-    if (opcode and opcode.debug.paramString) then
+    --[[if (opcode and opcode.debug.paramString) then
         local parameters = {}
 
         for i, param in ipairs(opcode.debug.paramString()) do
@@ -226,75 +242,88 @@ function Debug.nextOpcode()
             thread = currentThread.name,
             frame = frameCount,
             opcode = opcode.opcode,
-            example = opcode.debug.example:gsub('%%(%d+)([a-z])%%', '$%1'),
+            example = opcode.debug.example,
             parameters = parameters,
         }
 
-        --[[if (threadsFile) then
+        if (threadsFile) then
             fileWrite(threadsFile, toJSON(opcodeData, false, 'spaces').."\n")
-        end]]
-
-        opcodes[#opcodes + 1] = opcodeData
-    end
+        end
+    end]]
 
     if (opcode and opcode.debug.paramString) then
         local opcodeString = opcode.debug.example
 
-        for i, param in ipairs(opcode.debug.paramString()) do
-            local opcodeParam = opcode.debug.paramsData[i]
+        if opcode.opcode == 0x00D6 then
+            local ifParamCount = opcode.debug.paramsData[1] or {
+                value = 0,
+            }
 
-            if type(param) == 'table' then
-                param = Debug.prettifyTable(param)
+            ifParamCount = ifParamCount.value or 0
+
+            if ifParamCount == 0 then
+                opcodeString = 'if'
+            elseif ifParamCount < 8 then
+                opcodeString = 'if and'
+            else
+                opcodeString = 'if or'
             end
+        else
+            for i, param in ipairs(opcode.debug.paramString()) do
+                local opcodeParam = opcode.debug.paramsData[i]
 
-            if (type(opcodeParam.value) == "table" and opcodeParam.value.pointer ~= nil) then
-                if ((opcodeParam.value.type or -1) == 0) then
-                    if (opcodeParam.value.pointer < 0) then
-                        param = '$'..(-opcodeParam.value.pointer)..'('..tostring(param)..')'
+                if type(param) == 'table' then
+                    param = Debug.prettifyTable(param)
+                end
+
+                if (type(opcodeParam.value) == "table" and opcodeParam.value.pointer ~= nil) then
+                    if ((opcodeParam.value.type or -1) == 0) then
+                        if (opcodeParam.value.pointer < 0) then
+                            param = '$'..(-opcodeParam.value.pointer)..'('..tostring(param)..')'
+                        else
+                            param = '$'..opcodeParam.value.pointer..'('..tostring(param)..')'
+                        end
                     else
-                        param = '$'..opcodeParam.value.pointer..'('..tostring(param)..')'
+                        param = opcodeParam.value.pointer..'@('..tostring(param)..')'
                     end
-                else
-                    param = opcodeParam.value.pointer..'@('..tostring(param)..')'
-                end
-            elseif (type(opcodeParam.value) == "table" and opcodeParam.value.index ~= nil) then
-                local indexParam
+                elseif (type(opcodeParam.value) == "table" and opcodeParam.value.index ~= nil) then
+                    local indexParam
 
-                if (opcodeParam.value.flags >= 0 and opcodeParam.value.flags <= 0x3) then
-                    indexParam = opcodeParam.value.index.."@"
-                elseif (opcodeParam.value.flags >= 0x80 and opcodeParam.value.flags <= 0x83) then
-                    if (opcodeParam.value.index < 0) then
-                        indexParam = "$"..(-opcodeParam.value.index)
+                    if (opcodeParam.value.flags >= 0 and opcodeParam.value.flags <= 0x3) then
+                        indexParam = opcodeParam.value.index.."@"
+                    elseif (opcodeParam.value.flags >= 0x80 and opcodeParam.value.flags <= 0x83) then
+                        if (opcodeParam.value.index < 0) then
+                            indexParam = "$"..(-opcodeParam.value.index)
+                        else
+                            indexParam = "$"..opcodeParam.value.index
+                        end
                     else
-                        indexParam = "$"..opcodeParam.value.index
+                        indexParam = opcodeParam.value.index
                     end
-                else
-                    indexParam = opcodeParam.value.index
-                end
 
-                if ((opcodeParam.value.type or -1) == 0) then
-                    if (opcodeParam.value.offset < 0) then
-                        param = '$'..(-opcodeParam.value.offset)..'['..indexParam..']('..tostring(param)..')'
+                    if ((opcodeParam.value.type or -1) == 0) then
+                        if (opcodeParam.value.offset < 0) then
+                            param = '$'..(-opcodeParam.value.offset)..'['..indexParam..']('..tostring(param)..')'
+                        else
+                            param = '$'..opcodeParam.value.offset..'['..indexParam..']('..tostring(param)..')'
+                        end
                     else
-                        param = '$'..opcodeParam.value.offset..'['..indexParam..']('..tostring(param)..')'
+                        param = opcodeParam.value.offset..'@['..indexParam..']('..tostring(param)..')'
                     end
-                else
-                    param = opcodeParam.value.offset..'@['..indexParam..']('..tostring(param)..')'
-                end
-            elseif (type(opcodeParam.value) == 'string') then
-                param = '\''..opcodeParam.value..'\''
-            elseif (type(opcodeParam.value) == 'number') then
-                if (currentThread:isMissionThread() or currentThread:isExternalScript()) then
-                    opcodeString = opcodeString:gsub('%%'..i..'p%%', '@'..currentThread.name..'_'..(-param))
-                else
-                    opcodeString = opcodeString:gsub('%%'..i..'p%%', '@'..currentThread.name..'_'..(param - currentThread.startPosition))
+                elseif (type(opcodeParam.value) == 'string') then
+                    param = '\''..opcodeParam.value..'\''
+                elseif (type(opcodeParam.value) == 'number') then
+                    if (currentThread:isMissionThread() or currentThread:isExternalScript()) then
+                        opcodeString = opcodeString:gsub('${pointer.'..i..'}', '@'..currentThread.name..'_'..(-param))
+                    else
+                        opcodeString = opcodeString:gsub('${pointer.'..i..'}', '@'..currentThread.name..'_'..(param - currentThread.startPosition))
+                    end
+
+                    opcodeString = opcodeString:gsub('${object.'..i..'}', '#'..(Script.objectsById[math.abs(opcodeParam.value - 1)] or 'UNKNOWN'))
                 end
 
-                opcodeString = opcodeString:gsub('%%'..i..'o%%', '#'..(Script.objectsById[math.abs(opcodeParam.value - 1)] or 'UNKNOWN'))
-                opcodeString = opcodeString:gsub('%%'..i..'m%%', '#'..(Script.objectsById[math.abs(opcodeParam.value - 1)] or 'UNKNOWN'))
+                opcodeString = opcodeString:gsub('${'..i..'}', param)
             end
-
-            opcodeString = opcodeString:gsub('%%'..i..'[a-z]%%', param)
         end
 
         local _partiallyImplemented = Script.setOpcodePartiallyImplemented
@@ -312,29 +341,53 @@ function Debug.nextOpcode()
             return _unimplemented()
         end
 
-        _nextOpcode()
+        local status, err = pcall(_nextOpcode)
+        local offset = position - Script.getMainOffset()
 
-        local result = currentThread:getLastResult()
-        local resultLine = ""
+        if currentThread:isMissionThread() or currentThread:isExternalScript() then
+            offset = position - currentThread.startPosition
+        elseif currentThread.startPosition > Script.getMainOffset() then
+            offset = position - currentThread.startPosition
+        end
+
+        local resultLine = "["..(currentThread.name or 'UNKNOWN').."_"..offset.."]: "
 
         if (#Thread.currentThread.ifData["paramData"] > 0) then
-            result = Thread.currentThread.ifData["paramData"][#Thread.currentThread.ifData["paramData"]]
+            local result = Thread.currentThread.ifData["paramData"][#Thread.currentThread.ifData["paramData"]]
+            resultLine = "  "..resultLine
+
+            if result ~= nil then
+                resultLine = resultLine.."(return: "..tostring(result)..") "
+            end
+
+            if opcode.negated then
+                opcodeString = "NOT "..opcodeString
+            end
         end
 
         Script.setOpcodePartiallyImplemented = _partiallyImplemented
         Script.setOpcodeUnimplemented = _unimplemented
 
-        if (result ~= nil) then
-            resultLine = "(return: "..tostring(result)..") "
-        end
-
         if (implementationStatus == 1) then
-            resultLine = "(PARTIALLY IMPLEMENTED) "..resultLine
+            resultLine = resultLine.."(PARTIALLY IMPLEMENTED) "
         elseif (implementationStatus == 2) then
-            resultLine = "(UNIMPLEMENTED) "..resultLine
+            resultLine = resultLine.."(UNIMPLEMENTED) "
         end
 
-        fileWrite(threadsFile, "["..(currentThread.name or 'UNKNOWN').."]: "..resultLine..string.format("%.4X", opcode.opcode)..": "..opcodeString.."\n")
+        if not status then
+            resultLine = "(ERROR) "..resultLine
+        end
+
+        --if Thread.currentThread:getName() == 'DESERT9' then
+            fileWrite(threadsFile, resultLine..string.format("%.4X", opcode.opcode)..": "..opcodeString.."\n")
+        --end
+
+        if not status then
+            Logger.error('DEBUG', 'Error occurred while executing opcode: '..tostring(err))
+            Script.panic(err)
+
+            return false
+        end
 
         return true
     end
@@ -465,8 +518,45 @@ function Debug.render()
             --TrafficArea.debugRenderNaviNodes()
         end
 
-        Debug.vehicleDebugRender()
-        Debug.actorDebugRender()
+        local cameraX, cameraY, cameraZ = getCameraMatrix()
+        local player = PlayerElement.getLocalPlayer()
+
+        if player then
+            Debug.debugElementRender(player)
+        end
+
+        for _, vehicle in pairs(VehicleElement:all()) do
+            if (getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, vehicle:getPosition()) or 999999) < 80 then
+                Debug.debugElementRender(vehicle)
+            end
+        end
+
+        for _, actor in pairs(ActorElement:all()) do
+            if (getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, actor:getPosition()) or 999999) < 80 then
+                Debug.debugElementRender(actor)
+            end
+        end
+
+        for _, object in pairs(ObjectElement:all()) do
+            if (getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, object:getPosition()) or 999999) < 80 then
+                Debug.debugElementRender(object)
+            end
+        end
+
+        for _, pickup in pairs(PickupElement:all()) do
+            if (getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, pickup:getPosition()) or 999999) < 80 then
+                Debug.debugElementRender(pickup)
+            end
+        end
+
+        for _, marker in pairs(MarkerElement:all()) do
+            if (getDistanceBetweenPoints3D(cameraX, cameraY, cameraZ, marker:getPosition()) or 999999) < 160 then
+                Debug.debugElementRender(marker)
+            end
+        end
+
+        --[[Debug.vehicleDebugRender()
+        Debug.actorDebugRender()]]
 
         if (Debug.paused and Debug.stepFrame) then
             Logger.debug('DEBUG', 'Stepping frame')
@@ -487,6 +577,57 @@ end
 function Debug.hudRender()
     if (Debug.paused and Debug.stepFrame) then
         Game.onHudRender()
+    end
+end
+
+function Debug.debugElementRender(element)
+    local debugParams = element:getDebugParameters()
+    local x, y, z = element:getPosition()
+
+    local maxZ = 0
+
+    if element.element then
+        _, _, _, _, _, maxZ = getElementBoundingBox(element.element)
+    end
+
+    z = z + (maxZ or 0) + 0.2
+
+    local sx, sy = getScreenFromWorldPosition(x, y, z, 152)
+
+    if not sx or not sy then
+        return
+    end
+
+    local debugColor = debugParams.Color or tocolor(255, 255, 255, 255)
+
+    dxDrawLine(sx, sy, sx + 150 * (1920 / screenWidth), sy, debugColor, 2 * (1920 / screenWidth), false)
+    dxDrawLine(sx, sy, sx - 20 * (1920 / screenWidth), sy + 40 * (1920 / screenWidth), debugColor, 2 * (1920 / screenWidth), false)
+
+    dxDrawText(debugParams.Title, sx, sy - 28 * (1920 / screenWidth), sx + 152 * (1920 / screenWidth), sy - 28 * (1920 / screenWidth),
+        tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default-bold", "left", "top", false, false, false, true)
+
+    dxDrawText(debugParams.Title, sx, sy - 30 * (1920 / screenWidth), sx + 150 * (1920 / screenWidth), sy - 30 * (1920 / screenWidth),
+        debugColor, 1.6 * (1920 / screenWidth), "default-bold", "left", "top", false, false, false, true)
+
+    debugParams.Color = nil
+    debugParams.Title = nil
+
+    local infoYPosition = sy + 10 * (1920 / screenWidth)
+
+    for property, value in pairs(debugParams) do
+        property = string.gsub(property, "_", " ")
+
+        local line = tostring(property)..": "..tostring(value)
+        local _, newLineCount = string.gsub(line, "\n", "\n")
+
+        dxDrawText(line, sx + 10 * (1920 / screenWidth), infoYPosition + 2 * (1920 / screenWidth), screenWidth,
+            infoYPosition + 2 * (1920 / screenWidth),
+            tocolor(0, 0, 0, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+        dxDrawText(line, sx + 10 * (1920 / screenWidth), infoYPosition, screenWidth, infoYPosition,
+            tocolor(255, 255, 255, 255), 1.6 * (1920 / screenWidth), "default", "left", "top", false, false, false, true)
+
+        infoYPosition = infoYPosition + (newLineCount + 1) * 28 * (1920 / screenWidth)
     end
 end
 
@@ -1087,13 +1228,6 @@ function Debug.onKey(button, press)
     end
 end
 
-function Debug.onDebugFramesGet(hash)
-    Overlay.triggerEvent("onDebugFramesReceived", hash, {
-        frames = frameCount,
-        opcodes = opcodes,
-    })
-end
-
 function Debug.isLoaded()
     return Debug.loaded
 end
@@ -1150,6 +1284,3 @@ end)
 -----------------------------------
 -- * Events
 -----------------------------------
-
-addEvent('sphene:debug:frames:get', true)
-addEventHandler("sphene:debug:frames:get", root, Debug.onDebugFramesGet)

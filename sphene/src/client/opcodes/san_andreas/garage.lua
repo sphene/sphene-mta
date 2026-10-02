@@ -23,6 +23,9 @@ function SanAndreasOpcodeGarage.setResprayFree(_, _)
 end
 
 
-Opcode.register(0x0299, SanAndreasOpcodeGarage.activate, 'activate_garage {garageId} [string]')
-Opcode.register(0x02b9, SanAndreasOpcodeGarage.deactivate, 'deactivate_garage {garageId} [string]')
-Opcode.register(0x093a, SanAndreasOpcodeGarage.setResprayFree, 'set_garage_respray_free {garageId} [string] {state} [bool]')
+-- INI: 0299=1,activate_garage %1d%
+Opcode.register(0x0299, SanAndreasOpcodeGarage.activate, 1, 'activate_garage ${1}', {false})
+-- INI: 02b9=1,deactivate_garage %1d%
+Opcode.register(0x02b9, SanAndreasOpcodeGarage.deactivate, 1, 'deactivate_garage ${1}', {false})
+-- INI: 093A=2,set_paynspray %1g% type_to_girlfriend %2h%
+Opcode.register(0x093a, SanAndreasOpcodeGarage.setResprayFree, 2, 'set_garage_respray_free ${1} ${2}', {false, false})

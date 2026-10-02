@@ -30,7 +30,11 @@ function SanAndreasOpcodeCutscene.isOn()
 end
 
 
-Opcode.register(0x06b9, SanAndreasOpcodeCutscene.hasLoaded, 'has_cutscene_loaded')
-Opcode.register(0x08d1, SanAndreasOpcodeCutscene.getOffset, '[var xOffset: float], [var yOffset: float], [var zOffset: float] = get_cutscene_offset')
-Opcode.register(0x08f0, SanAndreasOpcodeCutscene.appendToNext, 'append_to_next_cutscene {_p1} [string] {_p2} [string]')
-Opcode.register(0x0e25, SanAndreasOpcodeCutscene.isOn, 'is_on_cutscene')
+-- INI: 06B9=0,  cutscene_data_loaded
+Opcode.register(0x06b9, SanAndreasOpcodeCutscene.hasLoaded, 0, 'has_cutscene_loaded', {})
+-- INI: 08D1=3,store_cutscene_pos_to %1d% %2d% %3d%
+Opcode.register(0x08d1, SanAndreasOpcodeCutscene.getOffset, 3, '${1}, ${2}, ${3} = get_cutscene_offset', {true, true, true})
+-- INI: 08F0=2,set_cutscene_model %1g% texture %2g% ; 8-byte strings
+Opcode.register(0x08f0, SanAndreasOpcodeCutscene.appendToNext, 2, 'append_to_next_cutscene ${1} ${2}', {false, false})
+-- INI: 0E25=0,is_on_cutscene
+Opcode.register(0x0e25, SanAndreasOpcodeCutscene.isOn, 0, 'is_on_cutscene', {})

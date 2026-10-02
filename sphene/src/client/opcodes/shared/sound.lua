@@ -37,5 +37,7 @@ function SharedOpcodeSound.remove(_)
 end
 
 
-Opcode.register(0x018c, SharedOpcodeSound.addOneOffSound, 'add_one_off_sound {x} [float] {y} [float] {z} [float] {soundId} [ScriptSound]')
-Opcode.register(0x018e, SharedOpcodeSound.remove, 'remove_sound [Sound]')
+-- INI: 018c=4,play_sound %4d% at %1d% %2d% %3d%
+Opcode.register(0x018c, SharedOpcodeSound.addOneOffSound, 4, 'add_one_off_sound ${1} ${2} ${3} ${4}', {false, false, false, false})
+-- INI: 018e=1,stop_sound %1d%
+Opcode.register(0x018e, SharedOpcodeSound.remove, 1, 'remove_sound ${1}', {false})

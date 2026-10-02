@@ -207,18 +207,33 @@ function SharedOpcodeBlip.addShortRangeSpriteForContactPoint(posX, posY, posZ, i
 end
 
 
-Opcode.register(0x0161, SharedOpcodeBlip.addForCarOld, '[var handle: Blip] = add_blip_for_car_old {vehicle} [Car] {color} [BlipColor] {display} [BlipDisplay]')
-Opcode.register(0x0164, SharedOpcodeBlip.remove, 'remove_blip [Blip]')
-Opcode.register(0x0165, SharedOpcodeBlip.changeColor, 'change_blip_colour [Blip] {color} [BlipColor]')
-Opcode.register(0x0167, SharedOpcodeBlip.addForCoordOld, '[var handle: Blip] = add_blip_for_coord_old {x} [float] {y} [float] {z} [float] {colour} [BlipColor] {display} [BlipDisplay]')
-Opcode.register(0x0168, SharedOpcodeBlip.changeScale, 'change_blip_scale [Blip] {size} [int]')
-Opcode.register(0x0186, SharedOpcodeBlip.addForCar, '[var handle: Blip] = add_blip_for_car {vehicle} [Car]')
-Opcode.register(0x0187, SharedOpcodeBlip.addForChar, '[var handle: Blip] = add_blip_for_char {char} [Char]')
-Opcode.register(0x0188, SharedOpcodeBlip.addForObject, '[var handle: Blip] = add_blip_for_object {object} [Object]')
-Opcode.register(0x018a, SharedOpcodeBlip.addForCoord, '[var handle: Blip] = add_blip_for_coord {x} [float] {y} [float] {z} [float]')
-Opcode.register(0x018b, SharedOpcodeBlip.changeDisplay, 'change_blip_display [Blip] {display} [BlipDisplay]')
-Opcode.register(0x02a7, SharedOpcodeBlip.addSpriteForContactPoint, '[var handle: Blip] = add_sprite_blip_for_contact_point {x} [float] {y} [float] {z} [float] {sprite} [RadarSprite]')
-Opcode.register(0x02a8, SharedOpcodeBlip.addSpriteForCoord, '[var handle: Blip] = add_sprite_blip_for_coord {x} [float] {y} [float] {z} [float] {sprite} [RadarSprite]')
-Opcode.register(0x03dc, SharedOpcodeBlip.addForPickup, '[var handle: Blip] = add_blip_for_pickup {pickup} [Pickup]')
-Opcode.register(0x04ce, SharedOpcodeBlip.addShortRangeSpriteForCoord, '[var handle: Blip] = add_short_range_sprite_blip_for_coord {x} [float] {y} [float] {z} [float] {sprite} [RadarSprite]')
-Opcode.register(0x0570, SharedOpcodeBlip.addShortRangeSpriteForContactPoint, '[var handle: Blip] = add_short_range_sprite_blip_for_contact_point {x} [float] {y} [float] {z} [float] {sprite} [RadarSprite]')
+-- INI: 0161=4,%4d% = create_marker_above_car %1d% color %2d% display %3d%
+Opcode.register(0x0161, SharedOpcodeBlip.addForCarOld, 4, '${4} = add_blip_for_car_old ${1} ${2} ${3}', {false, false, false, true})
+-- INI: 0164=1,disable_marker %1d%
+Opcode.register(0x0164, SharedOpcodeBlip.remove, 1, 'remove_blip ${1}', {false})
+-- INI: 0165=2,set_marker %1d% color_to %2d%
+Opcode.register(0x0165, SharedOpcodeBlip.changeColor, 2, 'change_blip_colour ${1} ${2}', {false, true})
+-- INI: 0167=6,%6d% = create_marker_at %1d% %2d% %3d% color %4d% display %5d%
+Opcode.register(0x0167, SharedOpcodeBlip.addForCoordOld, 6, '${6} = add_blip_for_coord_old ${1} ${2} ${3} ${4} ${5}', {false, false, false, false, false, true})
+-- INI: 0168=2,set_marker %1d% size %2d%
+Opcode.register(0x0168, SharedOpcodeBlip.changeScale, 2, 'change_blip_scale ${1} ${2}', {false, false})
+-- INI: 0186=2,%2d% = create_marker_above_car %1d%
+Opcode.register(0x0186, SharedOpcodeBlip.addForCar, 2, '${2} = add_blip_for_car ${1}', {false, true})
+-- INI: 0187=2,%2d% = create_marker_above_actor %1d%
+Opcode.register(0x0187, SharedOpcodeBlip.addForChar, 2, '${2} = add_blip_for_char ${1}', {false, true})
+-- INI: 0188=2,%2d% = create_marker_above_object %1d%
+Opcode.register(0x0188, SharedOpcodeBlip.addForObject, 2, '${2} = add_blip_for_object ${1}', {false, true})
+-- INI: 018a=4,%4d% = create_checkpoint_at %1d% %2d% %3d%
+Opcode.register(0x018a, SharedOpcodeBlip.addForCoord, 4, '${4} = add_blip_for_coord ${1} ${2} ${3}', {false, false, false, true})
+-- INI: 018b=2,set_marker %1d% display %2d%
+Opcode.register(0x018b, SharedOpcodeBlip.changeDisplay, 2, 'change_blip_display ${1} ${2}', {false, false})
+-- INI: 02a7=5,%5d% = create_icon_marker_and_sphere %4d% at %1d% %2d% %3d%
+Opcode.register(0x02a7, SharedOpcodeBlip.addSpriteForContactPoint, 5, '${5} = add_sprite_blip_for_contact_point ${4} ${1} ${2} ${3}', {false, false, false, false, true})
+-- INI: 02a8=5,%5d% = create_marker %4d% at %1d% %2d% %3d%
+Opcode.register(0x02a8, SharedOpcodeBlip.addSpriteForCoord, 5, '${5} = add_sprite_blip_for_coord ${4} ${1} ${2} ${3}', {false, false, false, false, true})
+-- INI: 03dc=2,%2d% = create_marker_above_pickup %1d%
+Opcode.register(0x03dc, SharedOpcodeBlip.addForPickup, 2, '${2} = add_blip_for_pickup ${1}', {false, true})
+-- INI: 04ce=5,%5d% = create_icon_marker_without_sphere %4d% at %1d% %2d% %3d%
+Opcode.register(0x04ce, SharedOpcodeBlip.addShortRangeSpriteForCoord, 5, '${5} = add_short_range_sprite_blip_for_coord ${4} ${1} ${2} ${3}', {false, false, false, false, true})
+-- INI: 0570=5,%5d% = create_asset_radar_marker_with_icon %4h% at %1d% %2d% %3d%
+Opcode.register(0x0570, SharedOpcodeBlip.addShortRangeSpriteForContactPoint, 5, '${5} = add_short_range_sprite_blip_for_contact_point ${4} ${1} ${2} ${3}', {false, false, false, false, true})

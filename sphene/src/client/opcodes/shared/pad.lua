@@ -55,10 +55,7 @@ function SharedOpcodePad.getPositionOfAnalogueSticks(_, _, _, _, _)
         specialControlUpState = Pad.isControlPressed('special_control_up') and 1 or (Pad.isControlPressed('special_control_down') and -1 or 0)
     end
 
-    Script.storeValueAtIndex(2, rightAnalogState)
-    Script.storeValueAtIndex(3, forwardsAnalogState)
-    Script.storeValueAtIndex(4, specialControlRightState)
-    Script.storeValueAtIndex(5, specialControlUpState)
+    return rightAnalogState, forwardsAnalogState, specialControlRightState, specialControlUpState
 end
 
 -- Opcode: 0x0AB0
@@ -76,9 +73,15 @@ function SharedOpcodePad.testCheat(_)
 end
 
 
-Opcode.register(0x00e1, SharedOpcodePad.isButtonPressed, 'is_button_pressed {pad} [PadId] {buttonId} [Button]')
-Opcode.register(0x0293, SharedOpcodePad.getControllerMode, '[var mode: ControllerMode] = get_controller_mode')
-Opcode.register(0x03fd, SharedOpcodePad.setDrunkInputDelay, 'set_drunk_input_delay {pad} [PadId] {delay} [int]')
-Opcode.register(0x0494, SharedOpcodePad.getPositionOfAnalogueSticks, '[var leftStickX: int], [var leftStickY: int], [var rightStickX: int], [var rightStickY: int] = get_position_of_analogue_sticks {pad} [PadId]')
-Opcode.register(0x0ab0, SharedOpcodePad.isKeyPressed, 'is_key_pressed {keyCode} [KeyCode]')
-Opcode.register(0x0adc, SharedOpcodePad.testCheat, 'test_cheat {input} [string]')
+-- INI: 00e1=2,  player %1d% pressed_button %2d%
+Opcode.register(0x00e1, SharedOpcodePad.isButtonPressed, 2, 'is_button_pressed ${1} ${2}', {false, false})
+-- INI: 0293=1,%1d% = get_controller_mode
+Opcode.register(0x0293, SharedOpcodePad.getControllerMode, 1, '${1} = get_controller_mode', {true})
+-- INI: 03fd=2,set_player %1d% handling_responsiveness %2d%
+Opcode.register(0x03fd, SharedOpcodePad.setDrunkInputDelay, 2, 'set_drunk_input_delay ${1} ${2}', {false, false})
+-- INI: 0494=5,get_joystick %1h% data_to %2d% %3d% %4d% %5d%
+Opcode.register(0x0494, SharedOpcodePad.getPositionOfAnalogueSticks, 5, '${2}, ${3}, ${4}, ${5} = get_position_of_analogue_sticks ${1}', {false, true, true, true, true})
+-- INI: 0AB0=1,  is_key_pressed %1d%
+Opcode.register(0x0ab0, SharedOpcodePad.isKeyPressed, 1, 'is_key_pressed ${1}', {false})
+-- INI: 0ADC=1,  test_cheat %1d%
+Opcode.register(0x0adc, SharedOpcodePad.testCheat, 1, 'test_cheat ${1}', {false})

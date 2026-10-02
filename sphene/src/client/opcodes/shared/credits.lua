@@ -23,6 +23,9 @@ function SharedOpcodeCredits.areFinished()
 end
 
 
-Opcode.register(0x0434, SharedOpcodeCredits.start, 'start_credits')
-Opcode.register(0x0435, SharedOpcodeCredits.stop, 'stop_credits')
-Opcode.register(0x0436, SharedOpcodeCredits.areFinished, 'are_credits_finished')
+-- INI: 0434=0,show_credits
+Opcode.register(0x0434, SharedOpcodeCredits.start, 0, 'start_credits', {})
+-- INI: 0435=0,end_credits
+Opcode.register(0x0435, SharedOpcodeCredits.stop, 0, 'stop_credits', {})
+-- INI: 0436=0,  reached_end_of_credits
+Opcode.register(0x0436, SharedOpcodeCredits.areFinished, 0, 'are_credits_finished', {})

@@ -23,6 +23,9 @@ function SharedOpcodeWeather.release()
 end
 
 
-Opcode.register(0x01b5, SharedOpcodeWeather.force, 'force_weather {type} [WeatherType]')
-Opcode.register(0x01b6, SharedOpcodeWeather.forceNow, 'force_weather_now {type} [WeatherType]')
-Opcode.register(0x01b7, SharedOpcodeWeather.release, 'release_weather')
+-- INI: 01b5=1,force_weather %1d%
+Opcode.register(0x01b5, SharedOpcodeWeather.force, 1, 'force_weather ${1}', {false})
+-- INI: 01b6=1,set_weather %1d%
+Opcode.register(0x01b6, SharedOpcodeWeather.forceNow, 1, 'force_weather_now ${1}', {false})
+-- INI: 01b7=0,release_weather
+Opcode.register(0x01b7, SharedOpcodeWeather.release, 0, 'release_weather', {})

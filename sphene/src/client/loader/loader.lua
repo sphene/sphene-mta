@@ -710,20 +710,8 @@ function Loader.loadScripts(scriptsData)
 
                     if (config('mode') ~= 'benchmark') then
                         if (Loader.game == Core.game.VICE_CITY) then
-                            Overlay.triggerEvent("onLoadStateChange", {
-                                state = 0,
-                                message = "Loading opcode table"
-                            })
-
-                            loadOpcodeTable("assets/opcodes/VCSCM.ini")
+                            --
                         elseif (Loader.game == Core.game.SAN_ANDREAS) then
-                            Overlay.triggerEvent("onLoadStateChange", {
-                                state = 0,
-                                message = "Loading opcode table"
-                            })
-
-                            loadOpcodeTable("assets/opcodes/SASCM.ini")
-
                             Overlay.triggerEvent("onLoadStateChange", {
                                 state = 0,
                                 message = "Loading text data"
