@@ -178,14 +178,20 @@ end
 -- Opcode: 0x04F9
 -- Instruction: set_extra_colours {color} [int] {fade} [bool]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/04F9
-function SharedOpcodeWorld.setExtraColors()
+function SharedOpcodeWorld.setExtraColors(color, fade)
+    TimeCycle.startExtraColor(color, fade == true or (type(fade) == 'number' and fade ~= 0))
+
+    -- Fading isn't implemented
     return Script.setOpcodePartiallyImplemented()
 end
 
 -- Opcode: 0x04FA
 -- Instruction: clear_extra_colours {withFade} [bool]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/04FA
-function SharedOpcodeWorld.clearExtraColors()
+function SharedOpcodeWorld.clearExtraColors(withFade)
+    TimeCycle.stopExtraColor(withFade == true or (type(withFade) == 'number' and withFade ~= 0))
+
+    -- Fading isn't implemented
     return Script.setOpcodePartiallyImplemented()
 end
 

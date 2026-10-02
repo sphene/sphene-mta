@@ -160,9 +160,6 @@ end
 
 function TaskSimpleGoToPoint:getDebugParameters()
     local ped = self:getPed()
-    local node = self.path and self.path:findNextWaypoint(0.1) or false
-
-    local x, y, z = ped:getPosition()
 
     return {
         Ped = tostring(ped:getId() or 'UNKNOWN'),

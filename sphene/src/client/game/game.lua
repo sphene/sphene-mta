@@ -72,6 +72,9 @@ function Game.start(game)
     Game.createEvents()
     ElementManager.load()
 
+    -- Time cycle slots of scripts, enexes and cutscenes are applied by Sphene
+    TimeCycle.start()
+
     Discord.setState('Playing game', true)
 end
 
@@ -87,6 +90,8 @@ function Game.stop()
     Game.policeStations = {}
 
     Game.removeEvents()
+
+    TimeCycle.stop()
 
     if Game.gameArchive then
         Game.gameArchive:close()
@@ -106,6 +111,7 @@ function Game.createEvents()
     addEventHandler("onClientRender", getRootElement(resourceRoot), Game.onRender)
     addEventHandler("onClientHUDRender", getRootElement(resourceRoot), Game.onHudRender)
     addEventHandler("onClientPlayerWasted", getLocalPlayer(), Game.onPlayerWasted)
+    addEventHandler("onClientPlayerSpawn", getLocalPlayer(), Game.onPlayerSpawn)
     addEventHandler("onClientKey", getRootElement(), Game.onClientKey)
     addEventHandler("onClientPlayerRadioSwitch", getRootElement(), Game.onPlayerRadioSwitch)
 end
@@ -115,6 +121,7 @@ function Game.removeEvents()
     removeEventHandler("onClientRender", getRootElement(resourceRoot), Game.onRender)
     removeEventHandler("onClientHUDRender", getRootElement(resourceRoot), Game.onHudRender)
     removeEventHandler("onClientPlayerWasted", getLocalPlayer(), Game.onPlayerWasted)
+    removeEventHandler("onClientPlayerSpawn", getLocalPlayer(), Game.onPlayerSpawn)
     removeEventHandler("onClientKey", getRootElement(), Game.onClientKey)
     removeEventHandler("onClientPlayerRadioSwitch", getRootElement(), Game.onPlayerRadioSwitch)
 end
@@ -189,6 +196,10 @@ function Game.onPlayerWasted()
 
         thread = thread.next
     end
+end
+
+function Game.onPlayerSpawn()
+    TimeCycle.stopExtraColor(false)
 end
 
 function Game.onClientKey(button, pressed)

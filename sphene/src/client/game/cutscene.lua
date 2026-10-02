@@ -194,56 +194,62 @@ function Cutscene.load(cutscene)
 
     PlayerElement.localPlayer:setVisible(false)
 
-    setTimer(function()
-        Cutscene.dataImgArchive = ImgArchive:create(Cutscene.DATA_PATH)
-        Cutscene.modelImgArchive = ImgArchive:create(Cutscene.MODEL_PATH)
+    Cutscene.dataImgArchive = ImgArchive:create(Cutscene.DATA_PATH)
+    Cutscene.modelImgArchive = ImgArchive:create(Cutscene.MODEL_PATH)
+    Cutscene.cutsceneData = {}
+
+    if (not Cutscene.parseCutFile(cutscene)) then
+        if (Cutscene.dataImgArchive) then
+            Cutscene.dataImgArchive:close()
+            Cutscene.dataImgArchive = nil
+        end
+
+        if (Cutscene.modelImgArchive) then
+            Cutscene.modelImgArchive:close()
+            Cutscene.modelImgArchive = nil
+        end
+
         Cutscene.cutsceneData = {}
+        return false
+    end
 
-        if (not Cutscene.parseCutFile(cutscene)) then
-            if (Cutscene.dataImgArchive) then
-                Cutscene.dataImgArchive:close()
-                Cutscene.dataImgArchive = nil
-            end
-
-            if (Cutscene.modelImgArchive) then
-                Cutscene.modelImgArchive:close()
-                Cutscene.modelImgArchive = nil
-            end
-
-            Cutscene.cutsceneData = {}
-            return false
+    if (not Cutscene.parseDatFile(cutscene)) then
+        if (Cutscene.dataImgArchive) then
+            Cutscene.dataImgArchive:close()
+            Cutscene.dataImgArchive = nil
         end
 
-        if (not Cutscene.parseDatFile(cutscene)) then
-            if (Cutscene.dataImgArchive) then
-                Cutscene.dataImgArchive:close()
-                Cutscene.dataImgArchive = nil
-            end
-
-            if (Cutscene.modelImgArchive) then
-                Cutscene.modelImgArchive:close()
-                Cutscene.modelImgArchive = nil
-            end
-
-            Cutscene.cutsceneData = {}
-            return false
+        if (Cutscene.modelImgArchive) then
+            Cutscene.modelImgArchive:close()
+            Cutscene.modelImgArchive = nil
         end
 
-        --[[if (not Cutscene.parseIFPFile(cutscene)) then
-            if (Cutscene.dataImgArchive) then
-                Cutscene.dataImgArchive:close()
-                Cutscene.dataImgArchive = nil
-            end
+        Cutscene.cutsceneData = {}
+        return false
+    end
 
-            if (Cutscene.modelImgArchive) then
-                Cutscene.modelImgArchive:close()
-                Cutscene.modelImgArchive = nil
-            end
+    --[[if (not Cutscene.parseIFPFile(cutscene)) then
+        if (Cutscene.dataImgArchive) then
+            Cutscene.dataImgArchive:close()
+            Cutscene.dataImgArchive = nil
+        end
 
-            Cutscene.cutsceneData = {}
-            return false
-        end]]
-    end, 100, 1)
+        if (Cutscene.modelImgArchive) then
+            Cutscene.modelImgArchive:close()
+            Cutscene.modelImgArchive = nil
+        end
+
+        Cutscene.cutsceneData = {}
+        return false
+    end]]
+
+    local offset = Cutscene.cutsceneData["offset"]
+
+    if (offset) then
+        enginePreloadWorldArea(offset["x"], offset["y"], offset["z"], 'models')
+    end
+
+    TimeCycle.onCutsceneLoaded(Cutscene.cutsceneData["extraColor"] or 0)
 
     return true
 end
@@ -376,6 +382,8 @@ function Cutscene.endScene()
         destroyElement(Cutscene.cutsceneData["sound"])
     end
 
+    TimeCycle.onCutsceneDeleted()
+
     local deleteModels = {}
 
     if (Cutscene.cutsceneData["objectMapping"] ~= nil) then
@@ -406,19 +414,17 @@ function Cutscene.endScene()
         Cutscene.modelImgArchive = nil
     end
 
-    setTimer(function()
-        for _, modelData in pairs(deleteModels) do
-            if (isElement(modelData.dff)) then
-                destroyElement(modelData.dff)
-            end
-
-            --engineRestoreModel(modelData.id)
-
-            if (isElement(modelData.txd)) then
-                destroyElement(modelData.txd)
-            end
+    for _, modelData in pairs(deleteModels) do
+        if (isElement(modelData.dff)) then
+            destroyElement(modelData.dff)
         end
-    end, 100, 1)
+
+        --engineRestoreModel(modelData.id)
+
+        if (isElement(modelData.txd)) then
+            destroyElement(modelData.txd)
+        end
+    end
 
     return true
 end
@@ -1069,6 +1075,8 @@ function Cutscene.parseCutFile(cutscene)
                                 }
 
                                 objectId = objectId + 1
+                            elseif (data.block == "extracol") then
+                                Cutscene.cutsceneData["extraColor"] = tonumber(buffer) or 0
                             end
                         end
                     end

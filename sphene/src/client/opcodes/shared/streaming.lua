@@ -19,14 +19,14 @@ end
 -- Instruction: request_model {modelId} [model_any]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0247
 function SharedOpcodeStreaming.requestModel(model)
-    ElementManager.loadModel(model)
+    ElementManager.requestModel(model)
 end
 
 -- Opcode: 0x0248
 -- Instruction: has_model_loaded {modelId} [model_any]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0248
 function SharedOpcodeStreaming.hasModelLoaded(model)
-    return ElementManager.isModelLoaded(model)
+    return ElementManager.hasModelLoaded(model)
 end
 
 -- Opcode: 0x0249
@@ -47,6 +47,7 @@ end
 -- Instruction: load_all_models_now
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/038B
 function SharedOpcodeStreaming.loadAllModelsNow()
+    ElementManager.loadAllRequestedModels()
     return true
 end
 

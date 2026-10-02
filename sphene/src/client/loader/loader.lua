@@ -815,6 +815,13 @@ function Loader.loadScripts(scriptsData)
                             IPL.load("data/game/san_andreas/data/maps/interior/stadint.ipl")
                             IPL.load("data/game/san_andreas/data/maps/interior/savehous.ipl")
 
+                            Overlay.triggerEvent("onLoadStateChange", {
+                                state = 0,
+                                message = "Loading time cycle"
+                            })
+
+                            TimeCycle.load("data/game/san_andreas/data/timecyc.dat")
+
                             --[[Overlay.triggerEvent("onLoadStateChange", {
                                 state = 0,
                                 message = "Loading textures"

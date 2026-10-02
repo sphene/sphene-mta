@@ -140,17 +140,25 @@ end
 -- Instruction: [var modelId: model_vehicle], [var class: int] = get_random_car_model_in_memory {_p1} [bool]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/09B2
 function SanAndreasOpcodeStreaming.getRandomCarModelInMemory(_)
+    -- Return a car that is actually loaded in memory. This function doesn't load anything.
+    -- TODO: Implement GTA's CPopulation::m_AppropriateLoadedCars.PickRandomCar
     Script.setOpcodePartiallyImplemented()
 
-    local model = math.random(400, 600)
+    local loadedCars = {}
 
-    while (VehicleElement.getTypeFromModel(model) ~= 'car') do
-        model = math.random(400, 600)
+    -- Inefficient, but will be improved once we complete the function.
+    for model = 400, 611 do
+        if (VehicleElement.getTypeFromModel(model) == 'car' and ElementManager.hasModelLoaded(model)) then
+            loadedCars[#loadedCars + 1] = model
+        end
     end
 
-    ElementManager.loadModel(model)
+    -- GTA returns -1 for both when there's no suitable car in memory.
+    if (#loadedCars == 0) then
+        return -1, -1
+    end
 
-    return model, 0
+    return loadedCars[math.random(#loadedCars)], 0
 end
 
 -- Opcode: 0x0A01
@@ -163,7 +171,10 @@ end
 -- Opcode: 0x0A0B
 -- Instruction: load_scene_in_direction {x} [float] {y} [float] {z} [float] {heading} [float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/0A0B
-function SanAndreasOpcodeStreaming.loadSceneInDirection(posX, posY, posZ, _)
+function SanAndreasOpcodeStreaming.loadSceneInDirection(posX, posY, posZ, heading)
+    Script.setOpcodePartiallyImplemented()
+
+    -- TODO: Implement heading into MTA and here.
     enginePreloadWorldArea(posX, posY, posZ, 'models')
 end
 
