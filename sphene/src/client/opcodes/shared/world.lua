@@ -13,7 +13,7 @@ end
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/02CE
 function SharedOpcodeWorld.getGroundZFor3DCoord(posX, posY, posZ, _)
     enginePreloadWorldArea(posX, posY, posZ, "collisions")
-    return getGroundPosition(posX, posY, posZ)
+    return World.findGroundZFor3DCoord(posX, posY, posZ)
 end
 
 -- Opcode: 0x031A
