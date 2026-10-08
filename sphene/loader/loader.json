@@ -23,6 +23,7 @@
             "src/client/game/ipl.lua",
             "src/client/game/game.lua",
             "src/client/game/timecycle.lua",
+            "src/client/game/world.lua",
 
             "src/client/game/map/enex.lua",
             "src/client/game/map/enexGroup.lua",

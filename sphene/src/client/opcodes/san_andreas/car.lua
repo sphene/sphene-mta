@@ -514,7 +514,7 @@ end
 -- Instruction: set_car_coordinates_no_offset [Car] {x} [float] {y} [float] {z} [float]
 -- https://library.sannybuilder.com/#/sa/script/extensions/default/088C
 function SanAndreasOpcodeCar.setCoordinatesNoOffset(car, posX, posY, posZ)
-   car:setPosition(posX, posY, posZ)
+   car:setPosition(posX, posY, posZ, true)
 end
 
 -- Opcode: 0x0897

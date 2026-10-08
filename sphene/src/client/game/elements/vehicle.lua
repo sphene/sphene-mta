@@ -49,7 +49,6 @@ function VehicleElement:create(model)
     }
 
     mt.scheduledAdjustment = false
-    mt.avoidDuplicateAdjustment = false
 
     mt.engineState = false
 
@@ -75,8 +74,13 @@ function VehicleElement:spawn(x, y, z, rotX, rotY, rotZ)
     self:setPosition(x or 0, y or 0, z or 0)
     self:setRotation(rotX or 0, rotY or 0, rotZ or 0)
     self:setInterior(getCameraInterior())
+    
+    self:setVelocity(0, 0, 0)
+    self:setAngularVelocity(0, 0, 0)
 
     ElementManager.addElementHandle(self.element, self)
+
+    addEventHandler("onClientElementStreamIn", self.element, VehicleElement.onStreamIn, false)
 
     if not self.element then
         Logger.error('VEHICLE', 'Failed to create vehicle with model {} and ID {}', self.model, self.id)
@@ -109,91 +113,85 @@ function VehicleElement:destroy()
     VehicleElement.parent.destroy(self)
 end
 
-function VehicleElement:adjustPosition()
-    if (not self.assignedPath) then
-        if (self.element and self.trailerOf and self.trailerOf.element) then
-            attachTrailerToVehicle(self.trailerOf.element, self.element)
-        elseif (self.element and self.trailer and self.trailer.element) then
-            attachTrailerToVehicle(self.element, self.trailer.element)
-        end
-
-        VehicleElement.parent.adjustPosition(self)
-    end
-end
-
 function VehicleElement:setMatrix(matrix)
     VehicleElement.parent.setMatrix(self, matrix)
-
-    if (not self.assignedPath) then
-        self:adjustPosition()
-    end
+    self.scheduledAdjustment = false
 end
 
-function VehicleElement:setPosition(x, y, z)
+function VehicleElement:setPosition(x, y, z, noOffset)
     VehicleElement.parent.setPosition(self, x, y, z)
+    self.scheduledAdjustment = false
 
-    if (not self.assignedPath) then
+    if not noOffset and not self.assignedPath then
         self:adjustPosition()
     end
 end
 
 function VehicleElement:adjustPosition()
-    if self.avoidDuplicateAdjustment then
+    -- The game puts trains on their track
+    if getVehicleType(self.element) == 'Train' then
         return
     end
 
-    local x, y, z = self:getPosition()
     local distanceCenter = getElementDistanceFromCentreOfMassToBaseOfModel(self.element)
 
-    if not distanceCenter or distanceCenter == 0 then
+    -- Schedule adjustment when it is streamed in, if not already
+    if not self:isStreamedIn() or not distanceCenter or distanceCenter == 0 then
         self.scheduledAdjustment = true
         return
     end
 
+    self.scheduledAdjustment = false
+
+    local x, y, z = self:getPosition()
+
     enginePreloadWorldArea(x, y, z, 'collisions')
 
-    local _, _, frontWheelZ = getVehicleComponentPosition(self.element, 'wheel_lf_dummy')
-    local _, _, rearWheelZ = getVehicleComponentPosition(self.element, 'wheel_lb_dummy')
-
-    local offsetZ
-
-    if frontWheelZ or rearWheelZ then
-        local wheelZ = math.min(frontWheelZ or 0, rearWheelZ or 0)
-        local axleSizes = getVehicleModelWheelSize(getElementModel(self.element), 'all_wheels')
-
-        if axleSizes then
-            local wheelSize = math.max(axleSizes.front_axle, axleSizes.rear_axle)
-
-            offsetZ = math.abs(z - (z + (wheelZ - (wheelSize / 2))))
-        else
-            offsetZ = distanceCenter
-        end
-    else
-        offsetZ = distanceCenter
+    if z <= World.SCRIPT_GROUND_Z_LIMIT then
+        z = World.findGroundZForCoord(x, y)
     end
 
-    local groundZ = getGroundPosition(x, y, z + distanceCenter + 1)
+    -- TODO: Calculate the rotation on an inclined road similarly with front and back wheels.
+    local matrix = self:getMatrix()
+    matrix:setPosition(x, y, z + self:getHeightAboveRoad(distanceCenter))
 
-    if not groundZ then
-        groundZ = getGroundPosition(x, y, 100)
+    Logger.debug(string.upper(self:getType()), 'Putting element with model {} and ID {} down at {} {} {}', self:getModel(), self.id, x, y, z)
+
+    -- Instead of setElementPosition, which delays vehicle placement for one frame,
+    -- we use setElementMatrix, so vehicle is placed in the same frame.
+    setElementMatrix(self.element, matrix)
+    self:setVelocity(0, 0, 0)
+    self:setAngularVelocity(0, 0, 0)
+end
+
+function VehicleElement:getHeightAboveRoad(distanceCenter)
+    local vehicleType = getVehicleType(self.element)
+    local handling = getVehicleHandling(self.element)
+
+    if vehicleType == 'Boat' or vehicleType == 'Train' or not handling or handling.suspensionForceLevel <= 0 then
+        return distanceCenter
     end
 
-    if groundZ then
-        if (z - offsetZ) < groundZ or z < groundZ then
-            Logger.debug(string.upper(self:getType()), 'Element with model {} and ID {} is below ground, adjusting position', self:getModel(), self.id)
+    local forceLevel = handling.suspensionForceLevel
+    local suspensionTravel = handling.suspensionUpperLimit - handling.suspensionLowerLimit
 
-            self.avoidDuplicateAdjustment = true
-            self:setPosition(x, y, groundZ + offsetZ)
-            self:setVelocity(0, 0, 0)
-            self:setAngularVelocity(0, 0, 0)
-            self.avoidDuplicateAdjustment = false
-        else
-            Logger.debug(string.upper(self:getType()), 'No adjustment needed for element with model {} and ID {}', self:getModel(), self.id)
-            Logger.debug(string.upper(self:getType()), 'Z: {}, lowest point: {}, groundZ: {}, offsetZ: {}', z, lowestPoint, groundZ, offsetZ)
-        end
+    -- CMonsterTruck::SetupSuspensionLines (0x6C7FB0)
+    if vehicleType == 'Monster Truck' then
+        local _, _, wheelZ = getVehicleComponentPosition(self.element, 'wheel_lf_dummy', 'parent')
+        local wheelRadius = getVehicleModelWheelSize(getElementModel(self.element), 'front_axle') * 0.5
+
+        return (1 - 1 / (4 * forceLevel)) * suspensionTravel + wheelRadius
+            - (wheelZ + handling.suspensionUpperLimit)
     end
 
-    self.scheduledAdjustment = false
+    -- TODO: Trailers
+
+    -- This formula is derived from CAutomobile::SetupSuspensionLines (0x6A65D0).
+    -- Basically:
+    --   (1) heightAboveRoad = (1 - 1 / (4 * forceLevel)) * (upper - lower) + wheelRadius - (wheelZ + upper)
+    --   (2) distanceCenter = wheelRadius - wheelZ - lower
+    -- Simplify (1) and insert (2), you'll come up with the following.
+    return distanceCenter - suspensionTravel / (4 * forceLevel)
 end
 
 function VehicleElement:addComponent()
@@ -482,10 +480,6 @@ end
 
 function VehicleElement:onPreFrame()
     VehicleElement.parent.onPreFrame(self)
-
-    if self.scheduledAdjustment then
-        self:adjustPosition()
-    end
 
     local assignedPath = self.assignedPath
 
@@ -867,3 +861,15 @@ Core.mergeInto(VehicleElement, ElementWrapper)
 -----------------------------------
 -- * Events
 -----------------------------------
+
+function VehicleElement.onStreamIn()
+    local vehicle = ElementManager.getElementByHandle(source)
+
+    if not vehicle then
+        return
+    end
+
+    if vehicle.scheduledAdjustment then
+        vehicle:adjustPosition()
+    end
+end
