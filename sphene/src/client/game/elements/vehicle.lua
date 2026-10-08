@@ -74,7 +74,7 @@ function VehicleElement:spawn(x, y, z, rotX, rotY, rotZ)
     self:setPosition(x or 0, y or 0, z or 0)
     self:setRotation(rotX or 0, rotY or 0, rotZ or 0)
     self:setInterior(getCameraInterior())
-    
+
     self:setVelocity(0, 0, 0)
     self:setAngularVelocity(0, 0, 0)
 
