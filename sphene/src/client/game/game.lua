@@ -171,7 +171,7 @@ function Game.onPreRender(timeSlice)
         return
     end
 
-    Camera.onPreFrame()
+    Camera.onPreFrame(timeSlice)
     ElementManager.onPreFrame()
     Enex.onPreFrame()
 end

@@ -12,3 +12,8 @@ end
 function clamp(value, min, max)
     return math.max(min, math.min(max, value))
 end
+
+-- Linear interpolation, t = 0 gives from and t = 1 gives to
+function lerp(from, to, t)
+    return from + (to - from) * t
+end

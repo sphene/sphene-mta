@@ -9,6 +9,8 @@
             "src/shared/utils/util.lua",
             "src/shared/utils/vehicles.lua",
             "src/shared/utils/math.lua",
+            "src/shared/utils/rwVector3.lua",
+            "src/shared/utils/rwMatrix.lua",
             "src/shared/tasks/taskcode.lua",
 
             "src/shared/io/ini.lua",
@@ -16,6 +18,9 @@
             "src/client/runtime/thread.lua",
 
             "src/client/game/audio.lua",
+            "src/client/game/camera/cameraAnimation.lua",
+            "src/client/game/camera/cameraShake.lua",
+            "src/client/game/camera/handShaker.lua",
             "src/client/game/camera.lua",
             "src/client/game/carrec.lua",
             "src/client/game/cutscene.lua",
