@@ -58,9 +58,9 @@ function TrainCarriageElement:onPreFrame()
     TrainCarriageElement.parent.onPreFrame(self)
 
     if (self.trailerOf and self.element and self.trailerOf.element) then
-        attachTrailerToVehicle(self.element, self.trailerOf.element)
+        attachTrailerToVehicle(self.trailerOf.element, self.element)
     elseif (self.trailer and self.element and self.trailer.element) then
-        attachTrailerToVehicle(self.trailer.element, self.element)
+        attachTrailerToVehicle(self.element, self.trailer.element)
     end
 end
 
