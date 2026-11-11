@@ -1,11 +1,4 @@
 -----------------------------------
--- * Locals (for perfomance)
------------------------------------
-
-local positionAnimation = {}
-local lookPointAnimation = {}
-
------------------------------------
 -- * Variables
 -----------------------------------
 
@@ -14,6 +7,20 @@ Camera.__index = Camera
 
 Camera.fadeColor = { 0, 0, 0 }
 Camera.fadeEnd = 0
+
+Camera.SWITCH_TYPE = {
+    NONE = 0,
+    INTERPOLATION = 1,
+    JUMPCUT = 2
+}
+
+-- CameraAnimation of the position and the look point, false when none
+Camera.positionAnimation = false
+Camera.lookAnimation = false
+
+-- SA's persistPosition and persistTrack
+Camera.persistPosition = false
+Camera.persistLook = false
 
 -----------------------------------
 -- * Functions
@@ -45,9 +52,24 @@ function Camera.setShakeLevel(intensity)
     setCameraDrunkLevel(intensity)
 end
 
+function Camera.setPersistPosition(state)
+    Camera.persistPosition = state
+end
+
+function Camera.setPersistLook(state)
+    Camera.persistLook = state
+end
+
+function Camera.resetScriptableComponents()
+    Camera.persistPosition = false
+    Camera.persistLook = false
+
+    CameraShake.stop()
+end
+
 function Camera.setPosition(posX, posY, posZ)
-    positionAnimation = {}
-    lookPointAnimation = {}
+    Camera.positionAnimation = false
+    Camera.lookAnimation = false
 
     local camera = getCamera()
     local _, _, _, currentRotX, currentRotY, currentRotZ, roll, fov = getCameraMatrix(camera)
@@ -60,8 +82,8 @@ function Camera.setRotation(rotX, rotY, rotZ)
 end
 
 function Camera.setLookAtPoint(posX, posY, posZ)
-    positionAnimation = {}
-    lookPointAnimation = {}
+    Camera.positionAnimation = false
+    Camera.lookAnimation = false
 
     local camera = getCamera()
     local cameraX, cameraY, cameraZ, _, _, _ = getCameraMatrix(camera)
@@ -73,48 +95,29 @@ function Camera.restoreToUserDefined()
     --setCameraTarget(PlayerElement.getLocalPlayer().element)
 end
 
-function Camera.pointWithSwitchStyle(posX, posY, posZ, switchstyle)
-    lookPointAnimation = {}
+function Camera.pointWithSwitchStyle(posX, posY, posZ, switchStyle)
+    Camera.lookAnimation = false
 
-    if (switchStyle == 1) then
-        local camera = getCamera()
-        --local cameraX, cameraY, cameraZ = getElementPosition(camera)
-        local _, _, _, lookX, lookY, lookZ = getElementMatrix(camera)
+    -- Pan from the current view (not the game's transition curve), anything else cuts
+    if (switchStyle == Camera.SWITCH_TYPE.INTERPOLATION) then
+        local cameraX, cameraY, cameraZ, lookX, lookY, lookZ = getCameraMatrix()
+        local position = RwVector3:create(cameraX, cameraY, cameraZ)
+        local target = RwVector3:create(posX, posY, posZ)
+        local front = (RwVector3:create(lookX, lookY, lookZ) - position):getNormalised()
 
-        Camera.animateLookPoint(lookX or posX, lookY or posY, lookZ or posZ, posX, posY, posZ, false, false, 3000)
-    else
+        -- Start at the target's distance, a look point 1 unit ahead would rush the turn
+        Camera.animateLookPoint(position + front * (target - position):getLength(), target, false, false, 3000)
+    elseif (switchStyle == Camera.SWITCH_TYPE.NONE or switchStyle == Camera.SWITCH_TYPE.JUMPCUT) then
         Camera.setLookAtPoint(posX, posY, posZ)
     end
 end
 
-function Camera.animatePosition(posX, posY, posZ, endX, endY, endZ, ease, returnToStart, time)
-    positionAnimation = {
-        startX = posX,
-        startY = posY,
-        startZ = posZ,
-        endX = endX,
-        endY = endY,
-        endZ = endZ,
-        ease = ease,
-        returnToStart = returnToStart,
-        startTick = getTickCount(),
-        endTick = getTickCount() + time
-    }
+function Camera.animatePosition(startPoint, endPoint, ease, returnToStart, time)
+    Camera.positionAnimation = CameraAnimation:create(startPoint, endPoint, ease, returnToStart, time)
 end
 
-function Camera.animateLookPoint(posX, posY, posZ, endX, endY, endZ, ease, returnToStart, time)
-    lookPointAnimation = {
-        startX = posX,
-        startY = posY,
-        startZ = posZ,
-        endX = endX,
-        endY = endY,
-        endZ = endZ,
-        ease = ease,
-        returnToStart = returnToStart,
-        startTick = getTickCount(),
-        endTick = getTickCount() + time
-    }
+function Camera.animateLookPoint(startPoint, endPoint, ease, returnToStart, time)
+    Camera.lookAnimation = CameraAnimation:create(startPoint, endPoint, ease, returnToStart, time)
 end
 
 function Camera.fade(fade, time)
@@ -128,8 +131,8 @@ function Camera.fade(fade, time)
 end
 
 function Camera.restore(withJumpCut)
-    positionAnimation = {}
-    lookPointAnimation = {}
+    Camera.positionAnimation = false
+    Camera.lookAnimation = false
 
     -- TODO: Add a animation to restore the camera if withJumpCut is false
 
@@ -155,63 +158,52 @@ function Camera.getTarget()
     return nil
 end
 
-function Camera.onPreFrame()
-    if (positionAnimation.startX ~= nil) then
-        local camera = getCamera()
+function Camera.processPositionAnimation(camera)
+    local animation = Camera.positionAnimation
 
-        if (getTickCount() > positionAnimation.endTick) then
-            if (positionAnimation.returnToStart) then
-                setElementPosition(camera, positionAnimation.startX, positionAnimation.startY, positionAnimation.startZ)
-            else
-                setElementPosition(camera, positionAnimation.endX, positionAnimation.endY, positionAnimation.endZ)
-            end
-
-            positionAnimation = {}
-        else
-            local progress =
-                1 / ((positionAnimation.endTick - positionAnimation.startTick) / (getTickCount() - positionAnimation.startTick))
-
-            if (positionAnimation.ease) then
-                progress = getEasingValue(progress, "InOutQuad")
-            end
-
-            local animX = positionAnimation.startX + ((positionAnimation.endX - positionAnimation.startX) * progress)
-            local animY = positionAnimation.startY + ((positionAnimation.endY - positionAnimation.startY) * progress)
-            local animZ = positionAnimation.startZ + ((positionAnimation.endZ - positionAnimation.startZ) * progress)
-
-            setElementPosition(camera, animX, animY, animZ)
-        end
+    if (not animation:isFinished()) then
+        setElementPosition(camera, animation:getInterpolatedPoint():unpack())
+        return
     end
 
-    if (lookPointAnimation.startX ~= nil) then
-        local camera = getCamera()
-        local cameraX, cameraY, cameraZ = getElementPosition(camera)
-
-        if (getTickCount() > lookPointAnimation.endTick) then
-            if (lookPointAnimation.returnToStart) then
-                setCameraMatrix(cameraX, cameraY, cameraZ, lookPointAnimation.startX, lookPointAnimation.startY, lookPointAnimation.startZ)
-            else
-                setCameraMatrix(cameraX, cameraY, cameraZ, lookPointAnimation.endX, lookPointAnimation.endY, lookPointAnimation.endZ)
-            end
-
-            lookPointAnimation = {}
-        else
-            local progress =
-                1 / ((lookPointAnimation.endTick - lookPointAnimation.startTick) / (getTickCount() - lookPointAnimation.startTick))
-
-            if (lookPointAnimation.ease) then
-                progress = getEasingValue(progress, "InOutQuad")
-            end
-
-            local animX = lookPointAnimation.startX + ((lookPointAnimation.endX - lookPointAnimation.startX) * progress)
-            local animY = lookPointAnimation.startY + ((lookPointAnimation.endY - lookPointAnimation.startY) * progress)
-            local animZ = lookPointAnimation.startZ + ((lookPointAnimation.endZ - lookPointAnimation.startZ) * progress)
-
-            setCameraMatrix(cameraX, cameraY, cameraZ, animX, animY, animZ)
-        end
+    if (not Camera.persistPosition) then
+        setElementPosition(camera, animation:getFinalPoint():unpack())
     end
+
+    Camera.positionAnimation = false
+end
+
+function Camera.processLookAnimation(camera)
+    local animation = Camera.lookAnimation
+    local cameraX, cameraY, cameraZ = getElementPosition(camera)
+
+    if (not animation:isFinished()) then
+        setCameraMatrix(cameraX, cameraY, cameraZ, animation:getInterpolatedPoint():unpack())
+        return
+    end
+
+    if (not Camera.persistLook) then
+        setCameraMatrix(cameraX, cameraY, cameraZ, animation:getFinalPoint():unpack())
+    end
+
+    Camera.lookAnimation = false
+end
+
+function Camera.onPreFrame(timeSlice)
+    local camera = getCamera()
+
+    if (Camera.positionAnimation) then
+        Camera.processPositionAnimation(camera)
+    end
+
+    if (Camera.lookAnimation) then
+        Camera.processLookAnimation(camera)
+    end
+
+    CameraShake.process(timeSlice)
 end
 
 function Camera.cleanup()
+    Camera.resetScriptableComponents()
     Camera.restore(true)
 end

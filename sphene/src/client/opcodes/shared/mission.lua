@@ -19,6 +19,8 @@ function SharedOpcodeMission.finish(_)
         TimeCycle.stopExtraColor(false)
     end
 
+    Camera.resetScriptableComponents()
+
     return Script.setOpcodePartiallyImplemented()
 end
 
